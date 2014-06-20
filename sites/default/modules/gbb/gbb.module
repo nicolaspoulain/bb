@@ -1,0 +1,421 @@
+<?php
+
+/**
+ * @file
+ *
+ * Un module de gestion de stages GAIA
+ * des tables supplementaires sont ajoutees a la base de donnees Drupal
+ * - les tables issues de GAIA, préfixées par gbb (gbb_gdisp, gbb_gmodu,
+ *    gbb_gdire...)
+ * - les tables propres au module (gbb_file, gbb_session...)
+ */
+
+/**
+* Implement hook_views_api().
+*
+* Charge le hook_views_data du fichier gbb.views.inc
+*/
+function gbb_views_api() {
+      return array('api' => 3.0);
+}
+
+/**
+* Implements hook_permission().
+*
+* Les accès aux pages définies par le module sont régis par des permissions
+* spéciales définies ici.
+* Ces permissions pourront être attribuées à des rôles dans l'interface de
+* gestion DRUPAL.
+*/
+
+function gbb_permission() {
+  return array(
+    'formateur gbb' => array(
+      'title' => t('Accès formateur'),
+      'description' => t('Donne acèès aux pages pour les formateurs.'),
+      ),
+    'stable gbb' => array(
+      'title' => t('Accéder à GaiaBB'),
+      'description' => t(  'Donne accès aux fonctionnalités en production du'
+      . 'tableau de bord GaiaBB.'),
+      ),
+    'testing gbb' => array(
+      'title' => t('TESTING'),
+      'description' => t(  'Donne accès aux fonctionnalités qui n\'ont pas'
+      . 'encore été acceptés dans la version en production,'
+      . 'mais qui sont en attente de l\'être.'),
+      ),
+    'unstable gbb' => array(
+      'title' => t('UNSTABLE'),
+      'description' => t('Donne accès aux fonctionnalités instables en cours de'
+      . 'développement.'),
+      ),
+    'gest_sessions gbb' => array(
+      'title' => t('Gérer les demandes d\'ajout de sessions GAIA pour module'),
+      'description' => t('Autorise à jouter, modifier, dupliquer ou supprimer'
+      . 'des sessions.'),
+      ),
+    'gest_convocs gbb' => array(
+      'title' => t('Signaler les envois/impressions de convocations'),
+      'description' => t('Autorise à marquer comme imprimées ou envoyées les'
+      . 'convocations.'),
+      ),
+    'gest_etablissements gbb' => array(
+      'title' => t('Ajouter un établissement dans la base de données'),
+      'description' => t('Permet de modifier le RNE (l\'identifiant), le nom et'
+      . 'le sigle. Les autres données sont modifiables par tous.'),
+      ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ */
+function gbb_menu() {
+
+  $items = array();
+
+  // Etant donnés une année (09,10,11,12,...),
+  // un co_degré (1 ou 2) et un co_tres (1,2 ou 3)
+  // affichage de la liste des responsables des stages
+  //   exemple : liste/12/2/1
+  // affichage de la liste des stages pour un conseiller (DENISE ou ARGO) donné
+  //   exemple : liste/12/2/1/DENISE
+
+  $items['liste'] = array(
+        'title' => '',
+        'page callback' => 'gbb_liste_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_liste_stages.inc',
+  );
+
+/*
+  $items['atraiter'] = array(
+        'title' => '',
+        'page callback' => 'gbb_atraiter_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+*/
+
+  // Etant donné un co_degré (1 ou 2)
+  // Affiche la page de gestion du module co_modu
+  //   exemple : module/2/26142
+
+  $items['module'] = array(
+        'title' => '',
+        'page callback' => 'gbb_module_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_module.inc',
+  );
+
+/*
+  // Etant donné un id (112 ou 2222)
+  // Affiche la page de gestion d'un formateur
+  //   exemple : formateur/112
+
+  $items['formateur'] = array(
+        'title' => '',
+        'page callback' => 'gbb_formateur_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Etant donné un id (112 ou 2222)
+  // Affiche la page de gestion d'un établisssement
+  //   exemple : etablissement/112
+
+  $items['etablissement'] = array(
+        'title' => '',
+        'page callback' => 'gbb_etablissement_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Conteneur pour le affichages de views
+  // dans un quicktab
+
+  $items['vue_rapports'] = array(
+        'title' => '',
+        'page callback' => 'gbb_rapports_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Fiche evaluation formateur
+  // degré 2, module 26142, groupe 3
+  //   exemple : evaluation/2/26142/3
+
+  $items['evaluation'] = array(
+        'title' => '',
+        'page callback' => 'gbb_evaluation_view',
+        'access arguments' => array('formateur gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Fiche Bilan conseiller à paartir de eval formateur
+  // degré 2, module 26142, groupe 3
+  //   exemple : bilan/2/26142/3
+
+  $items['bilan'] = array(
+        'title' => '',
+        'page callback' => 'gbb_bilan_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Saisie de la classification d'une offre
+  // co_omodu 26142
+  // exemple : offre/26142
+
+  $items['offre'] = array(
+        'title' => '',
+        'page callback' => 'gbb_offre_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  $items['ctp'] = array(
+        'title' => '',
+        'page callback' => 'gbb_offre_ctp_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Saisie de la classification d'un module du plan
+  // co_modu 26142
+  // exemple : ctplan/26142
+
+  $items['ctplan'] = array(
+        'title' => '',
+        'page callback' => 'gbb_ctplan_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Affichage pia du plan
+  // exemple : ctplan/26142
+
+  $items['pia'] = array(
+        'title' => '',
+        'page callback' => 'gbb_pia_view',
+        //'access arguments' => array('stable gbb'),
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+  );
+
+  //   exemple : bilan/2/26142/3
+
+  $items['offres_edit'] = array(
+        'title' => '',
+        'page callback' => 'gbb_offres_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+  $items['plan_edit'] = array(
+        'title' => '',
+        'page callback' => 'gbb_plan_edit_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+  );
+
+  // Pages pour autocomplete AJAX
+  // TODO : décrire
+  $items['autocomp/etablissement'] = array(
+        'page callback' => '_gbb_autocompetab',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK
+  );
+  // TODO : décrire
+  $items['autocomp/formateur'] = array(
+        'page callback' => '_gbb_autocompform',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK
+  );
+  // TODO : décrire
+  $items['autocomp/formateur2'] = array(
+        'page callback' => '_gbb_autocompformatr2',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK
+  );
+  // TODO : décrire
+  $items['autocomp/responsable'] = array(
+        'page callback' => '_gbb_autocompresp',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK
+  );
+  // TODO : décrire
+  $items['autocomp/stage'] = array(
+        'page callback' => '_gbb_autocompstage',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK
+  );
+
+ */
+
+  return $items;
+
+}
+
+function gbb_rapports_view($args = 'NaN') {
+  return render(t(""));
+}
+
+
+variable_set('_gbb_session_alert_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',
+  'alt' => 'session_alert',
+  'title' => t('Alerte sur session : le service administratif est
+                                     prévenu d\'un changement important.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_module_alert_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',
+  'alt' => 'module_alert',
+  'title' => t('Alerte sur le module : le service administratif est
+                                       prévenu d\'un changement important.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_not_en_attente_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/control_play_blue.png',
+  'alt' => 'en cours',
+  'title' => t('Demande de préparation des convocations.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_en_attente_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/control_pause.png',
+  'alt' => 'en attente',
+  'title' => t('En attente : ne pas préparer les convocations pour le moment.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_convoc_sent_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/convoc_sent.png',
+  'alt' => 'Convoc envoyée',
+  'title' => t('La convocation pour cette session a été envoyée.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_user_edit_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/user_edit.png',
+  'alt' => 'user_edit',
+  'title' => t('Voir la fiche.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_etab_edit_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/building.png',
+  'alt' => 'etab_edit',
+  'title' => t('Voir la fiche.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_etab_add_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/building_add.png',
+  'alt' => 'etab_add',
+  'title' => t('Ajouter un établissement manquant.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_user_add_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/user_add.png',
+  'alt' => 'user_add',
+  'title' => t('Ajouter un formateur manquant.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_prioritaire_icon', array(
+  'path'  => drupal_get_path('module', 'gbb') . '/images/prioritaire.png',
+  'alt'   => 'prioritaire',
+  'title' => t('Prioritaire'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_disk_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/disk.png',
+  'alt' => 'enregistrer',
+  'title' => t('Enregistrer.'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_print_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/printer_icon.png',
+  'alt' => 'module_printed',
+  'title' => t('Imprimé'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_prioritaire_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/prioritaire.png',
+  'alt' => 'prioritaire',
+  'title' => t('Prioritaire'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_attachement_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/attachement.gif',
+  'alt' => 'convoc_sent',
+  'title' => t('Fichier(s) attaché(s)'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_comment_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/comments.png',
+  'alt' => 'Organisation et dates de session',
+  'title' => t('Organisation et dates de session'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_timer_red_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/timer_red.png',
+  'alt' => 'TimerRed',
+  'title' => t('Première date dépassée'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_timer_orange_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/timer_orange.png',
+  'alt' => 'TimerOrange',
+  'title' => t('Première date dans moins de 15 jours'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_timer_green_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/timer_green.png',
+  'alt' => 'TimerGreen',
+  'title' => t('Première date dans plus de 15 jours'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_timer_end_icon', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/timer_end.png',
+  'alt' => 'TimerEnd',
+  'title' => t('Dernière date dépassée'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_evals', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/table.png',
+  'alt' => 'evals',
+  'title' => t('Evaluation(s) déposé(s)'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_bilans', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/table_edit.png',
+  'alt' => 'bilans',
+  'title' => t('Bilan(s) saisi(s)'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_DA_rendu', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/icon_cool.png',
+  'alt' => 'dossier',
+  'title' => t('Dossier Administratif déposé'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+variable_set('_gbb_pub_des', array(
+  'path' => drupal_get_path('module', 'gbb') . '/images/16p.png',
+  'alt' => 'Public désigné',
+  'title' => t('Stage à public désigné'),
+  'attributes' => array('class' => 'some-img', 'id' => 'my-img'))
+);
+
+
+/*
+  module_load_include('inc', 'gbb', 'gbb_module');
+module_load_include('inc', 'gbb', 'gbb_formateur');
+
+module_load_include('inc', 'gbb', 'gbb_etablissement');
+module_load_include('inc', 'gbb', 'gbb_evaluation');
+module_load_include('inc', 'gbb', 'gbb_bilan');
+module_load_include('inc', 'gbb', 'gbb_plan_edit');
+module_load_include('inc', 'gbb', 'gbb_offres');
+module_load_include('inc', 'gbb', 'gbb_offre');
+module_load_include('inc', 'gbb', 'gbb_ctplan');
+module_load_include('inc', 'gbb', 'gbb_pia');
+ */

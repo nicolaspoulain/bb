@@ -1,0 +1,1857 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+
+function gbb_schema() {
+
+  $schema = array();
+
+// ---------------------------------------------------------------------------
+// GDIRE
+// ---------------------------------------------------------------------------
+$schema['gbb_gdire'] = array(
+  'description' => 'Copie conforme de la table GAIA gdire',
+  'fields' => array(
+    'co_disp' => array(
+      'description' => 'Code interne du dispositif',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_resp' => array(
+      'description' => 'Code responsable',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_tres' => array(
+      'description' => 'code du type de responsable',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'co_modu' => array(
+     'description' => 'Code du module pour un dispositif donné',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'co_degre' => array(
+     'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+  ),
+  'primary key' => array('co_disp', 'co_modu', 'co_degre', 'co_resp', 'co_tres'),
+);
+
+// ---------------------------------------------------------------------------
+// GDISP
+// ---------------------------------------------------------------------------
+$schema['gbb_gdisp'] = array(
+  'description' => 'Copie conforme de la table GAIA gdisp',
+  'fields' => array(
+    'co_disp' => array(
+      'description' => 'Code interne du dispositif',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'id_disp' => array(
+      'description' => 'Identifiant du dispositif',
+      'type' => 'char',
+      'length' => '10',
+      'not null' => TRUE,
+    ),
+    'lib' => array(
+      'description' => 'Libellé',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'libl' => array(
+      'description' => 'Libellé long',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => FALSE,
+    ),
+    'co_objt' => array(
+      'description' => 'Code de l objectif de formation',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_init' => array(
+      'description' => 'Code du niveau d initiative',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_tcan' => array(
+      'description' => 'Code du type de candidature',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'nb_place_prev' => array(
+      'description' => 'Nombre de places prévues',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'duree_prev' => array(
+      'description' => 'Durée moyenne estimée par personne',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_mod_prev' => array(
+      'description' => 'Nombre de modules prévus',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'co_chap' => array(
+      'description' => 'Code du chapitre de prévision',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'co_art' => array(
+      'description' => 'Code article de prévision',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'dt_crea' => array(
+      'description' => 'date de création',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+    'ty_crea' => array(
+      'description' => 'Type de création',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_camp' => array(
+      'description' => 'Code de la campagne',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_them' => array(
+      'description' => 'Code du thème du dispositif',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_andi' => array(
+      'description' => 'Code du type d annulation du dispositif',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'lobjt' => array(
+      'description' => 'Objectif littéral',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_orga' => array(
+      'description' => 'Code de l organisme',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'co_offre' => array(
+      'description' => 'Code interne de l offre',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'co_orie' => array(
+      'description' => 'Code nomenclature locale d orientation créé dans la table NORIE de gaia',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'gestionnaire' => array(
+      'description' => 'Gestionnaire en charge du dispositif',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'co_tpla' => array(
+      'description' => 'Code type de plan',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_offreur' => array(
+      'description' => 'Code offreur',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'code_om_stag' => array(
+      'description' => 'Code du modèle choisi pour l OM stagiaire',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'code_remu' => array(
+      'description' => 'code du modèle choisi pour la fiche de rémunération',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'code_om_interv' => array(
+      'description' => 'code du modèle choisi pou l OM intervenant',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+  ),
+  'primary key' => array('co_disp', 'co_degre'),
+  'indexes' => array(
+    'idx_gdisp_id_disp' => array(array('id_disp', 3)),
+  ),
+);
+
+// ---------------------------------------------------------------------------
+// GMODU
+// ---------------------------------------------------------------------------
+$schema['gbb_gmodu'] = array(
+  'description' => 'Copie conforme de la table GAIA gmodu',
+  'fields' => array(
+    'co_disp' => array(
+      'description' => 'Code interne du dispositif',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_modu' => array(
+      'description' => 'Code du module pour un dispositif donné',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_type' => array(
+      'description' => 'type du module',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'lib' => array(
+      'description' => 'Libellé',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'libl' => array(
+      'description' => 'Libellé long',
+      'type' => 'char',
+      'length' => '150',
+      'not null' => FALSE,
+    ),
+    'co_cont' => array(
+      'description' => 'Code contenu',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_form' => array(
+      'description' => 'Code forme',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_moda' => array(
+      'description' => 'Code modalité',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_cibl' => array(
+      'description' => 'Code du public cible',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'duree_prev' => array(
+      'description' => 'Durée moyenne estimée par personne',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_place_prev' => array(
+      'description' => 'Nombre de places prévues',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_interv' => array(
+      'description' => 'Nombre d intervenant',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_h_interv' => array(
+      'description' => 'Nombre d heures d intervention',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'co_regr' => array(
+      'description' => 'Code regroupement',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'conv' => array(
+      'description' => 'Flag convention ? O/N',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_prac' => array(
+      'description' => 'Code priorité académique',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_prna' => array(
+      'description' => 'Code priorité nationale',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_budg' => array(
+      'description' => 'Code budget',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'dt_crea' => array(
+      'description' => 'date de création',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+    'cumul' => array(
+      'description' => 'cumul pour le 1 degré si plus 36 semaines',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'lcont' => array(
+      'description' => 'Contenu littéral',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'lmoda' => array(
+      'description' => 'modalité littérale',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'lcibl' => array(
+      'description' => 'Cible littérale',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'lautre' => array(
+      'description' => 'Autre zone littérale',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_anmo' => array(
+      'description' => 'Code du type d annulation des modules',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_remp' => array(
+      'description' => 'code de remplacement 1er degré',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_omodu' => array(
+      'description' => 'code du module de l offre',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'lpeda' => array(
+      'description' => 'Descriptif de l objectif pédagogique',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => FALSE,
+    ),
+    'lform' => array(
+      'description' => 'Description littérale de la forme',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => FALSE,
+    ),
+    'nb_groupe' => array(
+      'description' => 'Nombre de groupes possible',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_eff_groupe' => array(
+      'description' => 'Effectif par groupe',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'cout_p_fonc' => array(
+      'description' => 'cout prévisionnel de fonctionnement par groupe',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'cout_p_prest' => array(
+      'description' => 'cout prévisionnel de prestation par groupe',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'cout_p_excep' => array(
+      'description' => 'cout prévisionnel des frais exceptionnels',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'co_affich_org' => array(
+      'description' => 'Code affichage des organisations prévisionnelles - 
+arborescence plan (O/N)',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'lcomm' => array(
+      'description' => 'Commentaires',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => FALSE,
+    ),
+    'co_etab_dem' => array(
+      'description' => 'Code de l établissement demandeur',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'publie' => array(
+      'description' => 'Publication des demandes',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+  ),
+  'primary key' => array('co_modu', 'co_degre'),
+  'indexes' => array(
+    'idx_gmodu_co_disp' => array('co_disp'),
+  ),
+);
+
+// ---------------------------------------------------------------------------
+// NETAB
+// ---------------------------------------------------------------------------
+$schema['gbb_netab'] = array(
+  'description' => 'Copie conforme de la table GAIA netab',
+  'fields' => array(
+    'co_lieu' => array(
+      'description' => 'Code lieu',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => TRUE,
+    ),
+    'co_natu' => array(
+      'description' => 'Code nature',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_cate' => array(
+      'description' => 'Code catégorie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'secteur' => array(
+      'description' => 'Secteur',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'sigle' => array(
+      'description' => 'Sigle de l établissement',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'denom_princ' => array(
+      'description' => 'Dénomination principale',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'denom_comp' => array(
+      'description' => 'Dénomination complémentaire',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'adr' => array(
+      'description' => 'Adresse',
+      'type' => 'char',
+      'length' => '200',
+      'not null' => FALSE,
+    ),
+    'mention' => array(
+      'description' => 'Mention',
+      'type' => 'char',
+      'length' => '32',
+      'not null' => FALSE,
+    ),
+    'lieu_dit' => array(
+      'description' => 'Lieu-dit',
+      'type' => 'char',
+      'length' => '24',
+      'not null' => FALSE,
+    ),
+    'bp' => array(
+      'description' => 'Bureau Postal',
+      'type' => 'char',
+      'length' => '7',
+      'not null' => FALSE,
+    ),
+    'cedex' => array(
+      'description' => 'Cedex',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'lieu_dist' => array(
+      'description' => 'Bureau distributeur',
+      'type' => 'char',
+      'length' => '26',
+      'not null' => FALSE,
+    ),
+    'cp' => array(
+      'description' => 'code postal',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'pays' => array(
+      'description' => 'Pays',
+      'type' => 'char',
+      'length' => '32',
+      'not null' => FALSE,
+    ),
+    'tel' => array(
+      'description' => 'Téléphone',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'fax' => array(
+      'description' => 'fax',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'mel' => array(
+      'description' => '@mail',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'co_acad' => array(
+      'description' => 'Code de l académie',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_comm' => array(
+      'description' => 'Code commune',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'mdp' => array(
+      'description' => 'Mot de passe',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'co_circ' => array(
+      'description' => 'Code circonscription',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'zeelno' => array(
+      'description' => 'Numéro de zone élémentaire',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'flag_mel' => array(
+      'description' => 'Flag pour envois des Ordres de Mission -OM- par 
+mail (O/N)',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_lieu'),
+);
+
+// ---------------------------------------------------------------------------
+// GRESP
+// ---------------------------------------------------------------------------
+$schema['gbb_gresp'] = array(
+  'description' => 'Copie conforme de la table GAIA gresp',
+  'fields' => array(
+    'co_resp' => array(
+      'description' => 'Code responsable',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'id_resp' => array(
+      'description' => 'Identifiant du responsable',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'qualite' => array(
+      'description' => 'Qualité du responsable (fonction)',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'num_voie' => array(
+      'description' => 'Numéro de la voie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'nat_voie' => array(
+      'description' => 'Nature de la voie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'des_voie' => array(
+      'description' => 'adresse',
+      'type' => 'char',
+      'length' => '20',
+      'not null' => FALSE,
+    ),
+    'esc_res' => array(
+      'description' => 'escalier - résidence',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'cp' => array(
+      'description' => 'code postal',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'vil' => array(
+      'description' => 'Ville',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'tel' => array(
+      'description' => 'Téléphone',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'fax' => array(
+      'description' => 'fax',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'mel' => array(
+      'description' => '@mail',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'organ' => array(
+      'description' => 'Organisme',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'nomu' => array(
+      'description' => 'Nom d usage',
+      'type' => 'char',
+      'length' => '20',
+      'not null' => FALSE,
+    ),
+    'prenom' => array(
+      'description' => 'Prénom de la personne',
+      'type' => 'char',
+      'length' => '15',
+      'not null' => FALSE,
+    ),
+    'civilite' => array(
+      'description' => 'Civilité',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+  ),
+  'primary key' => array('co_resp', 'co_degre'),
+);
+
+// ---------------------------------------------------------------------------
+// GRESP_PLUS (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_gresp_plus'] = array(
+  'description' => 'Module GaiaBB - table des infos complémentaires pour gresp',
+  'fields' => array(
+    'co_resp' => array(
+      'description' => 'Code responsable',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'resp_dafor' => array(
+      'description' => 'Initiales du conseiller responsable',
+      'type' => 'varchar',
+      'length' => '10',
+      'not null' => TRUE,
+    ),
+    'discipline' => array(
+      'description' => 'Discipline',
+      'type' => 'varchar',
+      'length' => '100',
+      'not null' => TRUE,
+    ),
+    'decharge' => array(
+      'description' => 'Nombre d heures de décharge',
+      'type' => 'numeric',
+      'not null' => TRUE,
+      'default' => 0,
+      'precision' => '4',
+      'scale' => '1',
+    ),
+    'grade' => array(
+      'description' => 'Certifié, agrégé,...',
+      'type' => 'varchar',
+      'length' => '100',
+      'not null' => TRUE,
+    ),
+    'divers' => array(
+      'description' => 'Infos diverses',
+      'type' => 'varchar',
+      'length' => '1000',
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('co_resp'),
+);
+
+// ---------------------------------------------------------------------------
+// NCONT
+// ---------------------------------------------------------------------------
+$schema['gbb_ncont'] = array(
+  'description' => 'Copie conforme de la table GAIA ncont',
+  'fields' => array(
+    'co_cont' => array(
+      'description' => 'Code contenu',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => TRUE,
+    ),
+    'lib_court' => array(
+      'description' => 'Libellé court',
+      'type' => 'char',
+      'length' => '10',
+      'not null' => FALSE,
+    ),
+    'lib_long' => array(
+      'description' => 'Libellé long',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'dt_deb' => array(
+      'description' => 'Date de début',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+    'dt_fin' => array(
+      'description' => 'Date de fin',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_cont'),
+);
+
+// ---------------------------------------------------------------------------
+// NTCAN
+// ---------------------------------------------------------------------------
+$schema['gbb_ntcan'] = array(
+  'description' => 'Copie conforme de la table GAIA ntcan',
+  'fields' => array(
+    'co_tcan' => array(
+      'description' => 'Code du type de candidature',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'lib_court' => array(
+      'description' => 'Libellé court',
+      'type' => 'char',
+      'length' => '10',
+      'not null' => FALSE,
+    ),
+    'lib_long' => array(
+      'description' => 'Libellé long',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'dt_deb' => array(
+      'description' => 'Date de début',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+    'dt_fin' => array(
+      'description' => 'Date de fin',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_tcan'),
+);
+
+// ---------------------------------------------------------------------------
+// NORIE
+// ---------------------------------------------------------------------------
+$schema['gbb_norie'] = array(
+  'description' => 'Copie conforme de la table GAIA norie',
+  'fields' => array(
+    'co_orie' => array(
+      'description' => 'Code nomenclature locale d orientation créé dans la  table NORIE de gaia',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => TRUE,
+    ),
+    'lib_court' => array(
+      'description' => 'Libellé court',
+      'type' => 'char',
+      'length' => '10',
+      'not null' => FALSE,
+    ),
+    'lib_long' => array(
+      'description' => 'Libellé long',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'dt_deb' => array(
+      'description' => 'Date de début',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+    'dt_fin' => array(
+      'description' => 'Date de fin',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_orie'),
+);
+
+// ---------------------------------------------------------------------------
+// SESSION (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_session'] = array(
+  'description' => 'Module GaiaBB - table des demandes de session de formation',
+  'fields' => array(
+    'sess_id' => array(
+      'description' => 'Identifiant de la session',
+      'type' => 'serial',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'session_alert' => array(
+      'description' => 'Alerte sur la session, le service administratif est prévenu d un changement important. 0/1',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'en_attente' => array(
+      'description' => 'O:stage en attente, ne pas préparer la convocation pour cette session- 1:Demande de prépartion de la convocation pour cette session',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 1,
+    ),
+    'convoc_sent' => array(
+      'description' => 'La convocation pour cette session a été envoyée. 0/1',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'co_resp' => array(
+      'description' => 'Code responsable',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 1,
+    ),
+    'co_modu' => array(
+      'description' => 'Code du module pour un dispositif donné',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+    'co_lieu' => array(
+      'description' => 'Code lieu',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'groupe' => array(
+      'description' => 'Numéro du groupe',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 1,
+    ),
+    'date' => array(
+      'description' => 'Date de la session format YYYY-MM-DD',
+      'type' => 'varchar',
+      'mysql_type' => 'date',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => FALSE,
+    ),
+     'date_ts' => array(
+      'description' => 'Date de la session format TIMESTAMP',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'horaires' => array(
+      'description' => 'Horaires de la session',
+      'type' => 'varchar',
+      'length' => '50',
+      'not null' => FALSE,
+      'default' => '09h-17h',
+    ),
+    'type_paiement' => array(
+      'description' => 'type de paiement du formateur',
+      'type' => 'varchar',
+      'length' => '8',
+      'not null' => FALSE,
+      'default' => 'VAC',
+    ),
+    'duree_a_payer' => array(
+      'description' => 'Nombre d heures à payer',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'default' => 0,
+      'precision' => '4',
+      'scale' => '2',
+    ),
+    'duree_prevue' => array(
+      'description' => 'Nombre d heures prévues',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'default' => 0,
+      'precision' => '4',
+      'scale' => '2',
+    ),
+    'uid' => array(
+      'description' => 'User uid du responsable de la dernière modif',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+    'date_modif' => array(
+      'description' => 'Date de dernière modification',
+      'type' => 'varchar',
+      'mysql_type' => 'datetime',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('sess_id'),
+  'indexes' => array(
+    'idx_session_co_modu_degre' => array('co_modu', 'co_degre'),
+    'idx_session_co_resp' => array('co_resp'),
+    'idx_session_date' => array('date'),
+    'idx_session_date_ts' => array('date_ts'),
+  ),
+);
+
+// ---------------------------------------------------------------------------
+// GMODU_PLUS (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_gmodu_plus'] = array(
+  'description' => 'Module GaiaBB - table des infos complémentaires pour gmodu',
+  'fields' => array(
+    'co_modu' => array(
+      'description' => 'Code du module pour un dispositif donné',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+    'module_alert' => array(
+      'description' => 'Alerte sur le module : le service administratif est prévenu d un changement important.',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'prioritaire' => array(
+      'description' => 'Prioritaire',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'module_printed' => array(
+      'description' => 'L ensemble des convocations a été imprimé.',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'organisation' => array(
+      'description' => 'Journal de bord',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'CDC_etat' => array(
+      'description' => 'Le CDC a-t-il été transmis au CE ?',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'convoc_info_off' => array(
+      'description' => 'Info à ne pas porter sur la convocation ',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'convoc_info_on' => array(
+      'description' => 'Info à porter sur la convocation ',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'LE_etat' => array(
+      'description' => 'Listes d émargement transmises',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'LE_info' => array(
+      'description' => 'Infos à propos des listes d émargement',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'DSF_etat' => array(
+      'description' => 'Déclaration de Service Fait transmises',
+      'type' => 'int',
+      'size' => 'tiny',
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+    'DSF_info' => array(
+      'description' => 'Infos à propos des Déclaration de Service Fait ',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'DA_info' => array(
+      'description' => 'Infos à propos du Dossier Administratif',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'DA_date_depot' => array(
+      'description' => 'Date de dépot du dossier administratif',
+      'type' => 'varchar',
+      'mysql_type' => 'datetime',
+      'pgsql_type' => 'timestamp without time zone',
+      'sqlite_type' => 'VARCHAR',
+      'sqlsrv_type' => 'smalldatetime',
+      'not null' => TRUE,
+      'default' => '1970-01-01 00:00:00',
+    ),
+  ),
+  'primary key' => array('co_modu', 'co_degre'),
+);
+
+// ---------------------------------------------------------------------------
+// NETAB_DAFOR (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_netab_dafor'] = array(
+  'description' => 'Soeur de la table GAIA netab',
+  'fields' => array(
+    'co_lieu' => array(
+      'description' => 'Code lieu',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => TRUE,
+    ),
+    'co_natu' => array(
+      'description' => 'Code nature',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_cate' => array(
+      'description' => 'Code catégorie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'secteur' => array(
+      'description' => 'Secteur',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'sigle' => array(
+      'description' => 'Sigle de l établissement',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'denom_princ' => array(
+      'description' => 'Dénomination principale',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'denom_comp' => array(
+      'description' => 'Dénomination complémentaire',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'adr' => array(
+      'description' => 'Adresse',
+      'type' => 'char',
+      'length' => '200',
+      'not null' => FALSE,
+    ),
+    'mention' => array(
+      'description' => 'Mention',
+      'type' => 'char',
+      'length' => '32',
+      'not null' => FALSE,
+    ),
+    'lieu_dit' => array(
+      'description' => 'Lieu-dit',
+      'type' => 'char',
+      'length' => '24',
+      'not null' => FALSE,
+    ),
+    'bp' => array(
+      'description' => 'Bureau Postal',
+      'type' => 'char',
+      'length' => '7',
+      'not null' => FALSE,
+    ),
+    'cedex' => array(
+      'description' => 'Cedex',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'lieu_dist' => array(
+      'description' => 'Bureau distributeur',
+      'type' => 'char',
+      'length' => '26',
+      'not null' => FALSE,
+    ),
+    'cp' => array(
+      'description' => 'code postal',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'pays' => array(
+      'description' => 'Pays',
+      'type' => 'char',
+      'length' => '32',
+      'not null' => FALSE,
+    ),
+    'tel' => array(
+      'description' => 'Téléphone',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'fax' => array(
+      'description' => 'fax',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'mel' => array(
+      'description' => '@mail',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'co_acad' => array(
+      'description' => 'Code de l académie',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_comm' => array(
+      'description' => 'Code commune',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'mdp' => array(
+      'description' => 'Mot de passe',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'co_circ' => array(
+      'description' => 'Code circonscription',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'zeelno' => array(
+      'description' => 'Numéro de zone élémentaire',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'flag_mel' => array(
+      'description' => 'Flag pour envois des Ordres de Mission -OM- par 
+mail (O/N)',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_lieu'),
+);
+
+// ---------------------------------------------------------------------------
+// GRESP_DAFOR (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_gresp_dafor'] = array(
+  'description' => 'Soeur de la table GAIA gresp',
+  'fields' => array(
+    'co_resp' => array(
+      'description' => 'Code responsable',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'id_resp' => array(
+      'description' => 'Identifiant du responsable',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'qualite' => array(
+      'description' => 'Qualité du responsable (fonction)',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'num_voie' => array(
+      'description' => 'Numéro de la voie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'nat_voie' => array(
+      'description' => 'Nature de la voie',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'des_voie' => array(
+      'description' => 'adresse',
+      'type' => 'char',
+      'length' => '20',
+      'not null' => FALSE,
+    ),
+    'esc_res' => array(
+      'description' => 'escalier - résidence',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'cp' => array(
+      'description' => 'code postal',
+      'type' => 'char',
+      'length' => '5',
+      'not null' => FALSE,
+    ),
+    'vil' => array(
+      'description' => 'Ville',
+      'type' => 'char',
+      'length' => '30',
+      'not null' => FALSE,
+    ),
+    'tel' => array(
+      'description' => 'Téléphone',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'fax' => array(
+      'description' => 'fax',
+      'type' => 'char',
+      'length' => '14',
+      'not null' => FALSE,
+    ),
+    'mel' => array(
+      'description' => '@mail',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'organ' => array(
+      'description' => 'Organisme',
+      'type' => 'char',
+      'length' => '60',
+      'not null' => FALSE,
+    ),
+    'nomu' => array(
+      'description' => 'Nom d usage',
+      'type' => 'char',
+      'length' => '20',
+      'not null' => FALSE,
+    ),
+    'prenom' => array(
+      'description' => 'Prénom de la personne',
+      'type' => 'char',
+      'length' => '15',
+      'not null' => FALSE,
+    ),
+    'civilite' => array(
+      'description' => 'Civilité',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_degre' => array(
+      'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+  ),
+  'primary key' => array('co_resp', 'co_degre'),
+);
+
+// ---------------------------------------------------------------------------
+// FILE (non gaia)
+// ---------------------------------------------------------------------------
+$schema['gbb_file'] = array(
+  'description' => 'Association de fichiers à un module',
+  'fields' => array(
+    'co_modu' => array(
+     'description' => 'Code du module pour un dispositif donné',
+      'type' => 'int',
+      'not null' => TRUE,
+      'default' => 0,
+    ),
+    'co_degre' => array(
+     'description' => 'Code du degré',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+      'default' => 2,
+    ),
+     'fid' => array(
+     'description' => 'Clé étrangère avec table file_managed',
+      'type' => 'int',
+      'size' => 'small',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+  ),
+);
+
+// ---------------------------------------------------------------------------
+// GBB_GDIOF
+// ---------------------------------------------------------------------------
+$schema['gbb_gdiof'] = array(
+  'description' => 'Dispo offre',
+  'fields' => array(
+    'co_offre' => array(
+     'description' => 'Code offre',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'no_offre' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => TRUE,
+    ),
+    'co_orie' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => TRUE,
+    ),
+    'libl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => TRUE,
+    ),
+    'lobjt' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_objt' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => TRUE,
+    ),
+    'co_resp' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_orga' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'nb_mod_prev' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'larch' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => TRUE,
+    ),
+    'dt_crea' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'date',
+      'not null' => TRUE,
+    ),
+    'co_init' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_tcan' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'nb_place_prev' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'duree_prev' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'co_chap' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'co_art' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_camp' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_them' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'flag_compl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'cle' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '4',
+      'not null' => FALSE,
+    ),
+    'co_tpla' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_offreur' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+    'gestionnaire' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '50',
+      'not null' => FALSE,
+    ),
+    'publie' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_offre'),
+  'indexes' => array(
+    'gdiof_idx2' => array('cle'),
+    'gdiof_pk' => array('co_orie'),
+    'gdiof_pk2' => array('no_offre'),
+  ),
+);
+$schema['gbb_gmoof'] = array(
+  'description' => 'TODO: please describe this table!',
+  'fields' => array(
+    'co_offre' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'co_omodu' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'libl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => TRUE,
+    ),
+    'lpeda' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => TRUE,
+    ),
+    'lcont' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+    'co_form' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'lform' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_moda' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'lmoda' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_type' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => TRUE,
+    ),
+    'lcibl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'co_resp' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'co_resp_org' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'not null' => FALSE,
+    ),
+    'lconp' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'duree_prev' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'nb_groupe' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'nb_eff_groupe' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'cout_p_fonc' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'cout_p_prest' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'nb_interv' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => TRUE,
+    ),
+    'lcomm' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '250',
+      'not null' => FALSE,
+    ),
+    'dt_crea' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'date',
+      'not null' => TRUE,
+    ),
+    'dt_etat' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'date',
+      'not null' => FALSE,
+    ),
+    'co_etat' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_cont' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'co_cibl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'nb_place_prev' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'nb_h_interv' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'size' => 'small',
+      'not null' => FALSE,
+    ),
+    'co_regr' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '6',
+      'not null' => FALSE,
+    ),
+    'conv' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_prac' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_prna' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '2',
+      'not null' => FALSE,
+    ),
+    'co_budg' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '3',
+      'not null' => FALSE,
+    ),
+    'cumul' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_remp' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'cout_p_excep' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'numeric',
+      'not null' => FALSE,
+      'precision' => '7',
+      'scale' => '2',
+    ),
+    'flag_compl' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '1',
+      'not null' => FALSE,
+    ),
+    'co_etab_dem' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'char',
+      'length' => '8',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('co_omodu'),
+  'indexes' => array(
+    'gmoof_pk' => array('co_offre'),
+  ),
+);
+
+
+
+ return $schema;
+}
