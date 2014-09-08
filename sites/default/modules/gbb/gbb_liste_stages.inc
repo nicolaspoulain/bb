@@ -522,20 +522,22 @@ function gbb_liste_stages_liste($args) {
           'html' => FALSE,
         );
         $d_ouvert_ou_ferme = ($r->co_andi == '')? '' : 'Ferme';
-        $can = array(1 => "", 2 => "", 3 => theme('image', variable_get('_gbb_pub_des')));
+        $can = array(1 => "", 2 => "", 3 => variable_get('ico_pubDes'));
         $candidature = $can[$r->co_tcan];
         $paf_ou_fil = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->libd == $libd_precedent)? "gris" : $libd_class;
         
         // Les icônes à afficher
-        $session_alert = ($nb_sa == 0)? '' : '<i class="fa fa-flag fa-lg red">' . $nb_sa . '</i> ';
-        $module_alert = ($r->module_alert==0)? '' :  '<i class="fa fa-flag fa-lg red"></i> ';
-        $NOT_en_attente = ($nb_nea == 0)? '' : '<i class="fa fa-play-circle fa-lg blue">' . $nb_nea . '</i> ';
-        $en_attente = ($nb_ea == 0)? '' : '<i class="fa fa-pause fa-lg gray">' . $nb_ea . '</i> ';
-        $module_printed = ($r->module_printed)? '<i class="fa fa-print fa-lg green"></i> ' : '';
-        $prioritaire = (!$r->prioritaire)? '' : '<i class="fa fa-bell fa-lg orange"></i> ';
-        $convoc_sent = ($nb_s == 0)? '' : '<i class="fa fa-envelope fa-lg green">' .$nb_s. '</i> ';
+        $session_alert = ($nb_sa == 0)? '' : variable_get('ico_alert');
+        $module_alert = ($r->module_alert==0)? '' : variable_get('ico_alert');
+        $NOT_en_attente = ($nb_nea == 0)? '' : variable_get('ico_notAttente')
+          . "<span class=\"fa blue\">$nb_nea</span> ";
+        $en_attente = ($nb_ea == 0)? '' : variable_get('ico_attente')
+          . "<span class=\"fa\">$nb_ea</span> ";
+        $module_printed = ($r->module_printed)? variable_get('ico_print') : '';
+        $prioritaire = (!$r->prioritaire)? '' : variable_get('ico_bell');
+        $convoc_sent = ($nb_s == 0)? '' : variable_get('ico_sent')."<span class=\"fa green\">$nb_s</span> ";
         $rsp = db_select('gbb_gdire', 'd');
         $rsp ->fields('d', array('co_resp', 'co_tres'))
           ->condition('d.co_degre', arg(2), '=')
