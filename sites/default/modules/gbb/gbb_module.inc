@@ -18,41 +18,30 @@ function gbb_module_view($args = 'NaN') {
   // Construction de la page
   $build = array();
   $build['infos_general'] = gbb_infos_general($args);
-  $build['infos_detail']  = theme('fieldset',
-                                  array(
-                                    'element' => array(
-                                      '#attributes' => array(
-                                        'class' => array('details',
-                                                         'collapsible',
-                                                         'collapsed',
-                                        ),
-                                      ),
-                                      '#children' => '',
-                                      '#title' => t('Détails ...'),
-                                      '#value' => gbb_infos_detail($args),
-                                    )
-                                  )
-                            );
   if (user_access('gest_sessions gbb')) {
       $build['color_form']  = render(drupal_get_form('gbb_color_form', $args));
+  }
+  $build['sec_A'] = "<section>";
+  if (user_access('gest_sessions gbb')) {
       $build['organis_form'] = render(drupal_get_form('gbb_organis_form', $args));
   }
 
-  $collapsed = (user_access('gest_convocs gbb'))? '' : 'collapsed';
-  $build['sess_stagiaire'] = theme('fieldset', 
-                                     array(
-                                       'element' => array(
-                                         '#attributes' => array(
-                                           'class' => array('organisation', 
-                                                            'collapsible', 
-                                                            $collapsed   )),
-                                         '#children' => '',
-                                         '#title' => t('Convoc stagiaire ...'),
-                                         '#value' => gbb_sess_stagiaire($args),
+  if (user_access('gest_convocs gbb')) {
+    $build['sess_stagiaire'] = theme('fieldset', 
+                                       array(
+                                         'element' => array(
+                                           '#attributes' => array(
+                                             'class' => array('organisation', 
+                                                              'collapsible', )),
+                                           '#children' => '',
+                                           '#title' => t('Convoc stagiaire ...'),
+                                           '#value' => gbb_sess_stagiaire($args),
+                                         )
                                        )
-                                     )
-                               );
+                                 );
+  }
   $build['attachements'] = render(drupal_get_form('gbb_attachements', $args));
+  $build['sec_A_end'] = "</section>";
   $build['sess_formatr'] = render(drupal_get_form('gbb_sess_formatr', $args));
 
   if (isset($_GET['sess_id'])) {
@@ -105,8 +94,7 @@ function gbb_infos_general($args) {
     if ($r->co_tres == 1 || $r->co_tres == 2 || $r->co_tres == 3 ) {
       $str .= $TRES[$r->co_tres] . " : ";
       $str .= l( $r->prenom . ' ' . $r->nomu, 
-                 'liste/13/' . $r->co_degre . '/'. $voir .'/' . $r->nomu, 
-                 array('query' => array('voir_encours' => $voirEnCours))
+                 'liste/14/' . $r->co_degre . '/'. $voir .'/' . $r->nomu
               ) ;
       $str .= "&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;";
     }
@@ -232,9 +220,10 @@ function gbb_color_form($args) {
   $settings['id'] = $id;
 
   $form['f'] = array( '#type' => 'fieldset',
-                      '#title' => t('Choisissez la couleur que vous voulez pour le module dans la liste des stages'),
+                      '#title' => t('Couleur & Détails'),
                       '#attributes' => array('class' => array('color',
-                                                              'collapsible'  )),
+                      'collapsible',
+                  'collapsed',  )),
   );
 
   $form['f']['color'] = array(
@@ -270,11 +259,14 @@ function gbb_color_form($args) {
   $form['f']['codegre'] = array('#type' => 'hidden',
                                 '#value' => $codegre );
 
- $form['f']['submit'] = array(
+  $form['f']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),
     '#attributes' => array('class' => array('inline')),
              );
+  $form['f']['details']['#markup']= gbb_infos_detail($args);
+
+
   return $form;
 }
 function gbb_color_form_submit(&$form, &$form_state) {
@@ -1214,7 +1206,7 @@ function gbb_convoc_form($form, &$form_state) {
     '#type' => 'textarea',
     '#title' => t('Info à porter sur la convocation'),
     '#default_value' => $txtOn,
-    '#cols' => 50,
+    '#cols' => 43,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
     '#ajax' => array(
@@ -1518,51 +1510,4 @@ function gbb_DA_date_depot_form_submit(&$form, &$form_state) {
                 'co_degre' => $form_state['values']['codegre'],))
     ->fields(array('DA_date_depot' => $ddpt ))
     ->execute();
-}
-
-/**
- * Fonctions d' ** AUTOCOMPLETE AJAX ETABLISSEMENTS **
- */
-function _gbb_autocompetab($string) {
-
-  $matches = array();
-  $result = db_select('gbb_netab_dafor', 'c')
-    ->fields('c', array('co_lieu', 'denom_comp', 'sigle'))
-    ->condition('denom_comp', '%' . db_like($string) . '%', 'LIKE')
-    ->range(0, 10)
-    ->execute();
-  foreach ($result as $r) {
-    $etab = $r->denom_comp . ' ' . $r->sigle . ' (rne:' . $r->co_lieu . ')';
-    $matches[$etab] = $etab;
-  }
-  $count = $result->rowCount();
-  if ($count > 9) $matches[' '] = '..... Et bien d\'autres .....';
-  drupal_json_output($matches);
-}
-
-/**
- * Fonctions d' ** AUTOCOMPLETE AJAX FORMATEURS **
- */
-function _gbb_autocompform($string) {
-
-  $matches = array();
-  $result = db_select('gbb_gresp_dafor', 'c')
-    ->fields('c', array('co_resp', 'nomu', 'prenom'))
-    ->condition('nomu', '%' . db_like($string) . '%', 'LIKE')
-    ->range(0, 10)
-    ->execute();
-
-  if (strpos($string,'++')) {
-  $result = db_select('gbb_gresp_dafor', 'c')
-    ->fields('c', array('co_resp', 'nomu', 'prenom'))
-    ->condition('nomu', '%' . db_like(str_replace("++","",$string)) . '%', 'LIKE')
-    ->execute();
-  }
-  foreach ($result as $r) {
-    $formatr = $r->prenom . ' ' . $r->nomu . ' (id:' . $r->co_resp . ')';
-    $matches[$formatr] = $formatr;
-  }
-  $count = $result->rowCount();
-  if ($count > 9 && !strpos($string,'++')) $matches[' '] = '..... Et bien d\'autres .....';
-  drupal_json_output($matches);
 }

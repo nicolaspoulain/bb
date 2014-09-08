@@ -2,6 +2,9 @@ h1, h2, h3, h4, h5, h6 {
   margin: 20px;
   padding: 0;
 }
+#logo {
+  padding : 0px;
+}
 
 td.nowrap {
   whitespace:nowrap;
@@ -43,14 +46,20 @@ fieldset.details {
   background: none repeat scroll 0 0 #FFF;
   padding : 0px;
 }
+section {
+  width: 100%;
+  margin: 0;
+  padding: 1px;
+}
+
 fieldset.organisation {
   background: none repeat scroll 0 0 #FFF;
-  width : 66%;
+  width : 59%;
   float: left;
 }
 fieldset.attachements {
   background: none repeat scroll 0 0 #FFF;
-  width : 30%;
+  width : 40%;
 }
 fieldset.sessions {
   background: none repeat scroll 0 0 #F1F3F4;

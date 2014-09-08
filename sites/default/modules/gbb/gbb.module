@@ -90,14 +90,13 @@ function gbb_menu() {
         'file' => 'gbb_liste_stages.inc',
   );
 
-/*
   $items['atraiter'] = array(
         'title' => '',
         'page callback' => 'gbb_atraiter_view',
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
+        'file' => 'gbb_liste_stages.inc',
   );
-*/
 
   // Etant donné un co_degré (1 ou 2)
   // Affiche la page de gestion du module co_modu
@@ -220,40 +219,45 @@ function gbb_menu() {
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
   );
+ */
 
   // Pages pour autocomplete AJAX
   // TODO : décrire
   $items['autocomp/etablissement'] = array(
         'page callback' => '_gbb_autocompetab',
         'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_autocomp.inc',
   );
   // TODO : décrire
   $items['autocomp/formateur'] = array(
         'page callback' => '_gbb_autocompform',
         'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_autocomp.inc',
   );
   // TODO : décrire
   $items['autocomp/formateur2'] = array(
         'page callback' => '_gbb_autocompformatr2',
         'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_autocomp.inc',
   );
   // TODO : décrire
   $items['autocomp/responsable'] = array(
         'page callback' => '_gbb_autocompresp',
         'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_autocomp.inc',
   );
   // TODO : décrire
   $items['autocomp/stage'] = array(
         'page callback' => '_gbb_autocompstage',
         'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_autocomp.inc',
   );
 
- */
 
   return $items;
 
