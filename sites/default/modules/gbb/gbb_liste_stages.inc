@@ -527,28 +527,15 @@ function gbb_liste_stages_liste($args) {
         $paf_ou_fil = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->libd == $libd_precedent)? "gris" : $libd_class;
+        
         // Les icônes à afficher
-        $session_alert = ($nb_sa == 0)? '' :
-          theme('image', variable_get('_gbb_session_alert_icon')) .
-          '<span class="nb_sa">' . $nb_sa . '</span>';
-        $module_alert = ($r->module_alert==0)? '' :
-          theme('image', variable_get('_gbb_module_alert_icon'));
-        $NOT_en_attente = ($nb_nea == 0)? '' :
-          theme('image', variable_get('_gbb_not_en_attente_icon')) .
-          '<span class="nb_sa">' . $nb_nea . '</span>';
-        $en_attente = ($nb_ea == 0)? '' :
-          theme('image', variable_get('_gbb_en_attente_icon')) .
-          '<span class="nb_sa">' . $nb_ea . '</span>';
-        $module_printed = ($r->module_printed)?
-          theme('image', variable_get('_gbb_print_icon')) . ' ' : '';
-        $prioritaire = (!$r->prioritaire)? '' :
-          theme('image', variable_get('_gbb_prioritaire_icon'));
-        $convoc_sent = ($nb_s == 0)? '' :
-          theme('image', variable_get('_gbb_convoc_sent_icon')) .
-          '<span class="nb_sa">' . $nb_s . '</span>';
-        $attachement = ($nb_pj ==0)? '' :
-          theme('image', variable_get('_gbb_attachement_icon')) .
-          '<span class="nb_pj">' . $nb_pj . '</span>';
+        $session_alert = ($nb_sa == 0)? '' : '<i class="fa fa-flag fa-lg red">' . $nb_sa . '</i> ';
+        $module_alert = ($r->module_alert==0)? '' :  '<i class="fa fa-flag fa-lg red"></i> ';
+        $NOT_en_attente = ($nb_nea == 0)? '' : '<i class="fa fa-play-circle fa-lg blue">' . $nb_nea . '</i> ';
+        $en_attente = ($nb_ea == 0)? '' : '<i class="fa fa-pause fa-lg gray">' . $nb_ea . '</i> ';
+        $module_printed = ($r->module_printed)? '<i class="fa fa-print fa-lg green"></i> ' : '';
+        $prioritaire = (!$r->prioritaire)? '' : '<i class="fa fa-bell fa-lg orange"></i> ';
+        $convoc_sent = ($nb_s == 0)? '' : '<i class="fa fa-envelope fa-lg green">' .$nb_s. '</i> ';
         $rsp = db_select('gbb_gdire', 'd');
         $rsp ->fields('d', array('co_resp', 'co_tres'))
           ->condition('d.co_degre', arg(2), '=')
@@ -565,14 +552,14 @@ function gbb_liste_stages_liste($args) {
             $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
           }
         };
-        $timer = theme('image', variable_get('_gbb_timer_green_icon'));
+        $timer = '<i class="fa fa-clock-o fa-lg green"></i> ';
         if (strtotime($dateD) < time()) { // le premier jour dépassé
-          $timer = theme('image', variable_get('_gbb_timer_red_icon'));
+          $timer = '<i class="fa fa-clock-o fa-lg red"></i> ' ;
         } elseif(strtotime($dateD) < time() + 1296000) { // le premier jour est dans moins de 15 jours.
-          $timer = theme('image', variable_get('_gbb_timer_orange_icon'));
+          $timer = '<i class="fa fa-clock-o fa-lg orange"></i> ';
         };
         if ($dateF != '2061-07-16' && strtotime($dateF) < time()) { // le dernier jour jour dépassé donc formation finie
-          $timer = theme('image', variable_get('_gbb_timer_end_icon'));
+          $timer = '<i class="fa fa-flag-checkered fa-lg"></i> ';
         }
 
         if ($dateD > 0) {

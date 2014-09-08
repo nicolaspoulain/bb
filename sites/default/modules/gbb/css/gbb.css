@@ -9,6 +9,21 @@ h1, h2, h3, h4, h5, h6 {
 td.nowrap {
   whitespace:nowrap;
 }
+.gray {
+  color: gray;
+}
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
+.blue{
+  color:blue;
+}
+.orange {
+  color: orange;
+}
 
 .fil {
   font-weight:bold;
