@@ -23,6 +23,7 @@ function bootstrap_css_alter(&$css) {
     else {
       $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
     }
+    $cdn = 'http://bootswatch.com/united/bootstrap.css';
     $css[$cdn] = array(
       'data' => $cdn,
       'type' => 'external',
