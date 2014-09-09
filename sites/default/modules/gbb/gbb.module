@@ -273,6 +273,15 @@ variable_set('ico_attente',    '<i class="fa fa-pause" title="En attente : ne pa
 variable_set('ico_print',      '<i class="fa fa-print green" title="Imprimé par le service administratif"></i> ');
 variable_set('ico_bell',       '<i class="fa fa-bell orange" title="Prioritaire"></i> ');
 variable_set('ico_sent',       '<i class="fa fa-envelope green" title="La convocation pour cette session a été envoyée"></i>' );
+variable_set('ico_clockGreen', '<i class="fa fa-clock-o fa-lg green" title="Première date dans plus de 15 jours"></i> ');
+variable_set('ico_clockOrange','<i class="fa fa-clock-o fa-lg orange" title="Première date dans moins de 15 jours"></i> ');
+variable_set('ico_clockRed',   '<i class="fa fa-clock-o fa-lg red" title="Première date dépassée"></i> ');
+variable_set('ico_finish',     '<i class="fa fa-flag-checkered fa-lg" title="Dernière date dépassée"></i> ');
+variable_set('ico_user',       '<i class="fa fa-user" title="Formateur"></i>');
+variable_set('ico_etab',       '<i class="fa fa-university" title="Lieu"></i>');
+variable_set('ico_userAdd',    '<i class="fa fa-user" title="Ajouter un formateur">+</i>');
+variable_set('ico_etabAdd',    '<i class="fa fa-university" title="Ajouter un lieu">+</i>');
+variable_set('ico_save',       '<i class="fa fa-floppy-o fa-lg" title="Enregistrer"></i>');
 
 variable_set('_gbb_session_alert_icon', array(
   'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',

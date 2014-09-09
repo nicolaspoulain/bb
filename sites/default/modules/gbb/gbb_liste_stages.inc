@@ -185,7 +185,7 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
       array('attributes' => array('class' => 'anchor-class'), 'html' => TRUE)
     )
     . t(' (Ajouter un formateur&nbsp;') .
-      l( theme('image',variable_get('_gbb_user_add_icon')),
+      l( variable_get('ico_userAdd'),
           'formateur/add',
           array('attributes' => array('class' => 'anchor-class'),
           'html' => TRUE)) . ')'
@@ -200,7 +200,7 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
     $form['f']['lieu'] = array(
       '#markup' => 
     t(' (Ajouter un lieu&nbsp;') .
-    l( theme('image',variable_get('_gbb_etab_add_icon')),
+    l( variable_get('ico_etabAdd'),
         'etablissement/',
         array('attributes' =>  array('class' => 'anchor-class'),
         'html' => TRUE)) . ')</p>'
@@ -554,14 +554,14 @@ function gbb_liste_stages_liste($args) {
             $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
           }
         };
-        $timer = '<i class="fa fa-clock-o fa-lg green"></i> ';
+        $timer = variable_get('ico_clockGreen');
         if (strtotime($dateD) < time()) { // le premier jour dépassé
-          $timer = '<i class="fa fa-clock-o fa-lg red"></i> ' ;
+          $timer = variable_get('ico_clockRed') ;
         } elseif(strtotime($dateD) < time() + 1296000) { // le premier jour est dans moins de 15 jours.
-          $timer = '<i class="fa fa-clock-o fa-lg orange"></i> ';
+          $timer = variable_get('ico_clockOrange');
         };
         if ($dateF != '2061-07-16' && strtotime($dateF) < time()) { // le dernier jour jour dépassé donc formation finie
-          $timer = '<i class="fa fa-flag-checkered fa-lg"></i> ';
+          $timer = variable_get('ico_finish');
         }
 
         if ($dateD > 0) {
@@ -579,7 +579,7 @@ function gbb_liste_stages_liste($args) {
         } else { $dates =''; };
         $DA = "";
         if ($DAdd !="NaN" && $DAdd !="1970-01-01 00:00:00") {
-          $DA = "&nbsp;" . theme('image', variable_get('_gbb_DA_rendu'))
+          $DA = variable_get('ico_DArendu')
             . " " .strftime('%d/%m/%y', strtotime($DAdd));
         };
         $queryev = db_select('gbb_evaluation', 'e');
@@ -590,11 +590,11 @@ function gbb_liste_stages_liste($args) {
         $resultev = $queryev->execute();
         $evalbilan = '';
         if (($resultev->rowCount() != 0)) {
-          $evalbilan = "&nbsp;&nbsp;".theme('image', variable_get('_gbb_evals'));
+          $evalbilan = variable_get('ico_evals');
           foreach ($resultev as $rrv) {
             #if ($rrv->syntheseEvalForm !='') {
             if ($rrv->remqAnalysesRD !='') {
-              $evalbilan = "&nbsp;&nbsp;".theme('image', variable_get('_gbb_bilans'));
+              $evalbilan = variable_get('ico_bilans');
             };
           };
         };
@@ -610,8 +610,8 @@ function gbb_liste_stages_liste($args) {
 
         $items = array();
         foreach ($fo as $f) {
-          $items[] = ((!$f->en_attente)? '' :
-            theme('image', variable_get('_gbb_en_attente_icon')) ) .
+          $items[] = (!$f->en_attente)? '' :
+            variable_get('ico_attente') .
             ' ' . $f->date . ' - ' . $f->prenom . ' ' . $f->nomu;
         };
         $formateurs = theme('item_list', array('items' => $items));

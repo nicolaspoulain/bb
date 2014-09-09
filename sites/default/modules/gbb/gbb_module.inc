@@ -310,10 +310,12 @@ function gbb_organis_form($form, &$form_state) {
                           'message' => 'Enregistrement...'),
     ),
   );
+  $form['f']['envoyer']['#markup']= '<div class="flright">' .
+    variable_get('ico_save') . '</div>';
 
   $form['f']['prioritaire'] = array(
     '#type' => 'checkbox',
-    '#title' => t( theme('image', variable_get('_gbb_prioritaire_icon')) . 
+    '#title' => t( variable_get('ico_bell') . 
                    'Prioritaire' ),
     '#default_value' => $r['prioritaire'],
     '#ajax' => array(
@@ -565,13 +567,13 @@ function gbb_sess_formatr($form, $form_state, $args) {
   foreach ($result as $r) {
     $visibilite = ($r->en_attente)? 'grisclair' : '';
     if ($r->en_attente) {
-          $icon = theme('image', variable_get('_gbb_en_attente_icon'));
+          $icon = variable_get('ico_attente');
     } elseif ($r->session_alert) {
-          $icon = theme('image', variable_get('_gbb_session_alert_icon'));
+          $icon = variable_get('ico_alert');
     } elseif ($r->convoc_sent) {
-          $icon = theme('image', variable_get('_gbb_convoc_sent_icon'));
+          $icon = variable_get('ico_sent');
     } else {
-          $icon = theme('image', variable_get('_gbb_not_en_attente_icon'));
+          $icon = variable_get('ico_notAttente');
     };
     $row[$r->sess_id] = array(
       'date' => utf8_encode(strftime('%a %e %h %Y ', strtotime($r->date))),
@@ -579,7 +581,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
       'horaires' => $r->horaires,
       'lieu' => $r->denom_princ . ' ' . $r->denom_comp .
                 ' (' . $r->sigle . ')' . '&nbsp;' .
-                l( theme('image', variable_get('_gbb_etab_edit_icon')),
+                l( variable_get('ico_etab'),
                    'etablissement/' . $r->co_lieu,
                    array('attributes' => array('class' => 'anchor-class'),
                          'html' => TRUE )
@@ -588,7 +590,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
       'formateur' => (($r->statut)? '<span class="espe">':'')
                 .$r->prenom . ' ' . $r->nomu . '&nbsp;'
                 .(($r->statut)? '</span>':'')
-                .l( theme('image', variable_get('_gbb_user_edit_icon')),
+                .l( variable_get('ico_user'),
                    'formateur/' . $r->co_resp,
                    array('attributes' => array('class' => 'anchor-class'),
                          'html' => TRUE )
@@ -974,8 +976,8 @@ function gbb_sess_edition($form, $form_state, $args) {
   // mal compris par les conseillers
   $form['f']['session_alert'] = array(
     '#type' => 'checkbox',
-    '#title' => theme('image', variable_get('_gbb_session_alert_icon')) .
-                t('Alerte'),
+    '#title' => variable_get('ico_alert') .
+                t(' Alerte'),
     '#default_value' => $r->session_alert,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
@@ -989,7 +991,7 @@ function gbb_sess_edition($form, $form_state, $args) {
   if ($r->convoc_sent != 1 || user_access('gest_sessions gbb') ) {
     $form['f']['en_attente'] = array(
       '#type' => 'checkbox',
-      '#title' => theme('image', variable_get('_gbb_en_attente_icon')) .
+      '#title' => variable_get('ico_attente') .
                   t('En attente'),
       '#default_value' => $r->en_attente,
       '#prefix' => '<div class="inline">',
@@ -1023,13 +1025,13 @@ function gbb_sess_edition($form, $form_state, $args) {
   $form['f']['lieu'] = array(
     '#type' => 'textfield',
     '#title' => t('Lieu&nbsp;' . 
-                  l( theme('image',variable_get('_gbb_etab_add_icon')),
+                  l( variable_get('ico_etabAdd'),
                      'etablissement/',
                      array('attributes' => array('class' => 'anchor-class'),
                                                  'html' => TRUE))
                 ),
     '#default_value' => t("$r->sigle $r->denom_comp (rne:$r->co_lieu)"),
-    '#size' => 40,
+    '#size' => 50,
     '#maxlength' => 128,
     '#autocomplete_path' => 'autocomp/etablissement',
     '#prefix' => '<br/><div class="inline">',
@@ -1042,7 +1044,7 @@ function gbb_sess_edition($form, $form_state, $args) {
   $form['f']['formateur'] = array(
     '#type' => 'textfield',
     '#title' => t('Formateur&nbsp;' . 
-                  l( theme('image',variable_get('_gbb_user_add_icon')),
+                  l( variable_get('ico_userAdd'),
                      'formateur/add',
                      array('attributes' => array('class' => 'anchor-class'),
                                                  'html' => TRUE))
@@ -1153,12 +1155,12 @@ function gbb_convoc_form($form, &$form_state) {
   );
 
   $form['f']['envoyer']['#markup']= '<div class="flright">' .
-    theme('image', variable_get('_gbb_disk_icon')) . '</div>';
+    variable_get('ico_save') . '</div>';
 
   if (user_access('gest_convocs gbb')) {
     $form['f']['module_printed'] = array(
       '#type' => 'checkbox',
-      '#title' => theme('image', variable_get('_gbb_print_icon')) .
+      '#title' => variable_get('ico_print') .
                   t('Imprimé'),
       '#default_value' => $r['module_printed'],
       '#prefix' => '<div class="inline">',
@@ -1176,8 +1178,8 @@ function gbb_convoc_form($form, &$form_state) {
 
   $form['f']['module_alert'] = array(
     '#type' => 'checkbox',
-    '#title' => theme('image', variable_get('_gbb_module_alert_icon')) .
-                t('Alerte'),
+    '#title' => variable_get('ico_alert') .
+                t(' Alerte'),
     '#default_value' => $r['module_alert'],
     '#ajax' => array(
       'callback' => 'gbb_convoc_form_module_alert_submit',
@@ -1320,7 +1322,7 @@ function gbb_bilan_form($form, &$form_state) {
   );
 
   $form['f']['envoyer']['#markup']= '<div class="flright">' . 
-    theme('image', variable_get('_gbb_disk_icon')) . '</div>';
+    variable_get('ico_save') . '</div>';
 
   $html = $r['LE_info'];
   $txtOff = preg_replace('#<br\s*/?>#i', "\n", $html);  //ce <? est une ASTUCE 
