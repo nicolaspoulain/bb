@@ -28,7 +28,7 @@ function gbb_formateur_view($args = 'NaN') {
                                  'class' => array('details'),
                                ),
                                '#children' => '',
-                               '#title' => t('Graphique de répartition des heures en 2013-2014'),
+                               '#title' => t('Graphique de répartition des heures'),
                                '#value' => gbb_formateur_stages($args),
                              )
                            )
@@ -293,7 +293,52 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
  * Un tableau qui affiche les détails des interventions du formateur
  */
 function gbb_formateur_stages($args) {
+  
+  /*
+  //---------------------
+  //$chart = array(
+    '#type' => 'chart',
+    '#chart_type' => 'column',
+  );
+  $chart['male'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('Male'),
+    '#data' => array(10, 20, 30),
+  );
+  $chart['xaxis'] = array(
+    '#type' => 'chart_xaxis',
+    '#title' => t('Month'),
+    '#labels' => array(t('Jan'), t('Feb'), t('Mar')),
+  );
 
+  //---------------------
+  $chart = array(
+    '#type' => 'chart',
+    '#chart_type' => 'column',
+    '#title' => t('Column simple'),
+    '#stacking' => TRUE,
+  );
+  $chart['male'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('Male'),
+    '#data' => array(10, 20, 30),
+    '#suffix' => 'lbs',
+  );
+  $chart['female'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('Female'),
+    '#data' => array(12, 22),
+    '#suffix' => 'lbs',
+  );
+  $chart['xaxis'] = array(
+    '#type' => 'chart_xaxis',
+    '#labels' => array('Jan', 'Feb', 'Mar'),
+  );
+  
+  $output = drupal_render($chart);
+  return $output;
+  */
+  $annee = '13';
   if ($args == 'NaN') return "Vide";
   if (arg(1) == 'add') return "";
 
@@ -307,7 +352,7 @@ function gbb_formateur_stages($args) {
            );
   $query ->condition('s.co_resp', arg(1), '=')
          ->condition('s.co_degre', '2', '=')
-         ->condition('id_disp', db_like('14') . '%', 'LIKE')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
          ->fields('r', array('decharge',))
          ->distinct();
   $query ->addExpression('SUM(duree_prevue)', 'sumprevue');
@@ -325,7 +370,7 @@ function gbb_formateur_stages($args) {
   $query ->condition('s.co_resp', arg(1), '=')
          ->condition('s.co_degre', '2', '=')
          ->condition('s.type_paiement', 'VAC', 'LIKE')
-         ->condition('id_disp', db_like('14') . '%', 'LIKE')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
          ->distinct();
   $query ->addExpression('SUM(duree_a_payer)', 'sumapayervac');
   $r2 = $query->execute()->fetchObject();
@@ -341,11 +386,50 @@ function gbb_formateur_stages($args) {
   $query ->condition('s.co_resp', arg(1), '=')
          ->condition('s.co_degre', '2', '=')
          ->condition('s.type_paiement', 'DECH', 'LIKE')
-         ->condition('id_disp', db_like('14') . '%', 'LIKE')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
          ->distinct();
   $query ->addExpression('SUM(duree_a_payer)', 'sumapayerdec');
   $r3 = $query->execute()->fetchObject();
 
+  //_________________________
+  if (isset($r)) {
+    $chart = array(
+      '#type' => 'chart',
+      '#chart_type' => 'column',
+      '#title' => t('Année 20').$annee,
+      '#stacking' => TRUE,
+    );
+    $chart['decharge'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(27*$r->decharge,0,0),
+      '#title' => t(' '),
+      '#suffix' => 'h',
+    );
+    $chart['Prevue'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(0, $r->sumprevue, 0),
+      '#title' => t(' '),
+    );
+    $chart['ApayerDech'] = array(
+      '#type' => 'chart_data',
+      '#title' => t('décharge'),
+      '#data' => array(0, 0, $r3->sumapayerdec),
+    );
+    $chart['ApayerVac'] = array(
+      '#type' => 'chart_data',
+      '#title' => t('vacations'),
+      '#data' => array(0, 0, $r2->sumapayervac),
+    );
+    $chart['xaxis'] = array(
+      '#type' => 'chart_xaxis',
+      '#labels' => array('Décharge', 'Prévue', 'A payer'),
+    );
+    $output = drupal_render($chart);
+    return $output;
+  }
+
+
+  /*
   //http://code.google.com/p/drupal-chart-api/wiki/Examples
   //http://code.google.com/p/drupal-chart-api/wiki/PublicAPI
   if (isset($r)) {
@@ -388,5 +472,6 @@ function gbb_formateur_stages($args) {
 
     return $ret;
   };
+  */
 }
 

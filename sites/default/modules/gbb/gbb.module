@@ -110,7 +110,6 @@ function gbb_menu() {
         'file' => 'gbb_module.inc',
   );
 
-/*
   // Etant donné un id (112 ou 2222)
   // Affiche la page de gestion d'un formateur
   //   exemple : formateur/112
@@ -120,8 +119,10 @@ function gbb_menu() {
         'page callback' => 'gbb_formateur_view',
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
+        'file' => 'gbb_formateur.inc',
   );
 
+/*
   // Etant donné un id (112 ou 2222)
   // Affiche la page de gestion d'un établisssement
   //   exemple : etablissement/112
