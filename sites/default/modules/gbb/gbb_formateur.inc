@@ -293,51 +293,8 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
  * Un tableau qui affiche les détails des interventions du formateur
  */
 function gbb_formateur_stages($args) {
-  
-  /*
-  //---------------------
-  //$chart = array(
-    '#type' => 'chart',
-    '#chart_type' => 'column',
-  );
-  $chart['male'] = array(
-    '#type' => 'chart_data',
-    '#title' => t('Male'),
-    '#data' => array(10, 20, 30),
-  );
-  $chart['xaxis'] = array(
-    '#type' => 'chart_xaxis',
-    '#title' => t('Month'),
-    '#labels' => array(t('Jan'), t('Feb'), t('Mar')),
-  );
 
-  //---------------------
-  $chart = array(
-    '#type' => 'chart',
-    '#chart_type' => 'column',
-    '#title' => t('Column simple'),
-    '#stacking' => TRUE,
-  );
-  $chart['male'] = array(
-    '#type' => 'chart_data',
-    '#title' => t('Male'),
-    '#data' => array(10, 20, 30),
-    '#suffix' => 'lbs',
-  );
-  $chart['female'] = array(
-    '#type' => 'chart_data',
-    '#title' => t('Female'),
-    '#data' => array(12, 22),
-    '#suffix' => 'lbs',
-  );
-  $chart['xaxis'] = array(
-    '#type' => 'chart_xaxis',
-    '#labels' => array('Jan', 'Feb', 'Mar'),
-  );
-  
-  $output = drupal_render($chart);
-  return $output;
-  */
+
   $annee = '13';
   if ($args == 'NaN') return "Vide";
   if (arg(1) == 'add') return "";
@@ -395,7 +352,7 @@ function gbb_formateur_stages($args) {
   if (isset($r)) {
     $chart = array(
       '#type' => 'chart',
-      '#chart_type' => 'column',
+      '#chart_type' => 'bar',
       '#title' => t('Année 20').$annee,
       '#stacking' => TRUE,
     );
@@ -409,69 +366,34 @@ function gbb_formateur_stages($args) {
       '#type' => 'chart_data',
       '#data' => array(0, $r->sumprevue, 0),
       '#title' => t(' '),
+      '#suffix' => 'h',
     );
     $chart['ApayerDech'] = array(
       '#type' => 'chart_data',
-      '#title' => t('décharge'),
+      '#title' => t('en déch.'),
       '#data' => array(0, 0, $r3->sumapayerdec),
+      '#suffix' => 'h',
     );
     $chart['ApayerVac'] = array(
       '#type' => 'chart_data',
-      '#title' => t('vacations'),
+      '#title' => t('en vac.'),
       '#data' => array(0, 0, $r2->sumapayervac),
+      '#suffix' => 'h',
+    );
+    $chart['ApayerAutres'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(0, 0, $r->sumapayer-$r3->sumapayerdec-$r2->sumapayervac),
+      '#title' => t('autres'),
+      '#suffix' => 'h',
     );
     $chart['xaxis'] = array(
       '#type' => 'chart_xaxis',
       '#labels' => array('Décharge', 'Prévue', 'A payer'),
+      '#suffix' => 'h',
     );
     $output = drupal_render($chart);
     return $output;
   }
 
-
-  /*
-  //http://code.google.com/p/drupal-chart-api/wiki/Examples
-  //http://code.google.com/p/drupal-chart-api/wiki/PublicAPI
-  if (isset($r)) {
-    $dech = 27*$r->decharge;
-    $chart = array(
-           '#chart_id' => 'test_chart',
-           '#title' => t('Répartition'),
-           '#type' => CHART_TYPE_BAR_H,
-           // taille adaptative mais limitée à 900px :
-           '#size' => chart_size(floor(min(900,max(200,2*$dech,2*$r->sumprevue))), 170), 
-        );
-    $centpcent = max(max($dech,$r->sumprevue),0.1);
-    $chart['#data']['dech'] = 100*$dech/$centpcent;
-    $chart['#data']['prevue'] = 100*$r->sumprevue/$centpcent;
-    $chart['#data']['apayer'] = 100*$r->sumapayer/$centpcent;
-    $chart['#data']['dec'] = 100*$r3->sumapayerdec/$centpcent;
-    $chart['#data']['vac'] = 100*$r2->sumapayervac/$centpcent;
-
-    $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] =
-      chart_mixed_axis_label(t('0'));
-    $chart['#mixed_axis_labels'][CHART_AXIS_X_BOTTOM][0][] =
-      chart_mixed_axis_label($centpcent);
-
-    $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] =
-      chart_mixed_axis_label(t('D.à payer VAC('.$r2->sumapayervac.'h)'));
-    $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] =
-      chart_mixed_axis_label(t('D.à payer DECH('.$r3->sumapayerdec.'h)'));
-    $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] =
-      chart_mixed_axis_label(t('D.à payer TOTAL('.$r->sumapayer.'h)'));
-    $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] =
-      chart_mixed_axis_label(t('Durée prév ('.$r->sumprevue.'h)'));
-    $chart['#mixed_axis_labels'][CHART_AXIS_Y_LEFT][0][] =
-      chart_mixed_axis_label(t('Décharge ('.$dech.'h)'));
-
-    $ret = theme('chart', array('chart' => $chart));
-    //$ret .= "dech : " . 100*$dech/$centpcent;
-    //$ret .= "prev : " . 100*$r->sumprevue/$centpcent;
-    //$ret .= "prev : " . 100*$r->sumapayer/$centpcent;
-
-
-    return $ret;
-  };
-  */
 }
 
