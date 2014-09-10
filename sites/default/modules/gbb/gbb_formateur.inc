@@ -42,29 +42,21 @@ function gbb_formateur_view($args = 'NaN') {
 
 function gbb_formateur_filtre($form, &$form_state) {
 
-  // requete sur gbb_gmodu_plus. Le rightjoin sur gbb_gmodu assure un résultat.
-  $query = db_select('gbb_gresp_dafor', 'r')
-           ->fields('r', array('co_resp', 'nomu', 'prenom'));
-  $result = $query->execute();
-
-  foreach ($result as $r) {
-    $rows[$r->co_resp] = $r->nomu.' '.$r->prenom;
-  }
-  unset($rows['']);
-  $rows['add'] = '  ** AJOUTER UN FORMATEUR **';
-  asort($rows);
-
   $form['f'] = array(
     '#type' => 'fieldset',
     '#title' => t('Choix de la fiche formateur à éditer'),
   );
-
   $form['f']['coresp'] = array(
-    '#type' => 'select',
+    '#type' => 'textfield',
     '#default_value' => arg(1),
-    '#options' => $rows,
-    '#prefix' => '<div class="inline">',
+    '#title' => t('Rechercher un FORMATEUR'),
+    '#description' => t('Saisissez quelques lettres du nom
+    pour rechercher un formateur'),
+    '#autocomplete_path' => 'autocomp/formateur2',
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#prefix' => '<div class="ajaxform inline">',
     '#suffix' => '</div>',
+    '#size' => 80,
   );
 
   $form['f']['submit'] = array(
