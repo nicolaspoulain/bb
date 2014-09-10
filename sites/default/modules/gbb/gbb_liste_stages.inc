@@ -160,7 +160,7 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
   );
   $form['f']['submit_co_modu'] = array(
     '#type' => 'submit',
-    '#value' => 'Envoyer,',
+    '#value' => 'Envoyer',
     '#submit' => array('recherche_stage_submit'),
   );
 
@@ -177,36 +177,10 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
   );
   $form['f']['submit_co_resp'] = array(
     '#type' => 'submit',
-    '#value' => 'Envoyer.',
+    '#value' => 'Envoyer',
     '#submit' => array('recherche_formatr_submit'),
   );
-  $form['f']['links']['#markup']= 
-    l( t('<p>Liste des formateurs'), 'views_liste_formateurs',
-      array('attributes' => array('class' => 'anchor-class'), 'html' => TRUE)
-    )
-    . t(' (Ajouter un formateur&nbsp;') .
-      l( variable_get('ico_userAdd'),
-          'formateur/add',
-          array('attributes' => array('class' => 'anchor-class'),
-          'html' => TRUE)) . ')'
-          . '</p><p>'
-          . l( t('Liste des établissements'), 'views_liste_formateurs',
-      array('attributes' => array('class' => 'anchor-class'), 'html' => TRUE)
-    );
 
-
-
-  if (user_access('gest_etablissements gaiabb')) {
-    $form['f']['lieu'] = array(
-      '#markup' => 
-    t(' (Ajouter un lieu&nbsp;') .
-    l( variable_get('ico_etabAdd'),
-        'etablissement/',
-        array('attributes' =>  array('class' => 'anchor-class'),
-        'html' => TRUE)) . ')</p>'
-        );
-
-  };
   return $form;
 }
 
@@ -527,7 +501,7 @@ function gbb_liste_stages_liste($args) {
         $paf_ou_fil = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->co_camp == 'BS')? 'fil' : 'paf';
         $libd_class = ($r->libd == $libd_precedent)? "gris" : $libd_class;
-        
+
         // Les icônes à afficher
         $session_alert = ($nb_sa == 0)? '' : variable_get('ico_alert');
         $module_alert = ($r->module_alert==0)? '' : variable_get('ico_alert');
