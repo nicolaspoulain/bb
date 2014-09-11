@@ -78,7 +78,7 @@ function _gbb_autocompstage($string) {
   $query  ->addField('d', 'lib', 'lib');
   $query  ->addField('m', 'lib', 'libmodu');
   $query  ->addField('m', 'co_modu', 'co_modu');
-  $query  ->condition('id_disp', db_like('13') . '%', 'LIKE')
+  $query  ->condition('id_disp', db_like('14') . '%', 'LIKE')
     ->condition(db_or()->condition('id_disp', '%' . db_like($string) . '%', 'LIKE')
     ->condition('m.lib', '%' . db_like($string) . '%', 'LIKE')
     ->condition('m.co_modu', '%' . db_like($string) . '%', 'LIKE')
