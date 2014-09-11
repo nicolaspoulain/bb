@@ -3,7 +3,7 @@ opt=`getopt :nspgmre: $*`; statut=$?
 # Si une option invalide a été trouvée
 echo "Usage: `basename $0` [-n nettoyage] [-g get unl files] [-m mysqlInjections] [-r rapport par email]"
 
-HOME="/var/www/gbbdr/sites/default/files/private/unl2sql"
+HOME="/var/www/bb/sites/default/files/private/unl2sql"
 SCPDIR="/home/gaia/martine"
 source $HOME/BB-include.sh
 
@@ -64,11 +64,13 @@ do
     ## **************************************************
     -r) ## * -r * rapport par mail
     ## **************************************************
-    if grep -q "Erreur" $HOME/daily.log
+    if grep -q "ERROR" $HOME/daily.log
     then
-      /usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
+      #/usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
+      /usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com < $HOME/daily.log
     else
-      /usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
+      #/usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
+      /usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com < $HOME/daily.log
     fi
 
     shift;;
@@ -220,6 +222,8 @@ do
       echo -ne "* $GMOOF.SQL en cours d'injection  .....\t\t\t" |tee -a $HOME/daily.log
       /usr/bin/mysql --user=root --password=$BDDPW $BDD < $HOME/$GMOOF.SQL 2>&1 |tee -a $HOME/daily.log && echo -e " completed successfully" |tee -a $HOME/daily.log
     fi
+    
+    /usr/bin/mysql --user=root --password=$BDDPW $BDD < $HOME/annexes.sql 2>&1 |tee -a $HOME/daily.log && echo -e " annexes.sql injected" |tee -a $HOME/daily.log
 
     cat $HOME/daily.log >> history.log
     shift;;

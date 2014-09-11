@@ -3,7 +3,7 @@
 # Creation du fichier FILE.SQL depuis FILE.unl possedant N champs
 # Exemple : $ ./unl2sql.sh gmoof 39
 
-HOME="/var/www/gbbdr/sites/default/files/private/unl2sql"
+HOME="/var/www/bb/sites/default/files/private/unl2sql"
 SCPDIR="/home/gaia/martine"
 
 # Conversion UTF8 -> latin1
