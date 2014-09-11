@@ -39,7 +39,7 @@ function gbb_etablissement_filtre($form, &$form_state) {
   $result = $query->execute();
 
   foreach ($result as $r) {
-    $rows[$r->co_lieu] = $r->denom_comp . ' (' . $r->sigle . ')';
+    $rows[$r->co_lieu] = "$r->denom_comp $r->sigle (rne:$r->co_lieu)";
   }
   unset($rows['']);
   if (user_access('gest_etablissements gaiabb')) {
@@ -60,6 +60,18 @@ function gbb_etablissement_filtre($form, &$form_state) {
     '#suffix' => '</div>',
   );
 
+  $form['f']['colieu'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $rows[arg(1)],
+    '#title' => t('Rechercher un ETABLISSEMENT'),
+    '#description' => t('Saisissez quelques lettres du nom
+    pour rechercher un établissement'),
+    '#autocomplete_path' => 'autocomp/etablissement',
+    '#prefix' => '<div class="ajaxform inline">',
+    '#suffix' => '</div>',
+    '#size' => 80,
+  );
+
   $form['f']['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Envoyer',
@@ -75,7 +87,8 @@ function gbb_etablissement_filtre($form, &$form_state) {
  */
 function gbb_etablissement_filtre_submit($form, &$form_state) {
 
-  $url = url('etablissement/' . $form_state['values']['colieu'],
+  $pattern = array('/(.*rne:)/','/\)/');
+  $url = url('etablissement/' . preg_replace($pattern,'',$form_state['values']['colieu']),
                             array('absolute' => TRUE));
   $form_state['redirect'] = $url;
 }
