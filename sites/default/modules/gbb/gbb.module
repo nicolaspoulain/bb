@@ -284,6 +284,8 @@ variable_set('ico_etab',       '<i class="fa fa-university" title="Lieu"></i>');
 variable_set('ico_userAdd',    '<i class="fa fa-user" title="Ajouter un formateur">+</i>');
 variable_set('ico_etabAdd',    '<i class="fa fa-university" title="Ajouter un lieu">+</i>');
 variable_set('ico_save',       '<i class="fa fa-floppy-o fa-lg" title="Enregistrer"></i>');
+variable_set('ico_dureePrev',  '&nbsp;<i class="fa fa-eur fa-lg orange euro" title="Durée à payer"></i>');
+variable_set('ico_dureeApayer','&nbsp;<i class="fa fa-eur fa-lg lightgreen euro " title="Durée payée"></i>');
 
 variable_set('_gbb_session_alert_icon', array(
   'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',
