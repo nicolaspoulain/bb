@@ -133,13 +133,13 @@ function gbb_infos_general($args) {
   $rows[] = array( 
               array('data' => strtoupper($paf_ou_fil) . '&nbsp;-&nbsp;' . 
                               $r->id_disp . ' ' . $r->libd.$r->co_anmo,
-                    'class' => array($paf_ou_fil, $d_ouvert_ou_ferme),
+                    'class' => array($paf_ou_fil, $d_ouvert_ou_ferme, "sizel"),
                     'colspan' => '2'),
               array('data' => $evalStr),
             );
   $rows[] = array( 
               array('data' => $r->co_modu . ' ' . $r->libm,
-                    'class' => array($m_ouvert_ou_ferme),
+                    'class' => array($m_ouvert_ou_ferme, "sizexl"),
                     'colspan' => '2'),
               array('data' => $bilanStr),
             );
@@ -519,8 +519,8 @@ function gbb_sess_formatr($form, $form_state, $args) {
     'lieu' => t('Lieu'),
     'groupe' => t('Gr'),
     'formateur' => t('Formateur'),
-    'duree_prevue' => t('Prévues'),
-    'duree_a_payer' => t('À payer'),
+    'duree_prevue' => variable_get('ico_dureePrev'),
+    'duree_a_payer' => variable_get('ico_dureeApayer'),
     'TypePaiement' => t('Type pmt'),
   );
 
@@ -579,20 +579,22 @@ function gbb_sess_formatr($form, $form_state, $args) {
       'date' => utf8_encode(strftime('%a %e %h %Y ', strtotime($r->date))),
       'icone' => $icon,
       'horaires' => $r->horaires,
-      'lieu' => $r->denom_princ . ' ' . $r->denom_comp .
-                ' (' . $r->sigle . ')' . '&nbsp;' .
-                l( variable_get('ico_etab'),
+      'lieu' => l( "$r->sigle $r->denom_comp" ,
                    'etablissement/' . $r->co_lieu,
-                   array('attributes' => array('class' => 'anchor-class'),
+                   array('attributes' => array(
+                     'class' => 'anchor-class',
+                     'title' => "Voir la fiche",
+                   ),
                          'html' => TRUE )
                 ),
       'groupe' => $r->groupe,
-      'formateur' => (($r->statut)? '<span class="espe">':'')
-                .$r->prenom . ' ' . $r->nomu . '&nbsp;'
-                .(($r->statut)? '</span>':'')
-                .l( variable_get('ico_user'),
+      'formateur' => (($r->statut)? variable_get('ico_espe') . " " : '')
+                . l( "$r->prenom $r->nomu", 
                    'formateur/' . $r->co_resp,
-                   array('attributes' => array('class' => 'anchor-class'),
+                   array('attributes' => array(
+                     'class' => 'anchor-class',
+                     'title' => "Voir la fiche",
+                   ),
                          'html' => TRUE )
                        )
                        .(($r->statut && user_access('gest_convocs gbb') && !user_access('gest_sessions gbb'))? 
@@ -908,7 +910,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     '#type' => 'textfield',
     '#title' => 'Date',
     '#default_value' => $r->date,
-    '#size' => 10,
+    '#size' => 15,
     '#required' => TRUE,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>&nbsp;',
@@ -937,9 +939,9 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['duree_prevue'] = array(
     '#type' => 'textfield',
-    '#title' => t('Durée prévue'),
+    '#title' => variable_get('ico_dureePrev'),
     '#default_value' => $r->duree_prevue,
-    '#size' => 10,
+    '#size' => 6,
     '#maxlength' => 6,
     '#element_validate' => array('element_validate_number'),
     '#prefix' => '<div class="inline">',
@@ -948,9 +950,9 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['duree_a_payer'] = array(
     '#type' => 'textfield',
-    '#title' => t('Durée à payer'),
+    '#title' => variable_get('ico_dureeApayer'),
     '#default_value' => $r->duree_a_payer,
-    '#size' => 10,
+    '#size' => 6,
     '#maxlength' => 6,
     '#element_validate' => array('element_validate_number'),
     '#prefix' => '<div class="inline">',
