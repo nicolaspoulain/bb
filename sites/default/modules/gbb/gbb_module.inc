@@ -18,9 +18,7 @@ function gbb_module_view($args = 'NaN') {
   // Construction de la page
   $build = array();
   $build['infos_general'] = gbb_infos_general($args);
-  if (user_access('gest_sessions gbb')) {
-      $build['color_form']  = render(drupal_get_form('gbb_color_form', $args));
-  }
+  $build['color_form']  = render(drupal_get_form('gbb_color_form', $args));
   $build['sec_A'] = "<section>";
   if (user_access('gest_sessions gbb')) {
       $build['organis_form'] = render(drupal_get_form('gbb_organis_form', $args));
@@ -85,10 +83,10 @@ function gbb_infos_general($args) {
                  2 => t("Resp. orga."),
                  3 => t("Resp. péda.")
     );
-  $voir = (    user_access('gest_convocs gaiabb') 
-          and !user_access('gest_sessions gaiabb'))? 2 : 0;
-  $voirEnCours = (    user_access('gest_convocs gaiabb') 
-                 and !user_access('gest_sessions gaiabb'))? 1 : 0;
+  $voir = (    user_access('gest_convocs gbb') 
+          and !user_access('gest_sessions gbb'))? 2 : 0;
+  $voirEnCours = (    user_access('gest_convocs gbb') 
+                 and !user_access('gest_sessions gbb'))? 1 : 0;
   $str="";
   foreach ($result as $r) {
     if ($r->co_tres == 1 || $r->co_tres == 2 || $r->co_tres == 3 ) {
@@ -218,6 +216,7 @@ function gbb_color_form($args) {
 
   $settings['value'] = $value;
   $settings['id'] = $id;
+  
 
   $form['f'] = array( '#type' => 'fieldset',
                       '#title' => t('Couleur & Détails'),
@@ -226,6 +225,7 @@ function gbb_color_form($args) {
                   'collapsed',  )),
   );
 
+  if (user_access('gest_sessions gbb')) {
   $form['f']['color'] = array(
     '#suffix' => '<div id=' . $divid . '></div>',
     '#attached' => array(
@@ -248,7 +248,6 @@ function gbb_color_form($args) {
     '#size' => 7,
     '#maxlength' => 7,
   );
-
   $comodu = isset($form_state['values']['comodu'])? 
                $form_state['values']['comodu'] : arg(2);
   $form['f']['comodu'] = array('#type' => 'hidden',
@@ -260,10 +259,12 @@ function gbb_color_form($args) {
                                 '#value' => $codegre );
 
   $form['f']['submit'] = array(
+    '#value' => 'Envoyer',
     '#type' => 'submit',
     '#value' => t('Save'),
     '#attributes' => array('class' => array('inline')),
              );
+  }
   $form['f']['details']['#markup']= gbb_infos_detail($args);
 
 
@@ -682,7 +683,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
     );
   }
 
-  if (user_access('gest_convocs gaiabb')) {
+  if (user_access('gest_convocs gbb')) {
     $form['f']['convoc_envoyee'] = array(
       '#type' => 'submit',
       '#value' => t('Convocs envoyées'),
@@ -1039,7 +1040,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     '#prefix' => '<br/><div class="inline">',
     '#suffix' => '</div>&nbsp;',
   );
-  if (!user_access('gest_etablissements gaiabb')) {
+  if (!user_access('gest_etablissements gbb')) {
       $form['f']['lieu']['#title'] = t('Lieu');
   };
 
@@ -1066,7 +1067,7 @@ function gbb_sess_edition($form, $form_state, $args) {
   $form['f']['sess_id']  = array( '#type' => 'hidden',
                                  '#value' => $r->sess_id );
   $form['f']['submit']  = array(  '#type' => 'submit',
-                                 '#value' => t('Submit') );
+                                 '#value' => t('Enregistrer') );
   return $form;
 }
 
@@ -1219,12 +1220,14 @@ function gbb_convoc_form($form, &$form_state) {
                           'message' => 'Enregistrement...')),
   );
 
-  if (    user_access('gest_convocs gaiabb') 
-      && !user_access('gest_sessions gaiabb')) {
-    $form['f']['convoc_info_on']['#type']= 'markup';
+  if (    user_access('gest_convocs gbb') 
+      && !user_access('gest_sessions gbb')) {
+    $form['f']['convoc_info_on']['#type'] = 'markup';
+    $form['f']['convoc_info_on']['#cols'] = 100;
     $form['f']['convoc_info_on']['#markup']=  '<div class="inlineEncadre">' .
       '<b>Infos a porter sur la convoc</b><br/>' . nl2br($txtOn) . '</div>';
     $form['f']['convoc_info_off']['#type']= 'markup';
+    $form['f']['convoc_info_off']['#cols'] = 100;
     $form['f']['convoc_info_off']['#markup']= '<div class="inlineEncadre">' .
       '<b>Infos a ne pas porter sur la convoc</b><br/>' . nl2br($txtOff) . 
       '</div>';
