@@ -1,1 +1,1 @@
-cp /var/www/gbbdr/sites/de fault/files/* /var/www/bb/sites/default/files/
+cp /var/www/gbbdr/sites/default/files/* /var/www/bb/sites/default/files/
