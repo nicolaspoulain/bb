@@ -160,7 +160,7 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
   );
   $form['f']['submit_co_modu'] = array(
     '#type' => 'submit',
-    '#value' => 'Envoyer',
+    '#value' => 'Envoyer.',
     '#submit' => array('recherche_stage_submit'),
   );
 
@@ -513,7 +513,7 @@ function gbb_liste_stages_liste($args) {
         $prioritaire = (!$r->prioritaire)? '' : variable_get('ico_bell');
         $convoc_sent = ($nb_s == 0)? '' : variable_get('ico_sent')."<span class=\"fa green\">$nb_s</span> ";
         $rsp = db_select('gbb_gdire', 'd');
-        $rsp ->fields('d', array('co_resp', 'co_tres'))
+        $rsp ->fields('d', array('co_resp', 'co_tres', 'co_modu'))
           ->condition('d.co_degre', arg(2), '=')
           ->condition('d.co_tres', 3, '=')
           ->condition('d.co_modu', $r->co_modu, '=');
@@ -521,6 +521,7 @@ function gbb_liste_stages_liste($args) {
           'r.co_resp  = d.co_resp AND r.co_degre = d.co_degre');
         $rsp ->fields('r', array('nomu', 'prenom'));
         $respo = $rsp->execute()->fetchObject();
+        #print_r($respo);
         if ($paf_ou_fil=='paf') {
           if ($respo) {
             $plus = " <i>(R.péda : " . $respo->nomu . ")</i>";
@@ -614,7 +615,12 @@ function gbb_liste_stages_liste($args) {
             'module/' . arg(2) . '/' . $r->co_modu,
             $options_co_modu) .
             " <span class='$m_ouvert_ou_ferme'>" .
-            t($r->libm) . $plus . '</span> ',
+            #t($r->libm) . $plus . '</span> ',
+            #TODO TODO 
+            #TODO TODO 
+            #TODO TODO 
+            #TODO TODO 
+            t($r->libm) . '</span> ',
               ),
               'col3' => array(
                 'data' => nl2br($r->organisation). $formateurs ,
