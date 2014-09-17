@@ -66,11 +66,9 @@ do
     ## **************************************************
     if grep -q "ERROR" $HOME/daily.log
     then
-      #/usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
-      /usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com < $HOME/daily.log
+      /usr/bin/mail -s "$(echo -e "ECHEC BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
     else
-      #/usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
-      /usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com < $HOME/daily.log
+      /usr/bin/mail -s "$(echo -e "SUCCÈS BB")" nico.poulain@gmail.com marc-emmanuel.argo@ac-paris.fr jean-pierre.charpentrat@ac-paris.fr Isabelle.Cordier@ac-paris.fr christian.muir@ac-paris.fr jean-luc.simonet@ac-paris.fr < $HOME/daily.log
     fi
 
     shift;;
@@ -223,7 +221,7 @@ do
       /usr/bin/mysql --user=root --password=$BDDPW $BDD < $HOME/$GMOOF.SQL 2>&1 |tee -a $HOME/daily.log && echo -e " completed successfully" |tee -a $HOME/daily.log
     fi
     
-    /usr/bin/mysql --user=root --password=$BDDPW $BDD < $HOME/annexes.sql 2>&1 |tee -a $HOME/daily.log && echo -e " annexes.sql injected" |tee -a $HOME/daily.log
+    /usr/bin/mysql --user=root --password=$BDDPW $BDD < $HOME/annexes.sql 2>&1 |tee -a $HOME/daily.log && echo -e " annexes.sql injected. BB process complete." |tee -a $HOME/daily.log
 
     cat $HOME/daily.log >> history.log
     shift;;
