@@ -96,9 +96,12 @@ function gbb_atraiter_choix($form, &$form_state, $args) {
   // Ici on récupère le conseiller par défaut si arg(4) est vide
   // cela pour caler le select sur le bon conseiller
   global $user;
-  $query = db_select('field_data_field_nomu', 'u')
-    ->condition('u.entity_id', $user->uid, '=')
-    ->fields('u', array('field_nomu_value'));
+  $user_data = user_load($user->uid);
+  $n = $user_data->field_nomu['und']['0']['value'];
+
+  #$query = db_select('field_data_field_nomu', 'u')
+  #  ->condition('u.entity_id', $user->uid, '=')
+  #  ->fields('u', array('field_nomu_value'));
   $nomu = ( isset($_GET['nomu']) )? $_GET['nomu'] : 'TOUS';
   if ($nomu=="") { $nomu = "TOUS";};
 
@@ -230,6 +233,18 @@ function gbb_liste_stages_choix($form, &$form_state, $args) {
     '#attributes' => array('class' => array('collapsible',)),
   );
 
+  global $user;
+  $user_data = user_load($user->uid);
+  $n = $user_data->field_nomu['und']['0']['value'];
+  $form['f']['voir_atraiter']['#markup'] = '<p><div class="flotteDroite">'
+    .variable_get('ico_notAttente')."&nbsp;"
+                     . l( t('Mes stages à traiter'),
+                        'atraiter',
+                        array('attributes' =>  array('class' => 'anchor-class'
+                      ),
+                      'query' => array('nomu' => $n),
+                                                     'html' => TRUE)) . '</p>'
+   .'</div></p>';
   $degre = array(1 => 'Premier degré',
     2 => 'Second degré'  );
   $form['f']['codegre'] = array(
