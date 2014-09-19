@@ -429,6 +429,50 @@ variable_set('_gbb_pub_des', array(
 );
 
 
+/**
+ * Implements hook_token_info().
+ */
+function gbb_token_info() {
+  $info = array();
+  // Define a new token type.
+  $info['types']['my_custom_tokens'] = array(
+    'name' => t('My custom tokens'),
+    'description' => t('A token type for my custom tokens.'),
+  );
+  // Define any new tokens.
+  $info['tokens']['my_custom_tokens']['userFirstName'] = array(
+    'name' => t('User First Name'),
+    'description' => t('A token I use to show the name uf current user.'),
+  );
+  return $info;
+}
+
+/**
+ *  * Implements hook_tokens().
+ *   */
+function gbb_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+  if ($type == 'my_custom_tokens') {
+    // Loop through the available tokens.
+    foreach ($tokens as $name => $original) {
+      // Find our custom tokens by name.
+      switch ($name) {
+      case 'userFirstName':
+        // Work out the value of our token.
+        $value = 'ZZZZZZZZ';
+        // Give our token it's value!
+        $replacements[$original] = $value;
+        break;
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+
+
 /*
   module_load_include('inc', 'gbb', 'gbb_module');
 module_load_include('inc', 'gbb', 'gbb_formateur');
