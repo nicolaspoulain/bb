@@ -269,7 +269,7 @@ function gbb_rapports_view($args = 'NaN') {
   return render(t(""));
 }
 variable_set('ico_pubDes',     '<span title="Public Désigné"><i class="fa fa-hand-o-right fa-lg gray"></i><i class="fa fa-user fa-lg gray"></i></span> ' );
-variable_set('ico_alert',      '<i class="fa fa-flag fa-lg red" title="Alerte à l\'attention du service administratif"></i>');
+variable_set('ico_alert',      '<i class="fa fa-flag fa-lg red" title="Alerte à l\'attention du service administratif">&nbsp;</i>');
 variable_set('ico_notAttente', '<i class="fa fa-play-circle fa-lg blue" title="Demande de préparation des convocations"></i>');
 variable_set('ico_attente',    '<i class="fa fa-pause" title="En attente : ne pas préparer les convocations pour le moment"></i>');
 variable_set('ico_print',      '<i class="fa fa-print green" title="Imprimé par le service administratif"></i> ');
