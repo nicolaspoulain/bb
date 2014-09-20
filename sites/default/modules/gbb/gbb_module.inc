@@ -85,15 +85,23 @@ function gbb_infos_general($args) {
     );
   $voir = (    user_access('gest_convocs gbb') 
           and !user_access('gest_sessions gbb'))? 2 : 0;
-  $voirEnCours = (    user_access('gest_convocs gbb') 
-                 and !user_access('gest_sessions gbb'))? 1 : 0;
   $str="";
   foreach ($result as $r) {
     if ($r->co_tres == 1 || $r->co_tres == 2 || $r->co_tres == 3 ) {
       $str .= $TRES[$r->co_tres] . " : ";
-      $str .= l( $r->prenom . ' ' . $r->nomu, 
-                 'liste/14/' . $r->co_degre . '/'. $voir .'/' . $r->nomu
+      if (!user_access('gest_sessions gbb')) {
+                     $str .=  l( " $r->prenom  $r->nomu", 
+                        'atraiter',
+                        array('attributes' =>  array('class' => 'fa fa-play-circle'
+                      ),
+                      'query' => array('nomu' => $r->nomu),
+                                                     'html' => TRUE));
+      } else {
+        $str .= l( " $r->prenom $r->nomu", 
+                 'liste/14/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
+                        array('attributes' =>  array('class' => 'fa fa-th-list'))
               ) ;
+      }
       $str .= "&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;";
     }
   }
