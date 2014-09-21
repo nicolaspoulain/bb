@@ -595,14 +595,15 @@ function gbb_liste_stages_liste($args) {
         $qf ->condition('s.co_degre', arg(2), '=')
           ->condition('s.co_modu', $r->co_modu, '=')
           ->fields('r', array('nomu', 'prenom'))
-          ->fields('s', array('date', 'en_attente'));
+          ->fields('s', array('date', 'en_attente', 'convoc_sent'));
         $fo = $qf->execute();
 
         $items = array();
         foreach ($fo as $f) {
-          $items[] = (!$f->en_attente)? '' :
-            variable_get('ico_attente') .
-            ' ' . $f->date . ' - ' . $f->prenom . ' ' . $f->nomu;
+          $ico = ($f->en_attente)? variable_get('ico_attente') : variable_get('ico_notAttente') ;
+          if ($f->convoc_sent) $ico = variable_get('ico_sent');
+          $date = date("d/m/y", strtotime($f->date));
+          $items[] = "$ico $date - $f->prenom  $f->nomu";
         };
         $formateurs = theme('item_list', array('items' => $items));
         // ------------------------------------------------------------
