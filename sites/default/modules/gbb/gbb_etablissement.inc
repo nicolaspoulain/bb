@@ -42,7 +42,7 @@ function gbb_etablissement_filtre($form, &$form_state) {
     $rows[$r->co_lieu] = "$r->denom_comp $r->sigle (rne:$r->co_lieu)";
   }
   unset($rows['']);
-  if (user_access('gest_etablissements gaiabb')) {
+  if (user_access('gest_etablissements gbb')) {
     $rows['add'] = '  ** AJOUTER UN ETABLISSEMENT **';
   };
   asort($rows);
@@ -165,7 +165,7 @@ function gbb_etablissement_fiche($form, &$form_state) {
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
   );
-  if (user_access('gest_etablissements gaiabb')) {
+  if (user_access('gest_etablissements gbb')) {
     $form['f']['colieu']['#title' ] = t('RNE');
     $form['f']['colieu']['#disabled' ] = FALSE;
     $form['f']['colieu']['#required' ] = TRUE;
