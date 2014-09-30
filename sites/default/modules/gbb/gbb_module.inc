@@ -1041,6 +1041,7 @@ function gbb_sess_edition($form, $form_state, $args) {
                      array('attributes' => array('class' => 'anchor-class'),
                                                  'html' => TRUE))
                 ),
+    '#description' => t('Lieu manquant ? Contactez C.Muir ou N.Poulain'),
     '#default_value' => t("$r->sigle $r->denom_comp (rne:$r->co_lieu)"),
     '#size' => 50,
     '#maxlength' => 128,
@@ -1054,14 +1055,15 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['formateur'] = array(
     '#type' => 'textfield',
-    '#title' => t('Formateur&nbsp;' . 
-                  l( variable_get('ico_userAdd'),
+    '#title' => t('Formateur&nbsp;'), 
+    '#description' => t('Formateur manquant ? Ajoutez-le : '
+                  . l( variable_get('ico_userAdd'),
                      'formateur/add',
                      array('attributes' => array('class' => 'anchor-class'),
                                                  'html' => TRUE))
                 ),
     '#default_value' => t("$r->prenom $r->nomu (id:$r->co_resp)"),
-    '#size' => 30,
+    '#size' => 50,
     '#autocomplete_path' => 'autocomp/formateur',
     '#maxlength' => 50,
     '#prefix' => '<div class="inline">',
