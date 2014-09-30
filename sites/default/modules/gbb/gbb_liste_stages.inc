@@ -588,6 +588,7 @@ function gbb_liste_stages_liste($args) {
             };
           };
         };
+        $organisation = (strlen($r->organisation)>0) ? variable_get('ico_organisation') : variable_get('ico_organisation-o'); 
         // La liste des sessions pour le module
         $qf = db_select('gbb_session', 's');
         $qf ->leftjoin('gbb_gresp_dafor', 'r',
@@ -627,7 +628,7 @@ function gbb_liste_stages_liste($args) {
             'class' => 'nowrap',
           ),
           'col2' => array(
-            'data' => l( $r->co_modu,
+            'data' => $organisation . l( $r->co_modu,
             'module/' . arg(2) . '/' . $r->co_modu,
             $options_co_modu) .
             " <span class='$m_ouvert_ou_ferme'>" .
