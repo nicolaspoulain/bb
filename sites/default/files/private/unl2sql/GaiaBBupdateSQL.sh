@@ -44,6 +44,14 @@ do
     cd $HOME && rm *.unl *.SQL *.cl2
     shift;;
     ## **************************************************
+    -s) ## * -s * sauvegarde de la base précédente
+    ## **************************************************
+    echo "_S_auvegarde de la BDD dans BDD_BKP"
+    /usr/bin/mysql --user=root --password=$BDDPW -e "DROP DATABASE $BDDBKP;" && echo -e "BDDBKP deleted" |tee -a $HOME/daily.log
+    /usr/bin/mysql --user=root --password=$BDDPW -e "CREATE DATABASE $BDDBKP;" && echo -e "BDDBKP created" |tee -a $HOME/daily.log
+    /usr/bin/mysqldump --user=root --password=$BDDPW $BDD | /usr/bin/mysql --user=root --password=$BDDPW $BDDBKP  && echo -e "BDDBKP populated with BDD" |tee -a $HOME/daily.log
+    shift;;
+    ## **************************************************
     -g) ## * -g * recuperation des donnees
     ## **************************************************
     echo "_G_et donnees"
