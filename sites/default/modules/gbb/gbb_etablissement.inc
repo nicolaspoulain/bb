@@ -52,20 +52,20 @@ function gbb_etablissement_filtre($form, &$form_state) {
     '#title' => t('Choix de la fiche établissement à éditer'),
   );
 
-  $form['f']['colieu'] = array(
-    '#type' => 'select',
-    '#default_value' => arg(1),
-    '#options' => $rows,
-    '#prefix' => '<div class="inline">',
-    '#suffix' => '</div>',
-  );
+  // $form['f']['colieu'] = array(
+  //   '#type' => 'select',
+  //   '#default_value' => arg(1),
+  //   '#options' => $rows,
+  //   '#prefix' => '<div class="inline">',
+  //   '#suffix' => '</div>',
+  // );
 
   $form['f']['colieu'] = array(
     '#type' => 'textfield',
     '#default_value' => $rows[arg(1)],
-    '#title' => t('Rechercher un ETABLISSEMENT'),
+    '#title' => t('Rechercher un ETABLISSEMENT...     ou retrournez à la <a href="../views_liste_etablissements">liste des lieux <i class="fa fa-university fa-fw"></i></a>'),
     '#description' => t('Saisissez quelques lettres du nom
-    pour rechercher un établissement'),
+    pour rechercher un établissement. '),
     '#autocomplete_path' => 'autocomp/etablissement',
     '#prefix' => '<div class="ajaxform inline">',
     '#suffix' => '</div>',

@@ -49,9 +49,9 @@ function gbb_formateur_filtre($form, &$form_state) {
   $form['f']['co_resp'] = array(
     '#type' => 'textfield',
     '#default_value' => arg(1),
-    '#title' => t('Rechercher un FORMATEUR'),
+    '#title' => t('Rechercher un FORMATEUR... ou retournez à la <a href="../views_liste_formateurs">liste des formateurs <i class="fa fa-user fa-fw"></i></a>'),
     '#description' => t('Saisissez quelques lettres du nom
-    pour rechercher un formateur'),
+    pour rechercher un formateur. '),
     '#autocomplete_path' => 'autocomp/formateur2',
     '#prefix' => '<div class="ajaxform inline">',
     '#suffix' => '</div>',
