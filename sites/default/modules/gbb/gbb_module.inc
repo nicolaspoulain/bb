@@ -1064,7 +1064,7 @@ function gbb_sess_edition($form, $form_state, $args) {
                 ),
     '#default_value' => t("$r->prenom $r->nomu (id:$r->co_resp)"),
     '#size' => 50,
-    '#autocomplete_path' => 'autocomp/formateur',
+    '#autocomplete_path' => 'autocomp/formateur2',
     '#maxlength' => 50,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
