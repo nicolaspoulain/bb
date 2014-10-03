@@ -116,7 +116,9 @@ function _gbb_autocompformatr2($string) {
       ->execute();
   }
   foreach ($result as $r) {
-    $matches[$r->co_resp] =$r->nomu . ' ' . $r->prenom ;
+    $formatr = $r->nomu . ' ' . $r->prenom . ' (id:' . $r->co_resp . ')';
+    $matches[$formatr] = $formatr;
+    #$matches[$r->co_resp] =$r->nomu . ' ' . $r->prenom ;
   }
   $count = $result->rowCount();
   if ($count > 9 && !strpos($string,'++')) $matches[' '] = '..... Et bien d\'autres .....';
