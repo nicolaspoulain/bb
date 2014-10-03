@@ -21,33 +21,6 @@ function _gbb_autocompetab($string) {
 }
 
 /**
- * Fonctions d' ** AUTOCOMPLETE AJAX FORMATEURS **
- */
-function _gbb_autocompform($string) {
-
-  $matches = array();
-  $result = db_select('gbb_gresp_dafor', 'c')
-    ->fields('c', array('co_resp', 'nomu', 'prenom'))
-    ->condition('nomu', '%' . db_like($string) . '%', 'LIKE')
-    ->range(0, 10)
-    ->execute();
-
-  if (strpos($string,'++')) {
-  $result = db_select('gbb_gresp_dafor', 'c')
-    ->fields('c', array('co_resp', 'nomu', 'prenom'))
-    ->condition('nomu', '%' . db_like(str_replace("++","",$string)) . '%', 'LIKE')
-    ->execute();
-  }
-  foreach ($result as $r) {
-    $formatr = $r->prenom . ' ' . $r->nomu . ' (id:' . $r->co_resp . ')';
-    $matches[$formatr] = $formatr;
-  }
-  $count = $result->rowCount();
-  if ($count > 9 && !strpos($string,'++')) $matches[' '] = '..... Et bien d\'autres .....';
-  drupal_json_output($matches);
-}
-
-/**
  * Fonctions d' ** AUTOCOMPLETE AJAX RESPONSABLES **
  */
 function _gbb_autocompresp($string) {
@@ -95,11 +68,10 @@ function _gbb_autocompstage($string) {
 }
 
 
-
 /**
  * Fonctions d' ** AUTOCOMPLETE AJAX FORMATEURS **
  */
-function _gbb_autocompformatr2($string) {
+function _gbb_autocompform($string) {
 
   $matches = array();
   $result = db_select('gbb_gresp_dafor', 'c')
@@ -107,6 +79,36 @@ function _gbb_autocompformatr2($string) {
     ->condition('nomu', '%' . db_like($string) . '%', 'LIKE')
     ->range(0, 10)
     ->execute();
+
+  if (strpos($string,'++')) {
+  $result = db_select('gbb_gresp_dafor', 'c')
+    ->fields('c', array('co_resp', 'nomu', 'prenom'))
+    ->condition('nomu', '%' . db_like(str_replace("++","",$string)) . '%', 'LIKE')
+    ->execute();
+  }
+  foreach ($result as $r) {
+    $formatr = $r->prenom . ' ' . $r->nomu . ' (id:' . $r->co_resp . ')';
+    $matches[$formatr] = $formatr;
+  }
+  $count = $result->rowCount();
+  if ($count > 9 && !strpos($string,'++')) $matches[' '] = '..... Et bien d\'autres .....';
+  drupal_json_output($matches);
+}
+
+
+/**
+ * Fonctions d' ** AUTOCOMPLETE AJAX FORMATEURS **
+ */
+function _gbb_autocompformatr2($string) {
+
+  $matches = array();
+  $pieces = explode(" ",$string);
+  $query = db_select('gbb_gresp_dafor', 'c')
+         ->fields('c', array('co_resp', 'nomu', 'prenom'))
+         ->condition('nomu', '%'   . db_like($pieces[0]) . '%', 'LIKE')
+         ->condition('prenom', '%' . db_like($pieces[1]) . '%', 'LIKE');
+  $result = $query ->range(0, 10) ->execute();
+  #dpm( $query->__toString() . '\n');
   if (strpos($string,'++')) {
     $result = db_select('gbb_gresp_dafor', 'c')
       ->fields('c', array('co_resp', 'nomu', 'prenom'))
@@ -114,7 +116,7 @@ function _gbb_autocompformatr2($string) {
       ->execute();
   }
   foreach ($result as $r) {
-    $matches[$r->co_resp] = $r->prenom . ' ' . $r->nomu;
+    $matches[$r->co_resp] =$r->nomu . ' ' . $r->prenom ;
   }
   $count = $result->rowCount();
   if ($count > 9 && !strpos($string,'++')) $matches[' '] = '..... Et bien d\'autres .....';
