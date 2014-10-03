@@ -173,7 +173,6 @@ function gbb_liste_stages_search($form, &$form_state, $args) {
     '#description' => t('Saisissez quelques lettres du nom
     pour rechercher un formateur'),
     '#autocomplete_path' => 'autocomp/formateur2',
-    '#element_validate' => array('element_validate_integer_positive'),
     '#prefix' => '<div class="ajaxform inline">',
     '#suffix' => '</div>',
     '#size' => 80,
@@ -195,8 +194,13 @@ function recherche_stage_submit($form, &$form_state) {
     array('absolute' => TRUE));
 }
 function recherche_formatr_submit($form, &$form_state) {
-  $form_state['redirect'] = url('formateur/' . $form_state['values']['co_resp'],
-    array('absolute' => TRUE));
+  $replace = array ('\1');
+  $pattern = array ('/.*\(id:(.*)\)/');
+  $co_resp = preg_replace($pattern, $replace,
+                          $form_state['values']['co_resp']);
+  $url = url('formateur/' . $co_resp,
+                            array('absolute' => TRUE));
+  $form_state['redirect'] = $url;
 }
 
 

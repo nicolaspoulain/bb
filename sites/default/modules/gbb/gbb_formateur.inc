@@ -46,14 +46,13 @@ function gbb_formateur_filtre($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('Choix de la fiche formateur à éditer'),
   );
-  $form['f']['coresp'] = array(
+  $form['f']['co_resp'] = array(
     '#type' => 'textfield',
     '#default_value' => arg(1),
     '#title' => t('Rechercher un FORMATEUR'),
     '#description' => t('Saisissez quelques lettres du nom
     pour rechercher un formateur'),
     '#autocomplete_path' => 'autocomp/formateur2',
-    '#element_validate' => array('element_validate_integer_positive'),
     '#prefix' => '<div class="ajaxform inline">',
     '#suffix' => '</div>',
     '#size' => 80,
@@ -73,7 +72,11 @@ function gbb_formateur_filtre($form, &$form_state) {
  * ----> Submit
  */
 function gbb_formateur_filtre_submit($form, &$form_state) {
-  $url = url('formateur/' . $form_state['values']['coresp'],
+  $replace = array ('\1');
+  $pattern = array ('/.*\(id:(.*)\)/');
+  $co_resp = preg_replace($pattern, $replace,
+                          $form_state['values']['co_resp']);
+  $url = url('formateur/' . $co_resp,
                             array('absolute' => TRUE));
   $form_state['redirect'] = $url;
 }
@@ -123,7 +126,7 @@ function gbb_formateur_fiche($form, &$form_state) {
     '#title' => t('Fiche formateur (Nom, prénom, adresse, décharge etc...)'),
   );
 
-  $form['f']['coresp'] = array(
+  $form['f']['co_resp'] = array(
     '#type' => 'hidden',
     '#value' => $record['co_resp'],
   );
@@ -251,7 +254,7 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
 
   // Merge Queries : http://drupal.org/node/310085
   db_merge('gbb_gresp_dafor')
-    ->key(array('co_resp'  => $form_state['values']['coresp'],
+    ->key(array('co_resp'  => $form_state['values']['co_resp'],
              ))
     ->fields(array('nomu'     => $form_state['values']['nomu'],
                    'prenom'   => $form_state['values']['prenom'],
@@ -264,7 +267,7 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
       $form_state['values']['decharge']='0.0';
   };
   db_merge('gbb_gresp_plus')
-    ->key(array('co_resp'  => $form_state['values']['coresp'],
+    ->key(array('co_resp'  => $form_state['values']['co_resp'],
              ))
     ->fields(array('discipline' => $form_state['values']['discipline'],
                    'resp_dafor' => $form_state['values']['resp_dafor'],
@@ -275,7 +278,7 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
              ))
     ->execute();
 
-  $url = url('formateur/' . $form_state['values']['coresp'],
+  $url = url('formateur/' . $form_state['values']['co_resp'],
                             array('absolute' => TRUE));
   $form_state['redirect'] = $url;
 }
