@@ -104,9 +104,9 @@ function _gbb_autocompformatr2($string) {
   $matches = array();
   $pieces = explode(" ",$string);
   $query = db_select('gbb_gresp_dafor', 'c')
-         ->fields('c', array('co_resp', 'nomu', 'prenom'))
-         ->condition('nomu', '%'   . db_like($pieces[0]) . '%', 'LIKE')
-         ->condition('prenom', '%' . db_like($pieces[1]) . '%', 'LIKE');
+         ->fields('c', array('co_resp', 'nomu', 'prenom'));
+  $query ->condition('nomu', '%'   . db_like($pieces[0]) . '%', 'LIKE');
+  if (isset($pieces[1])) $query ->condition('prenom', '%' . db_like($pieces[1]) . '%', 'LIKE');
   $result = $query ->range(0, 10) ->execute();
   #dpm( $query->__toString() . '\n');
   if (strpos($string,'++')) {
