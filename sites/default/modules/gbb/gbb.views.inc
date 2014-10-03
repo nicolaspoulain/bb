@@ -853,16 +853,91 @@ function gbb_views_data() {
   // gbb_gresp_dafor
   // --------------------------------------------------------
 
+  # $data['gbb_gresp_dafor']['table'] = array(
+  #   'group' => t('gbb_gresp_dafor'),
+  #   'join' => array(
+  #     'gbb_gmodu' => array(
+  #       'left_table' => 'gbb_session',
+  #       'left_field' => 'co_resp',
+  #       'field' => 'co_resp',
+  #       'extra' => 'gbb_gresp_dafor.co_degre = gbb_gmodu.co_degre',
+  #     ),
+  #   ),
+  # );
+  #--------------------new-----------------
   $data['gbb_gresp_dafor']['table'] = array(
     'group' => t('gbb_gresp_dafor'),
+    'base' => array(
+      'table' => 'gbb_gresp_dafor',
+      'field' => 'co_resp',
+      'title' => t('GaiaBB_formateurs'),
+      'help' => t('Tables des formateurs du module GaiaBB.'),
+    ),
+  );
+  $data['gbb_gresp_plus']['table'] = array(
+    'group' => t('gbb_gresp_plus'),
     'join' => array(
-      'gbb_gmodu' => array(
-        'left_table' => 'gbb_session',
+      'gbb_gresp_dafor' => array(
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp_dafor.co_degre = gbb_gmodu.co_degre',
       ),
     ),
+  );
+  $data['gbb_sessionTOUT']['table'] = array(
+    'group' => t('gbb_sessiontout'),
+    'join' => array(
+      'gbb_gresp_dafor' => array(
+        'table' => 'gbb_session',
+        'left_field' => 'co_resp',
+        'field' => 'co_resp',
+      ),
+    ),
+  );
+  $data['gbb_session2014']['table'] = array(
+    'group' => t('gbb_session2014'),
+    'join' => array(
+      'gbb_gresp_dafor' => array(
+        'table' => 'gbb_session',
+        'left_field' => 'co_resp',
+        'field' => 'co_resp',
+        'extra' => 'gbb_session2014.date BETWEEN \'2014-08-01\' AND \'2015-07-31\'',
+      ),
+    ),
+  );
+  #--------------------end new-----------------
+  $data['gbb_sessionTOUT']['sess_id'] = array(
+    'title' => t('sess_id'),
+    'help' => t('Id de session'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_session2014']['sess_id'] = array(
+    'title' => t('sess_id'),
+    'help' => t('Id de session'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_session2014']['duree_prevue'] = array(
+    'title' => t('duree_prevue'),
+    'help' => t('Durée prévue'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+      'float' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
   $data['gbb_gresp_dafor']['co_resp'] = array(
     'title' => t('co_resp'),
@@ -875,7 +950,29 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
+  $data['gbb_gresp_dafor2']['co_resp'] = array(
+    'title' => t('co_resp'),
+    'help' => t('Code du formateur'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
   $data['gbb_gresp_dafor']['nomu'] = array(
+    'title' => t('nomu'),
+    'help' => t('Nom du formateur'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp_dafor2']['nomu'] = array(
     'title' => t('nomu'),
     'help' => t('Nom du formateur'),
     'field' => array(
