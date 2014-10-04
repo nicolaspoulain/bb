@@ -351,6 +351,29 @@ function gbb_organis_form($form, &$form_state) {
  * ----> Submit
 */
 function gbb_organis_form_submit(&$form, &$form_state) {
+  // Get a single record out of the database.
+  $query = db_select('gbb_gmodu_plus', 'p');
+  $query ->condition('p.co_modu' , $form_state['values']['comodu'] , '=')
+         ->condition('p.co_degre', $form_state['values']['codegre'], '=')
+         ->fields('p',  array('organisation', 'prioritaire'));
+  $result = $query->execute();
+  $orga = '';
+  $prio = '';
+  foreach ($result as $r) {
+    if ($r->organisation != $form_state['values']['organisation']) {
+      $orga = "Modif du journal\n-----------\n"
+        . $r->organisation
+        . "\n----------\n++++++++++ \n"
+        . $form_state['values']['organisation']
+        . "\n++++++++++";
+    };
+    if ($r->prioritaire != $form_state['values']['prioritaire']) {
+      $prio = "Coche Prioritaire basculée de "
+        .$r->prioritaire ." à ". $form_state['values']['prioritaire'];
+    }
+  }
+  watchdog('BouleEtBill', "Cadre Organisation  <pre>@orga @prio</pre>",
+    array( '@orga' => $orga , '@prio'  => $prio));
   db_merge('gbb_gmodu_plus')
     ->key(array('co_modu'  => $form_state['values']['comodu'],
                 'co_degre' => $form_state['values']['codegre'] ))
@@ -1105,6 +1128,41 @@ function gbb_sess_edition_submit($form, &$form_state) {
       ->fields(array('module_printed' => 0,))
       ->execute();
   };
+   
+  // Get a single record out of the database.
+  $query = db_select('gbb_session', 's');
+  $query ->condition('s.sess_id' , $sess_id , '=')
+    ->fields('s',  array('date', 'en_attente', 'horaires', 'co_lieu', 
+    'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+  $result = $query->execute();
+  $sess_oldAndNew = "Module " . $form_state['values']['co_modu'] . "\n-----------\n";
+  foreach ($result as $r) {
+    $sess_oldAndNew = $sess_oldAndNew
+      . $r->date        
+      . " | Pause:" . $r->en_attente
+      . " | Sent:"  . $r->convoc_sent  
+      . " | "       . $r->horaires    
+      . " | Lieu:"  . $r->co_lieu
+      . " | Gr:"    . $r->groupe
+      . " | Form:"  . $r->co_resp 
+      . " | "       . $r->duree_prevue  . "h"
+      . " | "       . $r->duree_a_payer . "h"
+      . " | "        .$r->type_paiement;
+  };
+  $sess_oldAndNew = $sess_oldAndNew . "\n----------\n++++++++++ \n"
+    . $form_state['values']['date']
+    . " | Pause:" . $form_state['values']['en_attente']
+    . " | Sent:"  . $convoc_sent
+    . " | "       . $form_state['values']['horaires']
+    . " | Lieu:"  . $co_lieu
+    . " | Gr:"    . $form_state['values']['groupe']
+    . " | Form:"  . $co_resp
+    . " | "       . $form_state['values']['duree_prevue']  . "h"
+    . " | "       . $form_state['values']['duree_a_payer'] . "h"
+    . " | "       . $form_state['values']['type_paiement']
+    . "\n++++++++++";
+  watchdog('BouleEtBill', "Session <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
 
   global $user;
   db_merge('gbb_session')
