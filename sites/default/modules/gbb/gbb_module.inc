@@ -355,7 +355,7 @@ function gbb_organis_form_submit(&$form, &$form_state) {
   $query = db_select('gbb_gmodu_plus', 'p');
   $query ->condition('p.co_modu' , $form_state['values']['comodu'] , '=')
          ->condition('p.co_degre', $form_state['values']['codegre'], '=')
-         ->fields('p',  array('organisation', 'prioritaire'));
+         ->fields('p',  array('co_modu', 'organisation', 'prioritaire'));
   $result = $query->execute();
   $orga = '';
   $prio = '';
@@ -372,7 +372,7 @@ function gbb_organis_form_submit(&$form, &$form_state) {
         .$r->prioritaire ." à ". $form_state['values']['prioritaire'];
     }
   }
-  watchdog('BouleEtBill', "Cadre Organisation  <pre>@orga @prio</pre>",
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Cadre Organisation  <pre>@orga @prio</pre>",
     array( '@orga' => $orga , '@prio'  => $prio));
   db_merge('gbb_gmodu_plus')
     ->key(array('co_modu'  => $form_state['values']['comodu'],
@@ -732,10 +732,48 @@ function gbb_sess_formatr_supprimer_submit($form, &$form_state) {
         || $form_state['values']['table'] == 0) {
     drupal_set_message(t('Choisissez la session à supprimer.'),'error');
     return;
- }
+  }
+  $sess_oldAndNew = '';
+  foreach ($form_state['values']['table'] as $i) {
+    if ($i != 0 ) {
+      // Get a single record out of the database.
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {};
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      }
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {
+          $sess_oldAndNew = $sess_oldAndNew
+          . "ses_id:". $i        
+          . " | "       . $r->date        
+          . " | Alert:" . $r->session_alert
+          . " | Pause:" . $r->en_attente
+          . " | Sent:"  . $r->convoc_sent 
+          . " | "       . $r->horaires    
+          . " | Lieu:"  . $r->co_lieu
+          . " | Gr:"    . $r->groupe
+          . " | Form:"  . $r->co_resp 
+          . " | "       . $r->duree_prevue  . "h"
+          . " | "       . $r->duree_a_payer . "h"
+          . " | "        .$r->type_paiement
+          . "\n-----------\n";
+      };
+    };
+  }
   db_delete('gbb_session') // supprime la session
       ->condition('sess_id', $form_state['values']['table'], 'IN')
       ->execute();
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Session(s) supprimée(s) <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
 
   drupal_set_message(t('La session a été supprimée.'));
 }
@@ -820,8 +858,40 @@ function gbb_sess_formatr_modifier_submit($form, &$form_state) {
 }
 
 function gbb_sess_formatr_convoc_submit($form, &$form_state) {
+  $sess_oldAndNew = '';
   foreach ($form_state['values']['table'] as $i) {
     if ($i != 0 ) {
+      // Get a single record out of the database.
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {};
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      }
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {
+          $sess_oldAndNew = $sess_oldAndNew
+          . "ses_id:". $i        
+          . " | "       . $r->date        
+          . " | Alert:" . $r->session_alert
+          . " | Pause:" . $r->en_attente
+          . " | Sent:"  . $r->convoc_sent . "->1" 
+          . " | "       . $r->horaires    
+          . " | Lieu:"  . $r->co_lieu
+          . " | Gr:"    . $r->groupe
+          . " | Form:"  . $r->co_resp 
+          . " | "       . $r->duree_prevue  . "h"
+          . " | "       . $r->duree_a_payer . "h"
+          . " | "        .$r->type_paiement
+          . "\n-----------\n";
+      };
       db_merge('gbb_session') // Marque comme envoyée chaque session cochée
         ->key(array('sess_id'  => $i))
         ->fields(array('convoc_sent' => 1,
@@ -829,6 +899,8 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
         ->execute();
     }
   }
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Convocation(s) envoyée(s) <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
   drupal_set_message(t('Les convocs ont été marquées comme envoyées.'));
 }
 
@@ -1132,13 +1204,15 @@ function gbb_sess_edition_submit($form, &$form_state) {
   // Get a single record out of the database.
   $query = db_select('gbb_session', 's');
   $query ->condition('s.sess_id' , $sess_id , '=')
-    ->fields('s',  array('date', 'en_attente', 'horaires', 'co_lieu', 
-    'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+    ->fields('s',  array('date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+    'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
   $result = $query->execute();
-  $sess_oldAndNew = "Module " . $form_state['values']['co_modu'] . "\n-----------\n";
+  $sess_oldAndNew = "\n-----------\n";
   foreach ($result as $r) {
     $sess_oldAndNew = $sess_oldAndNew
-      . $r->date        
+      . "ses_id:". $sess_id        
+      . " | "       . $r->date        
+      . " | Alert:" . $r->session_alert
       . " | Pause:" . $r->en_attente
       . " | Sent:"  . $r->convoc_sent  
       . " | "       . $r->horaires    
@@ -1150,7 +1224,9 @@ function gbb_sess_edition_submit($form, &$form_state) {
       . " | "        .$r->type_paiement;
   };
   $sess_oldAndNew = $sess_oldAndNew . "\n----------\n++++++++++ \n"
-    . $form_state['values']['date']
+    . "ses_id:". $sess_id        
+    . " | "       . $form_state['values']['date']
+    . " | Alert:" . $form_state['values']['session_alert']
     . " | Pause:" . $form_state['values']['en_attente']
     . " | Sent:"  . $convoc_sent
     . " | "       . $form_state['values']['horaires']
@@ -1161,7 +1237,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
     . " | "       . $form_state['values']['duree_a_payer'] . "h"
     . " | "       . $form_state['values']['type_paiement']
     . "\n++++++++++";
-  watchdog('BouleEtBill', "Session <pre>@sess_oldAndNew</pre>",
+  watchdog('BouleEtBill', "M:" . $form_state['values']['co_modu'] . " Session modifiée <pre>@sess_oldAndNew</pre>",
     array( '@sess_oldAndNew' => $sess_oldAndNew));
 
   global $user;
