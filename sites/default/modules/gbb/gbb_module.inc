@@ -736,16 +736,10 @@ function gbb_sess_formatr_supprimer_submit($form, &$form_state) {
   $sess_oldAndNew = '';
   foreach ($form_state['values']['table'] as $i) {
     if ($i != 0 ) {
-      // Get a single record out of the database.
-      $query = db_select('gbb_session', 's');
-      $query ->condition('s.sess_id' , $i , '=')
-        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
-        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
-      $result = $query->execute();
-      foreach ($result as $r) {};
       if ($sess_oldAndNew == '') {
           $sess_oldAndNew = "\n-----------\n";
       }
+      // Get a single record out of the database.
       $query = db_select('gbb_session', 's');
       $query ->condition('s.sess_id' , $i , '=')
         ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
@@ -861,16 +855,10 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
   $sess_oldAndNew = '';
   foreach ($form_state['values']['table'] as $i) {
     if ($i != 0 ) {
-      // Get a single record out of the database.
-      $query = db_select('gbb_session', 's');
-      $query ->condition('s.sess_id' , $i , '=')
-        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
-        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
-      $result = $query->execute();
-      foreach ($result as $r) {};
       if ($sess_oldAndNew == '') {
           $sess_oldAndNew = "\n-----------\n";
       }
+      // Get a single record out of the database.
       $query = db_select('gbb_session', 's');
       $query ->condition('s.sess_id' , $i , '=')
         ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
@@ -905,23 +893,46 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
 }
 
 function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
+  $sess_oldAndNew = '';
   $url_query= array();
   foreach ($form_state['values']['table'] as $i) {
     if ($i != 0 ) { // on traite seulement les cases cochées
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      };
       $query = db_select('gbb_session', 's')
              ->condition('sess_id', $i)
-             ->fields('s', array('en_attente','convoc_sent','session_alert'));
-      $r = $query->execute()->fetchAssoc(); // recupère les infos de la session
-      if ($r['convoc_sent'] != 1  && $r['session_alert'] != 1) {
+             ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires', 
+             'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute(); // recupère les infos de la session
+      foreach ($result as $r) {
+      if ($r->convoc_sent != 1  && $r->session_alert != 1) {
           // Modifie le statut en_attente SSI convoc_sent = 0 = session_alert
+          $sess_oldAndNew = $sess_oldAndNew
+          . "ses_id:". $i        
+          . " | "       . $r->date        
+          . " | Alert:" . $r->session_alert
+          . " | Pause:" . (($r->en_attente)? 1 : 0 ) . "->" . (($r->en_attente)? 0 : 1 )
+          . " | Sent:"  . $r->convoc_sent 
+          . " | "       . $r->horaires    
+          . " | Lieu:"  . $r->co_lieu
+          . " | Gr:"    . $r->groupe
+          . " | Form:"  . $r->co_resp 
+          . " | "       . $r->duree_prevue  . "h"
+          . " | "       . $r->duree_a_payer . "h"
+          . " | "        .$r->type_paiement
+          . "\n-----------\n";
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
-          ->fields(array('en_attente' => ( ($r['en_attente'])? 0 : 1 ) ))
+          ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ) ))
           ->execute();
+      }
       }
     }
     $url_query['sess_id[' . $i . ']'] =  $i;
   };
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Attente  Y/N <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
   drupal_set_message(t('Les convocs ont été basculées enAttente <-> enCours.'));
   $url = url('module/' . $form_state['values']['codegre'] .
                    '/' . $form_state['values']['comodu'],
