@@ -864,17 +864,18 @@ function gbb_views_data() {
   // gbb_gresp_dafor
   // --------------------------------------------------------
 
-  # $data['gbb_gresp_dafor']['table'] = array(
-  #   'group' => t('gbb_gresp_dafor'),
-  #   'join' => array(
-  #     'gbb_gmodu' => array(
-  #       'left_table' => 'gbb_session',
-  #       'left_field' => 'co_resp',
-  #       'field' => 'co_resp',
-  #       'extra' => 'gbb_gresp_dafor.co_degre = gbb_gmodu.co_degre',
-  #     ),
-  #   ),
-  # );
+   $data['gbb_gresp_dafor2']['table'] = array(
+     'group' => t('gbb_gresp_dafor2'),
+     'join' => array(
+       'gbb_gmodu' => array(
+         'table' => 'gbb_gresp_dafor',
+         'left_table' => 'gbb_session',
+         'left_field' => 'co_resp',
+         'field' => 'co_resp',
+         'extra' => 'gbb_gresp_dafor2.co_degre = gbb_gmodu.co_degre',
+       ),
+     ),
+   );
   #--------------------new-----------------
   $data['gbb_gresp_dafor']['table'] = array(
     'group' => t('gbb_gresp_dafor'),
@@ -995,6 +996,17 @@ function gbb_views_data() {
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
   $data['gbb_gresp_dafor']['prenom'] = array(
+    'title' => t('prenom'),
+    'help' => t('Prénom du formateur'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp_dafor2']['prenom'] = array(
     'title' => t('prenom'),
     'help' => t('Prénom du formateur'),
     'field' => array(
