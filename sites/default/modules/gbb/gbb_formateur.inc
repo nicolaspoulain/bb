@@ -383,7 +383,7 @@ function gbb_formateur_stages($args) {
     );
     $chart['xaxis'] = array(
       '#type' => 'chart_xaxis',
-      '#labels' => array('Décharge', 'Prévue', 'A payer'),
+      '#labels' => array('Décharge', 'Durée à payer', 'Durée payée'),
       '#suffix' => 'h',
     );
     $output = drupal_render($chart);
