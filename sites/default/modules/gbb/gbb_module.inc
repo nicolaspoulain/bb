@@ -372,7 +372,7 @@ function gbb_organis_form_submit(&$form, &$form_state) {
         .$r->prioritaire ." à ". $form_state['values']['prioritaire'];
     }
   }
-  watchdog('BouleEtBill', "M:" . $r->co_modu . " Cadre Organisation  <pre>@orga @prio</pre>",
+  if ($orga !='' OR $prio !='') watchdog('BouleEtBill', "M:" . $r->co_modu . " Cadre Organisation  <pre>@orga @prio</pre>",
     array( '@orga' => $orga , '@prio'  => $prio));
   db_merge('gbb_gmodu_plus')
     ->key(array('co_modu'  => $form_state['values']['comodu'],
@@ -747,18 +747,18 @@ function gbb_sess_formatr_supprimer_submit($form, &$form_state) {
       $result = $query->execute();
       foreach ($result as $r) {
           $sess_oldAndNew = $sess_oldAndNew
-          . "ses_id:". $i        
-          . " | "       . $r->date        
-          . " | Alert:" . $r->session_alert
-          . " | Pause:" . $r->en_attente
-          . " | Sent:"  . $r->convoc_sent 
-          . " | "       . $r->horaires    
-          . " | Lieu:"  . $r->co_lieu
-          . " | Gr:"    . $r->groupe
-          . " | Form:"  . $r->co_resp 
-          . " | "       . $r->duree_prevue  . "h"
-          . " | "       . $r->duree_a_payer . "h"
-          . " | "        .$r->type_paiement
+          . "". $i        
+          . " | "     . $r->date        
+          . " | Alt:" . $r->session_alert
+          . " | Pse:" . $r->en_attente
+          . " | Snt:" . $r->convoc_sent 
+          . " | "     . $r->horaires    
+          . " | "     . $r->co_lieu
+          . " | G"    . $r->groupe
+          . " | F:"   . $r->co_resp 
+          . " | "     . $r->duree_prevue  . "h"
+          . " | "     . $r->duree_a_payer . "h"
+          . " | "     . $r->type_paiement
           . "\n-----------\n";
       };
     };
@@ -866,18 +866,18 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
       $result = $query->execute();
       foreach ($result as $r) {
           $sess_oldAndNew = $sess_oldAndNew
-          . "ses_id:". $i        
-          . " | "       . $r->date        
-          . " | Alert:" . $r->session_alert
-          . " | Pause:" . $r->en_attente
-          . " | Sent:"  . $r->convoc_sent . "->1" 
-          . " | "       . $r->horaires    
-          . " | Lieu:"  . $r->co_lieu
-          . " | Gr:"    . $r->groupe
-          . " | Form:"  . $r->co_resp 
-          . " | "       . $r->duree_prevue  . "h"
-          . " | "       . $r->duree_a_payer . "h"
-          . " | "        .$r->type_paiement
+          . "". $i        
+          . " | "      . $r->date
+          . " | Alt:"  . $r->session_alert
+          . " | Pse:"  . $r->en_attente
+          . " | Snt:"  . $r->convoc_sent   . "->1"
+          . " | "      . $r->horaires
+          . " | "      . $r->co_lieu
+          . " | G"     . $r->groupe
+          . " | F:"    . $r->co_resp
+          . " | "      . $r->duree_prevue  . "h"
+          . " | "      . $r->duree_a_payer . "h"
+          . " | "      . $r->type_paiement
           . "\n-----------\n";
       };
       db_merge('gbb_session') // Marque comme envoyée chaque session cochée
@@ -909,18 +909,18 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
       if ($r->convoc_sent != 1  && $r->session_alert != 1) {
           // Modifie le statut en_attente SSI convoc_sent = 0 = session_alert
           $sess_oldAndNew = $sess_oldAndNew
-          . "ses_id:". $i        
-          . " | "       . $r->date        
-          . " | Alert:" . $r->session_alert
-          . " | Pause:" . (($r->en_attente)? 1 : 0 ) . "->" . (($r->en_attente)? 0 : 1 )
-          . " | Sent:"  . $r->convoc_sent 
-          . " | "       . $r->horaires    
-          . " | Lieu:"  . $r->co_lieu
-          . " | Gr:"    . $r->groupe
-          . " | Form:"  . $r->co_resp 
-          . " | "       . $r->duree_prevue  . "h"
-          . " | "       . $r->duree_a_payer . "h"
-          . " | "        .$r->type_paiement
+          . "". $i        
+          . " | "     . $r->date
+          . " | Alt:" . $r->session_alert
+          . " | Pse:" . (($r->en_attente)? 1 : 0 ) . "->" . (($r->en_attente)? 0 : 1 )
+          . " | Snt:" . $r->convoc_sent
+          . " | "     . $r->horaires
+          . " | "     . $r->co_lieu
+          . " | G"    . $r->groupe
+          . " | F:"   . $r->co_resp
+          . " | "     . $r->duree_prevue           . "h"
+          . " | "     . $r->duree_a_payer          . "h"
+          . " | "     . $r->type_paiement
           . "\n-----------\n";
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
@@ -1223,32 +1223,32 @@ function gbb_sess_edition_submit($form, &$form_state) {
   $sess_oldAndNew = "\n-----------\n";
   foreach ($result as $r) {
     $sess_oldAndNew = $sess_oldAndNew
-      . "ses_id:". $sess_id        
-      . " | "       . $r->date        
-      . " | Alert:" . $r->session_alert
-      . " | Pause:" . $r->en_attente
-      . " | Sent:"  . $r->convoc_sent  
-      . " | "       . $r->horaires    
-      . " | Lieu:"  . $r->co_lieu
-      . " | Gr:"    . $r->groupe
-      . " | Form:"  . $r->co_resp 
-      . " | "       . $r->duree_prevue  . "h"
-      . " | "       . $r->duree_a_payer . "h"
-      . " | "        .$r->type_paiement;
+      . "". $sess_id        
+      . " | "     . $r->date
+      . " | Alt:" . $r->session_alert
+      . " | Pse:" . $r->en_attente
+      . " | Snt:" . $r->convoc_sent
+      . " | "     . $r->horaires
+      . " | "     . $r->co_lieu
+      . " | G"    . $r->groupe
+      . " | F:"   . $r->co_resp
+      . " | "     . $r->duree_prevue   . "h"
+      . " | "     . $r->duree_a_payer  . "h"
+      . " | "     . $r->type_paiement;
   };
   $sess_oldAndNew = $sess_oldAndNew . "\n----------\n++++++++++ \n"
-    . "ses_id:". $sess_id        
-    . " | "       . $form_state['values']['date']
-    . " | Alert:" . $form_state['values']['session_alert']
-    . " | Pause:" . $form_state['values']['en_attente']
-    . " | Sent:"  . $convoc_sent
-    . " | "       . $form_state['values']['horaires']
-    . " | Lieu:"  . $co_lieu
-    . " | Gr:"    . $form_state['values']['groupe']
-    . " | Form:"  . $co_resp
-    . " | "       . $form_state['values']['duree_prevue']  . "h"
-    . " | "       . $form_state['values']['duree_a_payer'] . "h"
-    . " | "       . $form_state['values']['type_paiement']
+    . "". $sess_id        
+    . " | "     . $form_state['values']['date']
+    . " | Alt:" . $form_state['values']['session_alert']
+    . " | Pse:" . $form_state['values']['en_attente']
+    . " | Snt:" . $convoc_sent
+    . " | "     . $form_state['values']['horaires']
+    . " | "     . $co_lieu
+    . " | G"    . $form_state['values']['groupe']
+    . " | F:"   . $co_resp
+    . " | "     . $form_state['values']['duree_prevue']  . "h"
+    . " | "     . $form_state['values']['duree_a_payer'] . "h"
+    . " | "     . $form_state['values']['type_paiement']
     . "\n++++++++++";
   watchdog('BouleEtBill', "M:" . $form_state['values']['co_modu'] . " Session modifiée <pre>@sess_oldAndNew</pre>",
     array( '@sess_oldAndNew' => $sess_oldAndNew));
