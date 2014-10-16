@@ -1054,7 +1054,7 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['duree_prevue'] = array(
     '#type' => 'textfield',
-    '#title' => variable_get('ico_dureePrev'),
+    '#title' =>  variable_get('ico_dureePrev') . t('D.à payer'), 
     '#default_value' => $r->duree_prevue,
     '#size' => 6,
     '#maxlength' => 6,
@@ -1065,7 +1065,7 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['duree_a_payer'] = array(
     '#type' => 'textfield',
-    '#title' => variable_get('ico_dureeApayer'),
+    '#title' => variable_get('ico_dureeApayer') . t('D.payée') ,
     '#default_value' => $r->duree_a_payer,
     '#size' => 6,
     '#maxlength' => 6,
@@ -1076,7 +1076,7 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['type_paiement'] = array(
     '#type' => 'select',
-    '#title' => t('Type de paiement'),
+    '#title' => t('Type paiement'),
     '#options' => array( 'VAC'  => t('VAC'),
                          'CONV' => t('CONV'),
                          'BDC'  => t('BDC'),
@@ -1195,9 +1195,11 @@ function gbb_sess_edition_submit($form, &$form_state) {
   $pattern = array ('/.*\(rne:(.*)\)/');
   $co_lieu = preg_replace($pattern, $replace,  
                           $form_state['values']['lieu']);
+  if ($co_lieu == '') $co_lieu = 0;
   $pattern = array ('/.*\(id:(.*)\)/');
   $co_resp = preg_replace($pattern, $replace,
                           $form_state['values']['formateur']);
+  if ($co_resp == '') $co_resp = 1;
   $sess_id = $form_state['values']['sess_id'];
 
   $convoc_sent = $form_state['values']['convoc_sent'];
