@@ -880,10 +880,13 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
           . " | "      . $r->type_paiement
           . "\n-----------\n";
       };
+      global $user;
       db_merge('gbb_session') // Marque comme envoyée chaque session cochée
         ->key(array('sess_id'  => $i))
         ->fields(array('convoc_sent' => 1,
-                       'session_alert' => 0))
+          'session_alert' => 0,
+          'date_modification' => date('Y-m-d H:i:s'),
+          'user_id' => $user->uid))
         ->execute();
     }
   }
@@ -922,9 +925,12 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
           . " | "     . $r->duree_a_payer          . "h"
           . " | "     . $r->type_paiement
           . "\n-----------\n";
+        global $user;
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
-          ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ) ))
+          ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ),
+                   'date_modification' => date('Y-m-d H:i:s'),
+                   'user_id' => $user->uid))
           ->execute();
       }
       }
