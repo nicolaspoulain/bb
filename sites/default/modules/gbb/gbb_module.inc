@@ -885,8 +885,8 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
         ->key(array('sess_id'  => $i))
         ->fields(array('convoc_sent' => 1,
           'session_alert' => 0,
-          'date_modification' => date('Y-m-d H:i:s'),
-          'user_id' => $user->uid))
+          'date_modif' => date('Y-m-d H:i:s'),
+          'uid' => $user->uid))
         ->execute();
     }
   }
