@@ -636,12 +636,7 @@ function gbb_liste_stages_liste($args) {
             'module/' . arg(2) . '/' . $r->co_modu,
             $options_co_modu) .
             " <span class='$m_ouvert_ou_ferme'>" .
-            #t($r->libm) . $plus . '</span> ',
-            #TODO TODO 
-            #TODO TODO 
-            #TODO TODO 
-            #TODO TODO 
-            t($r->libm) . '</span> ',
+            t($r->libm) . $plus . '</span> ',
               ),
               'col3' => array(
                 'data' => nl2br($r->organisation). $formateurs ,
