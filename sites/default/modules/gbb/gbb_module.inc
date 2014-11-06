@@ -929,7 +929,7 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
           ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ),
-                   'date_modification' => date('Y-m-d H:i:s'),
+                   'date_modif' => date('Y-m-d H:i:s'),
                    'user_id' => $user->uid))
           ->execute();
       }
