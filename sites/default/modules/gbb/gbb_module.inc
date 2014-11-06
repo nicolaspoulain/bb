@@ -930,7 +930,7 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
           ->key(array('sess_id'  => $i))
           ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ),
                    'date_modif' => date('Y-m-d H:i:s'),
-                   'user_id' => $user->uid))
+                   'uid' => $user->uid))
           ->execute();
       }
       }
@@ -1451,6 +1451,8 @@ function gbb_convoc_form_module_alert_submit(&$form, &$form_state) {
                    'user_id' => $user->uid))
       ->execute();
   };
+  watchdog('BouleEtBill', "M:" . $form_state['values']['comodu'] . " Module alert : @new",
+    array( '@new' => $form_state['values']['module_alert'] ));
 
  }
 function gbb_convoc_form_module_printed_submit(&$form, &$form_state) {
@@ -1462,6 +1464,8 @@ function gbb_convoc_form_module_printed_submit(&$form, &$form_state) {
                    'date_modification' => date('Y-m-d H:i:s'),
                    'user_id' => $user->uid))
     ->execute();
+  watchdog('BouleEtBill', "M:" . $form_state['values']['comodu'] . " Module imprimé : @new",
+    array( '@new' => $form_state['values']['module_printed'] ));
 }
 
 
