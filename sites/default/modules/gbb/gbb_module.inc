@@ -1323,23 +1323,21 @@ function gbb_convoc_form($form, &$form_state) {
   $form['f']['envoyer']['#markup']= '<div class="flright">' .
     variable_get('ico_save') . '</div>';
 
-  if (user_access('gest_convocs gbb')) {
-    $form['f']['module_printed'] = array(
-      '#type' => 'checkbox',
-      '#title' => variable_get('ico_print') .
-                  t('Imprimé'),
-      '#default_value' => $r['module_printed'],
-      '#prefix' => '<div class="inline">',
-      '#suffix' => '</div>',
-      '#ajax' => array(
-        'callback' => 'gbb_convoc_form_module_printed_submit',
-        'progress' => array('type' => 'throbber',
-                            'message' => 'Enregistrement...')),
-    );
-  }
-  else {
-    $form['f']['module_printed'] = array('#type' => 'hidden',
-                                         '#value' => $r['module_printed']);
+  $form['f']['module_printed'] = array(
+    '#type' => 'checkbox',
+    '#title' => variable_get('ico_print') .
+                t('Imprimé'),
+    '#default_value' => $r['module_printed'],
+    '#prefix' => '<div class="inline">',
+    '#suffix' => '</div>',
+    '#ajax' => array(
+      'callback' => 'gbb_convoc_form_module_printed_submit',
+      'progress' => array('type' => 'throbber',
+                          'message' => 'Enregistrement...')),
+  );
+  
+  if (!user_access('gest_convocs gbb')) {
+    $form['f']['module_printed']['#disabled'] = TRUE;
   }
 
   $form['f']['module_alert'] = array(
