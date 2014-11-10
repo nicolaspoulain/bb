@@ -1337,6 +1337,7 @@ function gbb_convoc_form($form, &$form_state) {
   );
   
   if (!user_access('gest_convocs gbb')) {
+    $form['f']['module_printed']['#type'] = 'hidden';
     $form['f']['module_printed']['#disabled'] = TRUE;
   }
 
