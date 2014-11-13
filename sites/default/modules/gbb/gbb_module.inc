@@ -1111,7 +1111,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     ),
   );
 
-  if ($r->convoc_sent != 1 || user_access('gest_sessions gbb') ) {
+  if ($r->convoc_sent != 1 && user_access('gest_sessions gbb') ) {
     $form['f']['en_attente'] = array(
       '#type' => 'checkbox',
       '#title' => variable_get('ico_attente') .
