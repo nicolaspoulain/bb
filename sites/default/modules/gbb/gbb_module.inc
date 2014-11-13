@@ -1127,8 +1127,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     );
   }
   else {
-    $form['f']['en_attente'] = array( '#type'  => 'hidden',
-                                      '#value' => 0        );
+    $form['f']['en_attente']['#type']  = 'hidden';
   }
 
   if (user_access('gest_convocs gbb')) {
