@@ -1358,6 +1358,7 @@ function gbb_convoc_form($form, &$form_state) {
     '#title' => t('Info à ne pas porter sur la convocation'),
     '#default_value' => $txtOff,
     '#cols' => 50,
+    '#rows' => 15,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
     '#ajax' => array(
@@ -1373,6 +1374,7 @@ function gbb_convoc_form($form, &$form_state) {
     '#title' => t('Info à porter sur la convocation'),
     '#default_value' => $txtOn,
     '#cols' => 43,
+    '#rows' => 15,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
     '#ajax' => array(
