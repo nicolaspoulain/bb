@@ -1127,7 +1127,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     );
   }
   else {
-    $form['f']['en_attente']['#type']  = 'hidden';
+    $form['f']['en_attente']['#type']  = 'disabled';
   }
 
   if (user_access('gest_convocs gbb')) {
@@ -1208,6 +1208,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
   $sess_id = $form_state['values']['sess_id'];
 
   $convoc_sent = $form_state['values']['convoc_sent'];
+  $en_attente = (isset($form_state['values']['en_attente'])? $form_state['values']['en_attente'] : 0);
   // si le drapeau est posé sur une session, on fait sauter le convoc-sent
   //  sur cette session ainsi que le module_printed sur le module
   if ($form_state['values']['session_alert']==1) {
@@ -1245,7 +1246,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
     . "". $sess_id        
     . " | "     . $form_state['values']['date']
     . " | Alt:" . $form_state['values']['session_alert']
-    . " | Pse:" . $form_state['values']['en_attente']
+    . " | Pse:" . $en_attente
     . " | Snt:" . $convoc_sent
     . " | "     . $form_state['values']['horaires']
     . " | "     . $co_lieu
@@ -1266,7 +1267,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
                    'co_degre'      => $form_state['values']['co_degre'],
                    'groupe'        => $form_state['values']['groupe'],
                    'convoc_sent'   => $convoc_sent,
-                   'en_attente'    => $form_state['values']['en_attente'],
+                   'en_attente'    => $en_attente,
                    'session_alert' => $form_state['values']['session_alert'],
                    'horaires'      => $form_state['values']['horaires'],
                    'duree_prevue'  => $form_state['values']['duree_prevue'],
