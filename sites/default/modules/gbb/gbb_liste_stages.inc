@@ -546,6 +546,7 @@ function gbb_liste_stages_liste($args) {
         } else {
           $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
         }
+        if ($paf_ou_fil == 'paf') $plus = '';
         $timer = variable_get('ico_clockGreen');
         if (strtotime($dateD) < time()) { // le premier jour dépassé
           $timer = variable_get('ico_clockRed') ;
