@@ -541,13 +541,11 @@ function gbb_liste_stages_liste($args) {
         $rsp ->fields('r', array('nomu', 'prenom'));
         $respo = $rsp->execute()->fetchObject();
         #print_r($respo);
-        if ($paf_ou_fil=='paf') {
-          if ($respo) {
-            $plus = " <i>(R.péda : " . $respo->nomu . ")</i>";
-          } else {
-            $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
-          }
-        };
+        if ($respo) {
+          $plus = " <i>(R.péda : " . $respo->nomu . ")</i>";
+        } else {
+          $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
+        }
         $timer = variable_get('ico_clockGreen');
         if (strtotime($dateD) < time()) { // le premier jour dépassé
           $timer = variable_get('ico_clockRed') ;
