@@ -16,6 +16,10 @@ class ViewsConditionalHandler extends views_handler_field {
     6 => 'NOT empty',
     7 => 'Contains',
     8 => 'Does NOT contain',
+    9 => 'Length Equal to',
+    10 => 'Length NOT equal to',
+    11 => 'Length Greater than',
+    12 => 'Length Less than',
   );
 
   /**
@@ -46,10 +50,15 @@ class ViewsConditionalHandler extends views_handler_field {
     // Display all labels weighted less than the current label.
     $fields = array(
       0 => '- ' . t('no field selected') . ' -',
-    ) + $this->view->display_handler->get_field_labels();
-
-    // We only use fields up to (not including) this one.
-    unset($fields[$this->options['id']]);
+    );
+    foreach ($this->view->display_handler->get_handlers('field') as $field => $handler) {
+      // We only use fields up to (not including) this one.
+      if ($field == $this->options['id']) {
+        break;
+      }
+      $title = $handler->ui_name();
+      $fields[$field] = "[$field] == $title";
+    }
 
     $form['if'] = array(
       '#type' => 'select',
@@ -110,8 +119,13 @@ class ViewsConditionalHandler extends views_handler_field {
       'DATE_UNIX => Current date / time, in UNIX timestamp format (' . REQUEST_TIME . ')',
       'DATE_STAMP => Current date / time, in standard format (' . format_date(REQUEST_TIME) . ')',
     );
-    foreach ($this->view->display_handler->get_field_labels() as $item => $title) {
-      $items[] = "[$item] => $title";
+    foreach ($this->view->display_handler->get_handlers('field') as $field => $handler) {
+      // We only use fields up to (not including) this one.
+      if ($field == $this->options['id']) {
+        break;
+      }
+      $title = $handler->ui_name();
+      $items[] = "[$field] == $title";
     }
 
     $form['replacements']['variables'] = array(
@@ -148,8 +162,8 @@ class ViewsConditionalHandler extends views_handler_field {
         '!if' => $this->options['if'],
         '!condition' => $this->conditions[$this->options['condition']],
         '!equalto' => $this->options['equalto'],
-        '!then' => $this->options['then'],
-        '!or' => $this->options['or'],
+        '!then' => strip_tags($this->options['then']),
+        '!or' => strip_tags($this->options['or']),
       ));
     }
     else {
@@ -300,7 +314,7 @@ class ViewsConditionalHandler extends views_handler_field {
 
       // Contains
       case 7:
-        if (stripos($r, $equalto) !== FALSE) {
+        if (mb_stripos($r, $equalto) !== FALSE) {
           return $then;
         }
         else {
@@ -310,7 +324,47 @@ class ViewsConditionalHandler extends views_handler_field {
 
       // Does NOT contain
       case 8:
-        if (stripos($r, $equalto) === FALSE) {
+        if (mb_stripos($r, $equalto) === FALSE) {
+          return $then;
+        }
+        else {
+          return $or;
+        }
+        break;
+        
+      // Length Equal to.
+      case 9:
+        if (mb_strlen($r) == $equalto) {
+          return $then;
+        }
+        else {
+          return $or;
+        }
+        break;
+
+      // Length Not equal to.
+      case 10:
+        if (mb_strlen($r) !== $equalto) {
+          return $then;
+        }
+        else {
+          return $or;
+        }
+        break;
+
+      // Length Greater than.
+      case 11:
+        if (mb_strlen($r) > $equalto) {
+          return $then;
+        }
+        else {
+          return $or;
+        }
+        break;
+
+      // Length Less than.
+      case 12:
+        if (mb_strlen($r) < $equalto) {
           return $then;
         }
         else {
