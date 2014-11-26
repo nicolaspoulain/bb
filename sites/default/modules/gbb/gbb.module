@@ -134,17 +134,6 @@ function gbb_menu() {
         'file' => 'gbb_etablissement.inc',
   );
 
-/*
-  // Conteneur pour le affichages de views
-  // dans un quicktab
-
-  $items['vue_rapports'] = array(
-        'title' => '',
-        'page callback' => 'gbb_rapports_view',
-        'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK,
-  );
-
   // Fiche evaluation formateur
   // degré 2, module 26142, groupe 3
   //   exemple : evaluation/2/26142/3
@@ -152,17 +141,30 @@ function gbb_menu() {
   $items['evaluation'] = array(
         'title' => '',
         'page callback' => 'gbb_evaluation_view',
-        'access arguments' => array('formateur gbb'),
+        'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
+        'file' => 'gbb_evaluation.inc',
   );
 
   // Fiche Bilan conseiller à paartir de eval formateur
   // degré 2, module 26142, groupe 3
   //   exemple : bilan/2/26142/3
 
-  $items['bilan'] = array(
+  $items['bilanview'] = array(
         'title' => '',
         'page callback' => 'gbb_bilan_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_bilan.inc',
+  );
+
+/*
+  // Conteneur pour le affichages de views
+  // dans un quicktab
+
+  $items['vue_rapports'] = array(
+        'title' => '',
+        'page callback' => 'gbb_rapports_view',
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
   );
