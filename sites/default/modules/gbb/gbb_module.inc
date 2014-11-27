@@ -1351,6 +1351,10 @@ function gbb_convoc_form($form, &$form_state) {
       'progress' => array('type' => 'throbber',
                           'message' => 'Enregistrement...')),
   );
+  if (!user_access('gest_convocs gbb')) {
+    $form['f']['module_alert']['#type'] = 'hidden';
+    $form['f']['module_alert']['#disabled'] = TRUE;
+  }
 
   $html = $r['convoc_info_off'];
   $txtOff = preg_replace('#<br\s*/?>#i', "\n", $html); //ce <? est une ASTUCE
