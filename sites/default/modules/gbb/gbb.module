@@ -158,17 +158,18 @@ function gbb_menu() {
         'file' => 'gbb_bilan.inc',
   );
 
-/*
-  // Conteneur pour le affichages de views
-  // dans un quicktab
+  // Tableau permettant la Saisie des info compléméntaires
+  // concernant les offres
 
-  $items['vue_rapports'] = array(
+  $items['offres_edit'] = array(
         'title' => '',
-        'page callback' => 'gbb_rapports_view',
+        'page callback' => 'gbb_offres_view',
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
+        'file' => 'gbb_offres.inc',
   );
 
+/*
   // Saisie de la classification d'une offre
   // co_omodu 26142
   // exemple : offre/26142
@@ -211,12 +212,6 @@ function gbb_menu() {
 
   //   exemple : bilan/2/26142/3
 
-  $items['offres_edit'] = array(
-        'title' => '',
-        'page callback' => 'gbb_offres_view',
-        'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK,
-  );
   $items['plan_edit'] = array(
         'title' => '',
         'page callback' => 'gbb_plan_edit_view',
