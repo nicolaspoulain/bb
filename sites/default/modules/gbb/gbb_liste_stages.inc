@@ -540,13 +540,28 @@ function gbb_liste_stages_liste($args) {
           'r.co_resp  = d.co_resp AND r.co_degre = d.co_degre');
         $rsp ->fields('r', array('nomu', 'prenom'));
         $respo = $rsp->execute()->fetchObject();
-        #print_r($respo);
+        $rsp = db_select('gbb_gdire', 'd');
+        $rsp ->fields('d', array('co_resp', 'co_tres', 'co_modu'))
+          ->condition('d.co_degre', arg(2), '=')
+          ->condition('d.co_tres', 2, '=')
+          ->condition('d.co_modu', $r->co_modu, '=');
+        $rsp ->leftjoin('gbb_gresp', 'r',
+          'r.co_resp  = d.co_resp AND r.co_degre = d.co_degre');
+        $rsp ->fields('r', array('nomu', 'prenom'));
+        $respoo = $rsp->execute()->fetchObject();
+        #print_r($respo OR $respoo);
         if ($respo) {
-          $plus = " <i>(R.péda : " . $respo->nomu . ")</i>";
+          if ($nomu != $respo->nomu) {
+            $plus = "&nbsp;<i class=\"gray sizes\">&mdash; R.péda : " . $respo->nomu . "</i>";
+          }
+          elseif ($nomu != $respoo->nomu) {
+            $plus = "&nbsp;<i class=\"gray sizes\">&mdash; R.orga : " . $respoo->nomu . "</i>";
+          }
+          else { $plus = ''; }
         } else {
           $plus = " <b>R.péda NON SAISI DANS GAIA !!</b>";
         }
-        if ($paf_ou_fil == 'paf') $plus = '';
+        #if ($paf_ou_fil == 'paf') $plus = '';
         $timer = variable_get('ico_clockGreen');
         if (strtotime($dateD) < time()) { // le premier jour dépassé
           $timer = variable_get('ico_clockRed') ;

@@ -39,6 +39,9 @@ td.nowrap {
 .sizel {
   font-size: 1.2em;
 }
+.sizes {
+  font-size: 0.8em;
+}
 .fil {
   font-weight:bold;
   color : #8B00A6;
