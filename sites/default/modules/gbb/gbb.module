@@ -150,7 +150,7 @@ function gbb_menu() {
   // degré 2, module 26142, groupe 3
   //   exemple : bilan/2/26142/3
 
-  $items['bilanview'] = array(
+  $items['bilanedit'] = array(
         'title' => '',
         'page callback' => 'gbb_bilan_view',
         'access arguments' => array('stable gbb'),

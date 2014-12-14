@@ -129,7 +129,7 @@ function gbb_infos_general($args) {
   if (($result->rowCount() != 0)) {
     $bilanStr  = "Bilans :";
     foreach ($result as $rr) {
-      $bilanStr  .= l(' gr'.$rr->groupe,'bilanview/'.arg(1).'/'.arg(2).'/'.$rr->groupe);
+      $bilanStr  .= l(' gr'.$rr->groupe,'bilan_view/'.arg(1).'/'.arg(2).'/'.$rr->groupe);
     };
   };
   // Construction du tableau à trois lignes
