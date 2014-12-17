@@ -285,6 +285,8 @@ variable_set('ico_dureePrev',  '&nbsp;<i class="fa fa-eur fa-lg orange euro" tit
 variable_set('ico_dureeApayer','&nbsp;<i class="fa fa-eur fa-lg lightgreen euro " title="Durée payée"></i>');
 variable_set('ico_organisation','<i class="fa fa-comment lightgray" title="Le journal contient des infos"></i>&nbsp;');
 variable_set('ico_organisation-o','<i class="fa fa-comment-o lightgray" title="Le journal est vide"></i>&nbsp;');
+variable_set('ico_bilans',     '<i class="fa fa-check-square-o green fa-lg" title="Bilan rempli"></i>');
+variable_set('ico_DArendu',    '<i class="fa fa-thumbs-o-up green fa-lg" title="Dossier rendu"></i>');
 
 variable_set('_gbb_session_alert_icon', array(
   'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',
