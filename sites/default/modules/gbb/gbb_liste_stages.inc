@@ -587,8 +587,8 @@ function gbb_liste_stages_liste($args) {
         } else { $dates =''; };
         $DA = "";
         if ($DAdd !="NaN" && $DAdd !="1970-01-01 00:00:00") {
-          $DA = variable_get('ico_DArendu')
-            . " " .strftime('%d/%m/%y', strtotime($DAdd));
+          $DA = variable_get('ico_DArendu');
+            #.strftime('%d/%m/%y', strtotime($DAdd));
         };
         $queryev = db_select('gbb_evaluation', 'e');
         $queryev ->condition('e.co_modu', $r->co_modu, '=')
@@ -656,7 +656,7 @@ function gbb_liste_stages_liste($args) {
                 'data' => nl2br($r->organisation). $formateurs ,
               ),
               'col4' => array(
-                'data' => $dates . $evalbilan . $DA,
+                'data' => $dates ."&nbsp;". $evalbilan . $DA,
               ),
             );
         $libd_precedent = $r->libd;
