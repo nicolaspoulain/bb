@@ -52,6 +52,11 @@ function gbb_form_bilan($form, &$form_state) {
                                ));
   $r = $query->execute()->fetchAssoc();
 
+
+  $form['information'] = array(
+     '#markup' => l('Voir le bilan', 'bilan_view/'.arg(1).'/'.arg(2).'/'.arg(3)),
+   ); 
+
   $form['f'] = array(
     '#type' => 'fieldset',
     '#title' => t('Bilan des évaluations formateur et stagiaire pour le module ').arg(2).t(' groupe ').arg(3),

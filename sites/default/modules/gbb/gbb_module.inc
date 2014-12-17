@@ -118,6 +118,7 @@ function gbb_infos_general($args) {
       $evalStr  .= l(' gr'.$rr->groupe,'evaluationview/'.arg(1).'/'.arg(2).'/'.$rr->groupe);
     };
   };
+  $evalStr  = "";
   // --------------------------------------------------------------------
   $query = db_select('gbb_session', 's');
   $query ->condition('s.co_modu', arg(2), '=')
