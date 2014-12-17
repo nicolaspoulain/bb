@@ -2126,6 +2126,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmoof']['lcomm'] = array(
+    'title' => t('lcomm'),
+    'help' => t('Commentaires (GAIA)'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
 
   $data['gbb_gmoof']['dt_crea'] = array(
     'title' => t('dt_crea'),

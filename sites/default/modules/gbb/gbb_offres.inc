@@ -105,12 +105,12 @@ function gbb_offres_tab($args) {
     'no_offre' => t('No Offre/ Code Module'),
     'libl' => t('Titre'),
     'nomu2' => t('Resp. péda.'),
-    array('data' => t('ÉSPÉ & Universités'), 'class' => 'jaune'),
+    array('data' => t('Offreurs spécifiques'), 'class' => 'jaune'),
     array('data' => t('Nouv. offreur'), 'class' => 'jaune'),
     array('data' => t('Offre nouvelle'), 'class' => 'jaune'),
     array('data' => t('Pub. Dés.'), 'class' => 'jaune'),
-    'lmoda' => t('Modalités'),
-    'lcomm' => t('Commentaires (GAIA)'),
+    #'lmoda' => t('Modalités'),
+    #'lcomm' => t('Commentaires (GAIA)'),
     'nb_groupe' => t('Nbre groupe'),
     'duree_prev' => t('Duree prév. (h)'),
     array('data' => t('Nbre HP'), 'class' => 'jaune'),
@@ -132,7 +132,7 @@ function gbb_offres_tab($args) {
                     'd.co_resp = r.co_resp AND r.co_degre = 2');
   $query ->leftjoin('gbb_gresp', 'r2',
                     'm.co_resp = r2.co_resp AND r2.co_degre = 2');
-  $query ->condition('d.no_offre', '20140000', '>')
+  $query ->condition('d.no_offre', '20150000', '>')
          ->fields('d', array('no_offre', 'co_tpla', 'co_orie'))
          ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev'))
          ->fields('r', array('nomu'));
@@ -184,14 +184,14 @@ function gbb_offres_tab($args) {
                 array('data' => $r->co_orie),
                 array('data' => $position),
                 array('data' => $r->no_offre.' / '.$r->co_omodu),
-                array('data' => $r->libl),
+                array('data' => l($r->libl,'offre_detail/'.$r->co_omodu,array('attributes' => array('target'=>'_blank')))),
                 array('data' => $r->nomu2),
                 array('data' => $iufm),
                 array('data' => $nouv_offreur),
                 array('data' => $offre_new),
                 array('data' => $pub_des),
-                array('data' => $r->lmoda),
-                array('data' => $r->lcomm),
+                #array('data' => $r->lmoda),
+                #array('data' => $r->lcomm),
                 array('data' => $r->nb_groupe),
                 array('data' => $r->duree_prev),
                 array('data' => $hp),
@@ -281,8 +281,8 @@ function gbb_offres_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_nat'] = array(
     '#type' => 'select', 
-    '#options' => array('R0','R1','R2','R3','R4','R5','R6','R7','R8','R9','S0','S1','S2','S3','S4','S5','S6','S7','S8','S9','0'),
-    '#default_value' => (is_numeric($prio_nat)? $prio_nat : '20'),
+    '#options' => array('-','T0','T1','T2','T3','T4','T5','T6','T7','T8','V0','V1','V2','V3','V4','V5','V6','V7','V8'),
+    '#default_value' => (is_numeric($prio_nat)? $prio_nat : '0'),
     '#ajax' => array(
       'callback' => 'gbb_offres_prio_nat_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
@@ -299,8 +299,8 @@ function gbb_offres_prio_aca_form($form, &$form_state, $prio_aca, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_aca'] = array(
     '#type' => 'select',
-    '#options' => array('1','2', '3','4','5', '0'),
-    '#default_value' => (is_numeric($prio_aca)? $prio_aca : '5'),
+    '#options' => array('-','1','2', '3','4','5'),
+    '#default_value' => (is_numeric($prio_aca)? $prio_aca : '0'),
     '#ajax' => array(
       'callback' => 'gbb_offres_prio_aca_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
@@ -353,7 +353,7 @@ function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
   $form['f']['iufm'] = array(
     #'#type' => 'checkbox', '#size' => 1,
     '#type' => 'select',
-    '#options' => array('Choisir','ESPE','Paris1','Paris3','Paris4','Paris5','Paris6','Paris7','CNAM','Autres.'),
+    '#options' => array('Choisir','ESPE','Paris1','Paris3','Paris4','Paris5','Paris6','Paris7','CNAM','CANOPE','Autres.'),
     '#default_value' => $iufm,
     '#ajax' => array(
       'callback' => 'gbb_offres_iufm_form_submit',
