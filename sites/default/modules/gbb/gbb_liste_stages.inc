@@ -594,14 +594,14 @@ function gbb_liste_stages_liste($args) {
         $queryev ->condition('e.co_modu', $r->co_modu, '=')
           ->condition('e.co_degre', arg(2), '=')
           #->fields('e',  array('groupe','syntheseEvalForm'));
-          ->fields('e',  array('groupe','remqAnalysesRD'));
+          ->fields('e',  array('groupe','syntheseEvalSta'));
         $resultev = $queryev->execute();
         $evalbilan = '';
         if (($resultev->rowCount() != 0)) {
           $evalbilan = variable_get('ico_evals');
           foreach ($resultev as $rrv) {
             #if ($rrv->syntheseEvalForm !='') {
-            if ($rrv->remqAnalysesRD !='') {
+            if ($rrv->syntheseEvalSta !='') {
               $evalbilan = variable_get('ico_bilans');
             };
           };
