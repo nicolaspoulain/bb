@@ -157,7 +157,7 @@ function gbb_etablissement_fiche($form, &$form_state) {
   $form['f']['denomcomp'] = array(
     '#type' => 'textfield',
     '#title' => t('Nom (non modifiable)'),
-    '#description' => t('Catherine Laigle ou Christian Muir'),
+    '#description' => t('Nicolas Poulain ou Christian Muir'),
     '#default_value' => $record->denom_comp,
     '#size' => 40,
     '#maxlength' => 128,
@@ -181,6 +181,13 @@ function gbb_etablissement_fiche($form, &$form_state) {
     '#title' => t('Adresse'),
     '#default_value' => $record->adr,
     '#size' => 40,
+    '#maxlength' => 128,
+  );
+  $form['f']['cp'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Code Postal'),
+    '#default_value' => $record->cp,
+    '#size' => 20,
     '#maxlength' => 128,
   );
   $form['f']['mel'] = array(
@@ -231,6 +238,7 @@ function gbb_etablissement_fiche_submit($form, &$form_state) {
                    'sigle'     => $form_state['values']['sigle'],
                    'denom_comp'=> $form_state['values']['denomcomp'],
                    'adr'       => $form_state['values']['adr'],
+                   'cp'        => $form_state['values']['cp'],
                    'mel'       => $form_state['values']['mel'],
                    'tel'       => $form_state['values']['tel'],
                    'fax'       => $form_state['values']['fax'],
