@@ -1,40 +1,38 @@
 <?php
-
 /**
  * @file
+ * fontawesome.module
  * Drupal integration with Font Awesome, the iconic font for use with Bootstrap.
  */
+
+define('FONTAWESOME_LIBRARY', 'fontawesome');
+define('FONTAWESOME_NAME', 'Font Awesome');
+define('FONTAWESOME_URL', 'http://fontawesome.io');
+define('FONTAWESOME_DOWNLOAD_URL', 'http://fortawesome.github.io/Font-Awesome/3.2.1/assets/font-awesome.zip');
+define('FONTAWESOME_PREFIX', 'icon');
 
 /**
  * Implements hook_help().
  */
 function fontawesome_help($path, $arg) {
   switch ($path) {
-  case 'admin/help#fontawesome':
-    return '<p><i class="icon-flag icon-large"></i>' . t('<a href="@fontawesome">Font Awesome</a> is an iconic font designed for use with <a href="@bootstrap">Twitter Bootstrap</a>.', array(
-      '@fontawesome' => 'http://fortawesome.github.com/Font-Awesome/',
-      '@bootstrap' => 'http://twitter.github.com/bootstrap',
-    )) . '</p>';
+    case 'admin/help#fontawesome':
+      return '<p><i class="icon-flag icon-large"></i>' . t('<a href="!fontawesome_url">@fontawesome</a> is an iconic font designed for use with <a href="!bootstrap_url">Bootstrap</a>.', array(
+        '@fontawesome' => FONTAWESOME_NAME,
+        '!fontawesome_url' => FONTAWESOME_URL,
+        '!bootstrap_url' => 'http://getbootstrap.com',
+      )) . '</p>';
   }
-}
-
-/**
- * Implements hook_init().
- */
-function fontawesome_init() {
-  // Load up the Font Awesome CSS file.
-  drupal_load('module', 'libraries');
-  libraries_load('fontawesome');
 }
 
 /**
  * Implements hook_libraries_info().
  */
 function fontawesome_libraries_info() {
-  $libraries['fontawesome'] = array(
-    'name' => 'Font Awesome',
-    'vendor url' => 'http://fortawesome.github.com/Font-Awesome/',
-    'download url' => 'https://github.com/FortAwesome/Font-Awesome/zipball/master',
+  $libraries[FONTAWESOME_LIBRARY] = array(
+    'name' => FONTAWESOME_NAME,
+    'vendor url' => FONTAWESOME_URL,
+    'download url' => FONTAWESOME_DOWNLOAD_URL,
     'version arguments' => array(
       'file' => 'css/font-awesome.css',
       'pattern' => '/((?:\d+\.?){2,3})/',
@@ -47,34 +45,29 @@ function fontawesome_libraries_info() {
       ),
     ),
   );
-
   return $libraries;
 }
 
+/**
+ * Implements hook_preprocess_page().
+ *
+ * Purposefully only load on page requests and not hook_init(). This is
+ * required so it does not increase the bootstrap time of Drupal when it isn't
+ * necessary.
+ */
+function fontawesome_preprocess_page() {
+  libraries_load(FONTAWESOME_LIBRARY);
+}
 
 /**
  * Implements hook_icon_providers().
  */
 function fontawesome_icon_providers() {
-  $providers['fontawesome'] = array(
-    'title' => t('fontawesome'),
-    'url' => 'http://fontawesome.io',
-    'default bundle' => array(
-      'render' => 'html_tag',
-      'settings' => fontawesome_default_settings(),
-    ),
+  $providers[FONTAWESOME_LIBRARY] = array(
+    'title' => FONTAWESOME_NAME,
+    'url' => FONTAWESOME_URL,
   );
   return $providers;
-}
-
-
-/**
- * Provide default bundle settings.
- */
-function fontawesome_default_settings() {
-  return array(
-    'tag' => 'i',
-  );
 }
 
 /**
@@ -82,83 +75,45 @@ function fontawesome_default_settings() {
  */
 function fontawesome_icon_bundle_configure(&$settings, &$form_state, &$complete_form) {
   $bundle = $form_state['bundle'];
-  if ($bundle['provider'] === 'fontawesome') {
+  if ($bundle['provider'] === FONTAWESOME_LIBRARY) {
     $settings['tag'] = array(
       '#type' => 'select',
       '#title' => t('HTML Markup'),
-      '#description' => t('Choose the HTML markup tag that Font Awesome icons should be created with.
-        Typically, this is an %i tag, however it can be changed to suite the theme requirements.', array('%i' => '<i/>')),
+      '#description' => t('Choose the HTML markup tag that @fontawesome icons should be created with. Typically, this is a %tag tag, however it can be changed to suite the theme requirements.', array(
+        '@fontawesome' => FONTAWESOME_NAME,
+        '%tag' => '<' . $bundle['settings']['tag'] . '>',
+      )),
       '#options' => drupal_map_assoc(array('i', 'span', 'div')),
-      '#default_value' => isset($bundle['settings']['tag']) ? $bundle['settings']['tag'] : 'span',
+      '#default_value' => $bundle['settings']['tag'],
     );
   }
 }
 
 /**
- * Define render hook information.
- *
- * @see hook_icon_render_hooks()
+ * Implements hook_preprocess_icon_RENDER_HOOK().
  */
-function fontawesome_icon_render_hooks() {
-  $hooks['html_tag'] = array();
-  return $hooks;
-}
-
-/**
- * Implements hook_preprocess_icon().
- */
-function fontawesome_preprocess_icon(&$variables) {
-  if (!empty($variables['bundle']['provider']) && $variables['bundle']['provider'] === 'fontawesome') {
-    $variables['attributes']['class'][] = 'fa';
-  }
-}
-
-
-/**
- * @desc Implements hook_preprocess_icon_RENDER_HOOK().
- */
-function fontawesome_preprocess_icon_html_tag(&$variables) {
+function fontawesome_preprocess_icon_sprite(&$variables) {
   $bundle = &$variables['bundle'];
-  $icon = &$variables['icon'];
-  // Sanitize and add icon class here.
-  $class = drupal_html_class($icon);
-
-  $library = libraries_load('fontawesome');
-  $lib_class = 'icon';
-  if(isset($library['version']) && floor($library['version'])>3){
-    $lib_class = 'fa';
+  if ($bundle['provider'] === FONTAWESOME_LIBRARY) {
+    $variables['attributes']['class'][] = FONTAWESOME_PREFIX;
+    // Prepend the icon with the ICON prefix (which will be used as the class).
+    $variables['icon'] = FONTAWESOME_PREFIX . '-' . $variables['icon'];
   }
-  $variables['attributes']['class'][] = $lib_class . ' ' . $lib_class . '-' . $class;
 }
 
 /**
- * @desc return HTML tag emement with fontawesome icon classed
- * @param <type> $variables
- * @return <type>
- */
-function theme_icon_html_tag($variables) {
-  $output = '';
-  $bundle = $variables['bundle'];
-  $icon = $variables['icon'];
-  $output = theme('html_tag', array(
-    'element' => array(
-      '#tag' => isset($bundle['settings']['tag']) ? $bundle['settings']['tag'] : 'span',
-      '#attributes' => $variables['attributes'],
-      '#value' =>' ',
-    ),
-  ));
-  return $output;
-}
-
-
-/**@TODO: Grab these icons from css/Json file.
- * @desc Implements hook_icon_bundles().
+ * Implements hook_icon_bundles().
+ *
+ * @todo Extract icons from CSS or JSON file (currently not possible).
  */
 function fontawesome_icon_bundles() {
-  $bundles['fontawesome'] = array(
-    'render' => 'html_tag',
-    'provider' => 'fontawesome',
-    'title' => t('FontAwsome: Icons'),
+  $bundles[FONTAWESOME_LIBRARY] = array(
+    'title' => FONTAWESOME_NAME,
+    'provider' => FONTAWESOME_LIBRARY,
+    'render' => 'sprite',
+    'settings' => array(
+      'tag' => 'i',
+    ),
     'icons' => array(
       'rub' => 'rub',
       'ruble' => 'ruble',
