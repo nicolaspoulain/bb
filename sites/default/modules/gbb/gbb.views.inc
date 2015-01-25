@@ -1992,6 +1992,42 @@ function gbb_views_data() {
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
 
+  $data['gbb_gdiof_dafor']['montant'] = array(
+    'title' => t('montant'),
+    'help' => t('montant'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+
+  $data['gbb_gdiof_dafor']['ht2'] = array(
+    'title' => t('ht2'),
+    'help' => t('ht2'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+
+  $data['gbb_gdiof_dafor']['anim_peda'] = array(
+    'title' => t('anim_peda'),
+    'help' => t('anim_peda'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+
   // --------------------------------------------------------
   // gbb_gmoof
   // --------------------------------------------------------
