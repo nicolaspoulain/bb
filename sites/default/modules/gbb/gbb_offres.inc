@@ -109,12 +109,16 @@ function gbb_offres_tab($args) {
     array('data' => t('Nouv. offreur'), 'class' => 'jaune'),
     array('data' => t('Offre nouvelle'), 'class' => 'jaune'),
     array('data' => t('Pub. Dés.'), 'class' => 'jaune'),
+    array('data' => t('Anim. Péda.'), 'class' => 'jaune'),
     #'lmoda' => t('Modalités'),
     #'lcomm' => t('Commentaires (GAIA)'),
     'nb_groupe' => t('Nbre groupe'),
+    'nb_place_prev' => t('Nbre places prev.'),
     'duree_prev' => t('Duree prév. (h)'),
     array('data' => t('Nbre HP'), 'class' => 'jaune'),
     array('data' => t('Nbre vac.'), 'class' => 'jaune'),
+    array('data' => t('Montant en € Vac'), 'class' => 'jaune'),
+    array('data' => t('HT2'), 'class' => 'jaune'),
     #array('data' => t('Hors CDC'), 'class' => 'jaune'),
     array('data' => t('Priorité Nat.'), 'class' => 'jaune'),
     array('data' => t('Priorité Aca.'), 'class' => 'jaune'),
@@ -134,12 +138,12 @@ function gbb_offres_tab($args) {
                     'm.co_resp = r2.co_resp AND r2.co_degre = 2');
   $query ->condition('d.no_offre', '20150000', '>')
          ->fields('d', array('no_offre', 'co_tpla', 'co_orie'))
-         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev'))
+         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_place_prev'))
          ->fields('r', array('nomu'));
   $query ->addField('r2', 'nomu', 'nomu2');
-  $query ->fields('dd', array('nb_hp','nb_vac','hors_cdc','iufm',
+  $query ->fields('dd', array('nb_hp','nb_vac','montant','ht2','iufm',
                               'nouv_offreur','prio_nat','prio_aca','offre_new',
-                              'pub_des','comment','position' ));
+                              'pub_des','anim_peda','comment','position' ));
   $query = $query->extend('PagerDefault')->limit($count);
   $query ->distinct();
 
@@ -158,8 +162,10 @@ function gbb_offres_tab($args) {
                                 $r->nb_hp, $r->co_omodu)) ;
     $vac = render(drupal_get_form('gbb_offres_nb_vac_form',
                                 $r->nb_vac, $r->co_omodu)) ;
-    $hors_cdc = render(drupal_get_form('gbb_offres_hors_cdc_form',
-                                $r->hors_cdc, $r->co_omodu)) ;
+    $montant = render(drupal_get_form('gbb_offres_montant_form',
+                                $r->montant, $r->co_omodu)) ;
+    $ht2 = render(drupal_get_form('gbb_offres_ht2_form',
+                                $r->ht2, $r->co_omodu)) ;
     $prio_nat = render(drupal_get_form('gbb_offres_prio_nat_form',
                                 $r->prio_nat, $r->co_omodu)) ;
     $prio_aca = render(drupal_get_form('gbb_offres_prio_aca_form',
@@ -177,6 +183,8 @@ function gbb_offres_tab($args) {
                                 $r->nouv_offreur, $r->co_omodu)) ;
     $pub_des = render(drupal_get_form('gbb_offres_pub_des_form',
                                 $r->pub_des, $r->co_omodu)) ;
+    $anim_peda = render(drupal_get_form('gbb_offres_anim_peda_form',
+                                $r->anim_peda, $r->co_omodu)) ;
 
     $rows[] = array(
                 array('data' => $r->nomu),
@@ -190,12 +198,16 @@ function gbb_offres_tab($args) {
                 array('data' => $nouv_offreur),
                 array('data' => $offre_new),
                 array('data' => $pub_des),
+                array('data' => $anim_peda),
                 #array('data' => $r->lmoda),
                 #array('data' => $r->lcomm),
                 array('data' => $r->nb_groupe),
+                array('data' => $r->nb_place_prev),
                 array('data' => $r->duree_prev),
                 array('data' => $hp),
                 array('data' => $vac),
+                array('data' => $montant),
+                array('data' => $ht2),
                 #array('data' => $hors_cdc),
                 array('data' => $prio_nat),
                 array('data' => $prio_aca),
@@ -257,6 +269,40 @@ function gbb_offres_nb_vac_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('nb_vac'  => $form_state['values']['nb_vac'],
+  ))->execute();
+}
+
+function gbb_offres_montant_form($form, &$form_state, $montant, $co_omodu) {
+  $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
+  $form['f']['montant'] = array(
+    '#type' => 'textfield', '#size' => 1,
+    '#default_value' => $montant,
+    '#ajax' => array(
+      'callback' => 'gbb_offres_montant_form_submit',
+      'progress' => array('type' => 'throbber', 'message' => '')),);
+  return $form;
+}
+function gbb_offres_montant_form_submit($form, &$form_state) {
+  db_merge('gbb_gdiof_dafor')
+    ->key(array('co_omodu' => $form_state['values']['co_omodu']))
+    ->fields(array('montant'  => $form_state['values']['montant'],
+  ))->execute();
+}
+
+function gbb_offres_ht2_form($form, &$form_state, $ht2, $co_omodu) {
+  $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
+  $form['f']['ht2'] = array(
+    '#type' => 'textfield', '#size' => 1,
+    '#default_value' => $ht2,
+    '#ajax' => array(
+      'callback' => 'gbb_offres_ht2_form_submit',
+      'progress' => array('type' => 'throbber', 'message' => '')),);
+  return $form;
+}
+function gbb_offres_ht2_form_submit($form, &$form_state) {
+  db_merge('gbb_gdiof_dafor')
+    ->key(array('co_omodu' => $form_state['values']['co_omodu']))
+    ->fields(array('ht2'  => $form_state['values']['ht2'],
   ))->execute();
 }
 
@@ -353,7 +399,7 @@ function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
   $form['f']['iufm'] = array(
     #'#type' => 'checkbox', '#size' => 1,
     '#type' => 'select',
-    '#options' => array('Choisir','ESPE','Paris1','Paris3','Paris4','Paris5','Paris6','Paris7','CNAM','CANOPE','Autres.'),
+    '#options' => array('Choisir','ESPE','Paris1','Paris3','Paris4','Paris5','Paris6','Paris7','Paris8','Paris10','CNAM','CANOPE','Autres.'),
     '#default_value' => $iufm,
     '#ajax' => array(
       'callback' => 'gbb_offres_iufm_form_submit',
@@ -400,6 +446,24 @@ function gbb_offres_pub_des_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('pub_des'  => $form_state['values']['pub_des'],
+  ))->execute();
+}
+
+
+function gbb_offres_anim_peda_form($form, &$form_state, $anim_peda, $co_omodu) {
+  $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
+  $form['f']['anim_peda'] = array(
+    '#type' => 'checkbox', '#size' => 1,
+    '#default_value' => $anim_peda,
+    '#ajax' => array(
+      'callback' => 'gbb_offres_anim_peda_form_submit',
+      'progress' => array('type' => 'throbber', 'message' => '')),);
+  return $form;
+}
+function gbb_offres_anim_peda_form_submit($form, &$form_state) {
+  db_merge('gbb_gdiof_dafor')
+    ->key(array('co_omodu' => $form_state['values']['co_omodu']))
+    ->fields(array('anim_peda'  => $form_state['values']['anim_peda'],
   ))->execute();
 }
 
