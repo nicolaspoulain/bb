@@ -113,7 +113,7 @@ function gbb_offres_tab($args) {
     #'lmoda' => t('Modalités'),
     #'lcomm' => t('Commentaires (GAIA)'),
     'nb_groupe' => t('Nbre groupe'),
-    'nb_place_prev' => t('Nbre places prev.'),
+    'nb_eff_groupe' => t('Effectif groupe'),
     'duree_prev' => t('Duree prév. (h)'),
     array('data' => t('Nbre HP'), 'class' => 'jaune'),
     array('data' => t('Nbre vac.'), 'class' => 'jaune'),
@@ -138,7 +138,7 @@ function gbb_offres_tab($args) {
                     'm.co_resp = r2.co_resp AND r2.co_degre = 2');
   $query ->condition('d.no_offre', '20150000', '>')
          ->fields('d', array('no_offre', 'co_tpla', 'co_orie'))
-         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_place_prev'))
+         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_eff_groupe'))
          ->fields('r', array('nomu'));
   $query ->addField('r2', 'nomu', 'nomu2');
   $query ->fields('dd', array('nb_hp','nb_vac','montant','ht2','iufm',
@@ -202,7 +202,7 @@ function gbb_offres_tab($args) {
                 #array('data' => $r->lmoda),
                 #array('data' => $r->lcomm),
                 array('data' => $r->nb_groupe),
-                array('data' => $r->nb_place_prev),
+                array('data' => $r->nb_eff_groupe),
                 array('data' => $r->duree_prev),
                 array('data' => $hp),
                 array('data' => $vac),
