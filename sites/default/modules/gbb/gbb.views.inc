@@ -2085,6 +2085,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
+  $data['gbb_gmoof']['nb_place_prev'] = array(
+    'title' => t('nb_place_prev'),
+    'help' => t('Nb places prévues'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
   $data['gbb_gmoof']['nb_groupe'] = array(
     'title' => t('nb_groupe'),
     'help' => t('Nbre de groupes'),
