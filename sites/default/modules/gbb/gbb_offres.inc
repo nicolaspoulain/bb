@@ -117,7 +117,8 @@ function gbb_offres_tab($args) {
     'duree_prev' => t('Duree prév. (h)'),
     array('data' => t('Nbre HP'), 'class' => 'jaune'),
     array('data' => t('Nbre vac.'), 'class' => 'jaune'),
-    array('data' => t('Montant en € Vac'), 'class' => 'jaune'),
+    array('data' => t('Taux vac.'), 'class' => 'jaune'),
+    // array('data' => t('taux en € Vac'), 'class' => 'jaune'),
     array('data' => t('HT2'), 'class' => 'jaune'),
     #array('data' => t('Hors CDC'), 'class' => 'jaune'),
     array('data' => t('Priorité Nat.'), 'class' => 'jaune'),
@@ -141,7 +142,7 @@ function gbb_offres_tab($args) {
          ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_eff_groupe'))
          ->fields('r', array('nomu'));
   $query ->addField('r2', 'nomu', 'nomu2');
-  $query ->fields('dd', array('nb_hp','nb_vac','montant','ht2','iufm',
+  $query ->fields('dd', array('nb_hp','nb_vac','taux','ht2','iufm',
                               'nouv_offreur','prio_nat','prio_aca','offre_new',
                               'pub_des','anim_peda','comment','position' ));
   $query = $query->extend('PagerDefault')->limit($count);
@@ -162,8 +163,8 @@ function gbb_offres_tab($args) {
                                 $r->nb_hp, $r->co_omodu)) ;
     $vac = render(drupal_get_form('gbb_offres_nb_vac_form',
                                 $r->nb_vac, $r->co_omodu)) ;
-    $montant = render(drupal_get_form('gbb_offres_montant_form',
-                                $r->montant, $r->co_omodu)) ;
+    $taux = render(drupal_get_form('gbb_offres_taux_form',
+                                $r->taux, $r->co_omodu)) ;
     $ht2 = render(drupal_get_form('gbb_offres_ht2_form',
                                 $r->ht2, $r->co_omodu)) ;
     $prio_nat = render(drupal_get_form('gbb_offres_prio_nat_form',
@@ -206,7 +207,7 @@ function gbb_offres_tab($args) {
                 array('data' => $r->duree_prev),
                 array('data' => $hp),
                 array('data' => $vac),
-                array('data' => $montant),
+                array('data' => $taux),
                 array('data' => $ht2),
                 #array('data' => $hors_cdc),
                 array('data' => $prio_nat),
@@ -272,20 +273,21 @@ function gbb_offres_nb_vac_form_submit($form, &$form_state) {
   ))->execute();
 }
 
-function gbb_offres_montant_form($form, &$form_state, $montant, $co_omodu) {
+function gbb_offres_taux_form($form, &$form_state, $taux, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
-  $form['f']['montant'] = array(
-    '#type' => 'textfield', '#size' => 1,
-    '#default_value' => $montant,
+  $form['f']['taux'] = array(
+    '#type' => 'select',
+    '#options' => array('0','42','52','54','70'),
+    '#default_value' => $taux,
     '#ajax' => array(
-      'callback' => 'gbb_offres_montant_form_submit',
+      'callback' => 'gbb_offres_taux_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_montant_form_submit($form, &$form_state) {
+function gbb_offres_taux_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
-    ->fields(array('montant'  => $form_state['values']['montant'],
+    ->fields(array('taux'  => $form_state['values']['taux'],
   ))->execute();
 }
 

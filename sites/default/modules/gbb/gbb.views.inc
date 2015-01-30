@@ -1992,9 +1992,9 @@ function gbb_views_data() {
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
 
-  $data['gbb_gdiof_dafor']['montant'] = array(
-    'title' => t('montant'),
-    'help' => t('montant'),
+  $data['gbb_gdiof_dafor']['taux'] = array(
+    'title' => t('taux'),
+    'help' => t('taux'),
     'field' => array(
       'handler' => 'views_handler_field_numeric',
       'click sortable' => TRUE,
