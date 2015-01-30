@@ -247,6 +247,14 @@ function gbb_liste_stages_choix($form, &$form_state, $args) {
                         array('attributes' =>  array('class' => 'anchor-class'
                       ),
                       'query' => array('nomu' => $n),
+                                                     'html' => TRUE)) .'<br/>'
+    .variable_get('ico_calendar')."&nbsp;"
+                     . l( t('Mon planning'),
+                        'planning_stages',
+                        array('attributes' =>  array('class' => 'anchor-class'
+                      ),
+                      'query' => array('nomu' => $n,
+                      'date_ts[value][date]' => date('d/m/Y')),
                                                      'html' => TRUE)) . '</p>'
    .'</div></p>';
   $degre = array(1 => 'Premier degré',

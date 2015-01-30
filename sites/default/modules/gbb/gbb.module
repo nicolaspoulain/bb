@@ -277,6 +277,7 @@ variable_set('ico_clockOrange','<i class="fa fa-clock-o fa-lg orange" title="Pre
 variable_set('ico_clockRed',   '<i class="fa fa-clock-o fa-lg red" title="Première date dépassée"></i> ');
 variable_set('ico_finish',     '<i class="fa fa-flag-checkered fa-lg" title="Dernière date dépassée"></i> ');
 variable_set('ico_user',       '<i class="fa fa-user" title="Formateur"></i>');
+variable_set('ico_calendar',   '<i class="fa fa-calendar" title="Planning"></i>');
 variable_set('ico_etab',       '<i class="fa fa-university" title="Lieu"></i>');
 variable_set('ico_userAdd',    '<i class="fa fa-user" title="Ajouter un formateur">+</i>');
 variable_set('ico_etabAdd',    '<i class="fa fa-university" title="Ajouter un lieu">+</i>');
