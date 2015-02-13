@@ -277,7 +277,7 @@ function gbb_offres_taux_form($form, &$form_state, $taux, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['taux'] = array(
     '#type' => 'select',
-    '#options' => array('0','42','52','54','70'),
+    '#options' => array('0','42','52','56','59','70'),
     '#default_value' => $taux,
     '#ajax' => array(
       'callback' => 'gbb_offres_taux_form_submit',
