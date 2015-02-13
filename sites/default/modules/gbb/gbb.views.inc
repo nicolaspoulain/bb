@@ -2041,6 +2041,28 @@ function gbb_views_data() {
       ),
     ),
   );
+  $data['gbb_gmoof']['lcibl'] = array(
+    'title' => t('cibl'),
+    'help' => t('Cible'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gmoof']['lform'] = array(
+    'title' => t('lform'),
+    'help' => t('Forme'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmoof']['co_omodu'] = array(
     'title' => t('co_omodu'),
     'help' => t('CODE ??'),
