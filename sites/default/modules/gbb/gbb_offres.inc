@@ -226,16 +226,17 @@ function gbb_offres_nb_hp_form($form, &$form_state, $nb_hp, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_hp'] = array(
     '#type' => 'textfield', '#size' => 1,
-    '#default_value' => $nb_hp,
+    '#default_value' => (isset($nb_hp))? (int)$nb_hp: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_nb_hp_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
 function gbb_offres_nb_hp_form_submit($form, &$form_state) {
+  $val = is_numeric($form_state['values']['nb_hp'])? $form_state['values']['hp']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
-    ->fields(array('nb_hp'  => $form_state['values']['nb_hp'],
+    ->fields(array('nb_hp'  => $val,
   ))->execute();
 }
 
@@ -243,16 +244,17 @@ function gbb_offres_position_form($form, &$form_state, $position, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['position'] = array(
     '#type' => 'textfield', '#size' => 1,
-    '#default_value' => (isset($position))? (int)$position : '',
+    '#default_value' => (isset($position))? (int)$position : '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_position_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
 function gbb_offres_position_form_submit($form, &$form_state) {
+  $val = is_numeric($form_state['values']['position'])? $form_state['values']['position']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
-    ->fields(array('position'  => $form_state['values']['position'],
+    ->fields(array('position'  => $val,
   ))->execute();
 }
 
@@ -260,16 +262,17 @@ function gbb_offres_nb_vac_form($form, &$form_state, $nb_vac, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_vac'] = array(
     '#type' => 'textfield', '#size' => 1,
-    '#default_value' => $nb_vac,
+    '#default_value' => (isset($nb_vac))? (int)$nb_vac: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_nb_vac_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
 function gbb_offres_nb_vac_form_submit($form, &$form_state) {
+  $val = is_numeric($form_state['values']['nb_vac'])? $form_state['values']['nb_vac']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
-    ->fields(array('nb_vac'  => $form_state['values']['nb_vac'],
+    ->fields(array('nb_vac'  => $val, 
   ))->execute();
 }
 
@@ -295,16 +298,17 @@ function gbb_offres_ht2_form($form, &$form_state, $ht2, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['ht2'] = array(
     '#type' => 'textfield', '#size' => 1,
-    '#default_value' => $ht2,
+    '#default_value' => (isset($ht2))? (int)$ht2: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_ht2_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
 function gbb_offres_ht2_form_submit($form, &$form_state) {
+  $val = is_numeric($form_state['values']['ht2'])? $form_state['values']['ht2']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
-    ->fields(array('ht2'  => $form_state['values']['ht2'],
+    ->fields(array('ht2'  => $val,
   ))->execute();
 }
 
