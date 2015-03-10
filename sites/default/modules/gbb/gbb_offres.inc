@@ -233,7 +233,7 @@ function gbb_offres_nb_hp_form($form, &$form_state, $nb_hp, $co_omodu) {
   return $form;
 }
 function gbb_offres_nb_hp_form_submit($form, &$form_state) {
-  $val = is_numeric($form_state['values']['nb_hp'])? $form_state['values']['hp']:0;
+  $val = is_numeric($form_state['values']['nb_hp'])? $form_state['values']['nb_hp']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('nb_hp'  => $val,
@@ -281,7 +281,7 @@ function gbb_offres_taux_form($form, &$form_state, $taux, $co_omodu) {
   $form['f']['taux'] = array(
     '#type' => 'select',
     '#options' => array('0','42','52','56','59','70'),
-    '#default_value' => $taux,
+    '#default_value' => (int)$taux,
     '#ajax' => array(
       'callback' => 'gbb_offres_taux_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
