@@ -280,7 +280,7 @@ function gbb_offres_taux_form($form, &$form_state, $taux, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['taux'] = array(
     '#type' => 'select',
-    '#options' => array('0','42','52','56','59','70'),
+    '#options' => array('0'=>'0','42'=>'42','52'=>'52','56'=>'56','59'=>'59','70'=>'70'),
     '#default_value' => (int)$taux,
     '#ajax' => array(
       'callback' => 'gbb_offres_taux_form_submit',
@@ -333,8 +333,11 @@ function gbb_offres_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_nat'] = array(
     '#type' => 'select', 
-    '#options' => array('-','T0','T1','T2','T3','T4','T5','T6','T7','T8','V0','V1','V2','V3','V4','V5','V6','V7','V8'),
-    '#default_value' => (is_numeric($prio_nat)? $prio_nat : '0'),
+    '#options' => array('0'=>'-','T0'=>'T0','T1'=>'T1','T2'=>'T2','T3'=>'T3',
+                        'T4'=>'T4','T5'=>'T5','T6'=>'T6','T7'=>'T7','T8'=>'T8',
+                        'V0'=>'V0','V1'=>'V1','V2'=>'V2','V3'=>'V3','V4'=>'V4',
+                        'V5'=>'V5','V6'=>'V6','V7'=>'V7','V8'=>'V8'),
+    '#default_value' => $prio_nat,
     '#ajax' => array(
       'callback' => 'gbb_offres_prio_nat_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
@@ -405,7 +408,11 @@ function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
   $form['f']['iufm'] = array(
     #'#type' => 'checkbox', '#size' => 1,
     '#type' => 'select',
-    '#options' => array('Choisir','ESPE','Paris1','Paris3','Paris4','Paris5','Paris6','Paris7','Paris8','Paris10','CNAM','CANOPE','Autres.'),
+    '#options' => array('0'=>'Choisir','ESPE'=>'ESPE','Paris1'=>'Paris1',
+                  'Paris3'=>'Paris3','Paris4'=>'Paris4','Paris5'=>'Paris5',
+                  'Paris6'=>'Paris6','Paris7'=>'Paris7','Paris8'=>'Paris8',
+                  'Paris10'=>'Paris10','CNAM'=>'CNAM','CANOPE'=>'CANOPE',
+    'Autres.'=>'Autres.'),
     '#default_value' => $iufm,
     '#ajax' => array(
       'callback' => 'gbb_offres_iufm_form_submit',
