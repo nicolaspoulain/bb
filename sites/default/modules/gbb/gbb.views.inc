@@ -1946,14 +1946,14 @@ function gbb_views_data() {
 
   $data['gbb_gdiof_dafor']['iufm'] = array(
     'title' => t('iufm'),
-    'help' => t('IUFM (O/N)'),
+    'help' => t('Offreur specifique)'),
     'field' => array(
-      'handler' => 'views_handler_field_numeric',
+      'handler' => 'views_handler_field',
       'click sortable' => TRUE,
     ),
     'sort' => array('handler' => 'views_handler_sort'),
-    'filter' => array('handler' => 'views_handler_filter_numeric'),
-    'argument' => array('handler' => 'views_handler_argument_numeric'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
   );
 
   $data['gbb_gdiof_dafor']['nouv_offreur'] = array(
