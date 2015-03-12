@@ -167,7 +167,20 @@ function gbb_menu() {
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
         'file' => 'gbb_offres.inc',
+      );
+
+  // Saisie de la classification d'un module du plan
+  // co_modu 26142
+  // exemple : ctplan/26142
+
+  $items['ctplan'] = array(
+        'title' => '',
+        'page callback' => 'gbb_ctplan_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_ctplan.inc',
   );
+
 
 /*
   // Saisie de la classification d'une offre
@@ -184,17 +197,6 @@ function gbb_menu() {
   $items['ctp'] = array(
         'title' => '',
         'page callback' => 'gbb_offre_ctp_view',
-        'access arguments' => array('stable gbb'),
-        'type' => MENU_CALLBACK,
-  );
-
-  // Saisie de la classification d'un module du plan
-  // co_modu 26142
-  // exemple : ctplan/26142
-
-  $items['ctplan'] = array(
-        'title' => '',
-        'page callback' => 'gbb_ctplan_view',
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
   );
