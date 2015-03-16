@@ -2195,6 +2195,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmoof']['co_moda'] = array(
+    'title' => t('co_moda'),
+    'help' => t('Code Modalité'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmoof']['lcomm'] = array(
     'title' => t('lcomm'),
     'help' => t('Commentaires (GAIA)'),
