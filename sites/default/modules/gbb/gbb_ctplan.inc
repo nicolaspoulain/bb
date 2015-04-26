@@ -38,10 +38,12 @@ function gbb_ctplan_view($args = 'NaN') {
 function gbb_ctplan_tab($args) {
   //print_r(taxonomy_get_vocabularies());
   foreach (taxonomy_get_vocabularies() as $k=>$v) {
-    $header[] = array('data' => t($v->name.' ').l('('.t('edit').')',
-                            'admin/structure/taxonomy/'.$v->machine_name), 'class' => 'gris');
-    $rows[0][] = array('data' => gbb_ctplan_vocab($k),
-                       'class'=>'topAlign');
+    if ($k == 8) {
+      $header[] = array('data' => t($v->name.' ').l('('.t('edit').')',
+                              'admin/structure/taxonomy/'.$v->machine_name), 'class' => 'gris');
+      $rows[0][] = array('data' => gbb_ctplan_vocab($k),
+                         'class'=>'topAlign');
+    }
   }
   $output = theme('table',array('header' => $header, 'rows'   => $rows ));
   return $output;
@@ -52,7 +54,7 @@ function gbb_ctplan_tab($args) {
   $terms = taxonomy_get_tree($vid);
   $terms_select = array();
   foreach ($terms as $term) {
-    $terms_select[$term->tid] = str_repeat('— ', $term->depth) . $term->name;
+      $terms_select[$term->tid] = str_repeat('— ', $term->depth) . $term->name;
   };
   $check = db_query("SELECT tid,weight FROM {gbb_gmodu_taxonomy}
                                   WHERE co_modu = :co_modu",

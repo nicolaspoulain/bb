@@ -1795,6 +1795,17 @@ function gbb_views_data() {
       'help' => t('Tables des offres GaiaBB.'),
     ),
   );
+  $data['gbb_gdiof']['co_camp'] = array(
+    'title' => t('co_camp'),
+    'help' => t('Code campagne'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gdiof']['co_tpla'] = array(
     'title' => t('co_tpla'),
     'help' => t('Code type plan'),
