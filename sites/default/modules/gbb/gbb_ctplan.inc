@@ -139,3 +139,156 @@ function gbb_ctplan_taxonomy_form_submit($form, &$form_state) {
 }
 
 
+/**
+ * Affiche le contenu à compiler pour le CTP
+ */
+function gbb_ctplan_latex_view($args = 'NaN') {
+
+  // Construction de la page
+  $build = array();
+  $build['tab'] = gbb_ctplan_latex($args);
+
+  return implode('', $build);
+}
+
+/**
+ * Construit le tableau avec un vocabulaire par colonne
+ */
+function gbb_ctplan_latex($args) {
+
+  //print_r(taxonomy_get_vocabularies());
+  $str = "";
+  // $k ---- 2:2Deg  3:IATSS  4:MotsClé  5:1Deg  6: Encadr  7:Interdeg
+  $header[] = array('data' => t("CTP").l('('.t('edit').')', '#'), 'class' => 'gris');
+
+  // $str .= "<br/>((H0))PREMIER DEGRÉ<br/>";
+  // $str .= gbb_ctplan_latex_vocab(10);
+  // $str .= "<br/>((H0))INTERDEGRÉ<br/>";
+  // $str .= gbb_ctplan_latex_vocab(7);
+  $str .= "<br/>((H0))SECOND DEGRÉ<br/>";
+  $str .= gbb_ctplan_latex_vocab(8);
+  // $str .= "<br/>((H0))IATSS<br/>";
+  // $str .= gbb_ctplan_latex_vocab(9);
+  // $str .= "<br/>((H0))ENCADREMENT<br/>";
+  // $str .= gbb_ctplan_latex_vocab(6);
+
+  $rows[0][] = array('data' => $str,
+                     'class'=>'topAlign');
+  $output = theme('table',array('header' => $header, 'rows'   => $rows ));
+  return $output;
+}
+
+/**
+ * Construit le tableau avec une colonne contant les mots du vocabulaire $vid
+ */
+  function gbb_ctplan_latex_vocab($vid) {
+
+  $terms = taxonomy_get_tree($vid);
+  $terms_select = array();
+  foreach ($terms as $term) {
+    $depth = $term->depth +1;
+    $terms_select[$term->tid] = '((H' . $depth .'))' . $term->name . '<br/>';
+  };
+  foreach ($terms_select as $key=>$val) {
+    $query = db_select('gbb_gmodu_taxonomy','t')
+          ->condition('tid', $key )
+          ->condition('d.id_disp' , '15' . '%', 'LIKE')
+          // ->condition('d.co_degre' , 'm.co_degre', '=')
+          ->condition('d.co_andi' , '', '=')
+          ->condition('m.co_anmo' , '', '=')
+          ->condition('weight', 500, '<')
+          ->isNotNull('m.libl');
+    $query->leftjoin('gbb_gmodu', 'm',
+                     't.co_modu = m.co_modu');
+    $query->leftjoin('gbb_gdisp', 'd',
+                     'm.co_disp = d.co_disp');
+    if ($vid == 10) {  // Responsable premier degre
+      $query->leftjoin('gbb_gdire', 'gd',
+                     'gd.co_modu = m.co_modu AND gd.co_degre=1 AND gd.co_tres=3');
+      $query->leftjoin('gbb_gresp', 'rm',
+                     'gd.co_resp = rm.co_resp AND rm.co_degre=1');
+    } else {          // Responsable second degré
+      $query->leftjoin('gbb_gdire', 'gd',
+                     'gd.co_modu = m.co_modu AND gd.co_degre=2 AND gd.co_tres=3');
+      $query->leftjoin('gbb_gresp', 'rm',
+                     'gd.co_resp = rm.co_resp AND rm.co_degre=2');
+    }
+    $query->fields('t',array('tid'));
+    $query->fields('m',array('co_modu','duree_prev','lpeda','lcont','lmoda','lform','lcibl'));
+    $query->addField('rm', 'nomu', 'nomu_modu');
+    $query->addField('rm', 'prenom', 'prenom_modu');
+    $query->addField('rm', 'qualite', 'qualite');
+    $query->addField('m', 'libl', 'libmodu');
+    $query->addField('m', 'co_modu', 'co_omodu');
+    $query->addField('d', 'id_disp', 'no_offre');
+    $query->fields('d',array('lib','lobjt'));
+    $query->orderBy('weight', 'ASC');
+    $list= $query->execute()->fetchAll();
+
+    $str = "";
+    $count= 0;
+    $no_offre = -1;
+
+    foreach ($list as $f) {
+      if ($no_offre != $f->no_offre || $count==3) { 
+          //on crée un nouveau tableau si les modules ne sont pas dans le
+          //même dispo ou si le tableau a plus de 4 lignes.
+        if ($no_offre != -1) $str .= '((13))<br/>';
+
+        $q = $query;
+        // Compte le nombre de modules
+        $q = db_select('gbb_gmodu','m');
+        $q->fields('m',array('co_modu'));
+        $q->leftjoin('gbb_gdisp', 'd',
+                     'm.co_disp = d.co_disp');
+        $q->leftjoin('gbb_gmodu_taxonomy', 't',
+                     't.co_modu = m.co_modu');
+        $q->condition('weight', 500, '<');
+        $q->condition('tid', $f->tid);
+        $nbmod = $q->condition('d.id_disp', $f->no_offre)->execute()->rowCount();
+
+        if ($nbmod>1) {
+          $str .= '((1))' . $f->no_offre;
+        } else {
+          $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
+
+        }
+        $str .= '((2))' . strtoupperFr($f->lib);
+
+        // affiche le lib dispo que si modules multiples
+        if ($nbmod>1) {
+          $str .= '((3))' . $f->lobjt; 
+          $str .= '((4))' . $f->co_omodu;
+          $str .= '((5))' . strtoupperFr($f->libmodu);
+        }
+        $count = 0;
+      } else { 
+        $count = $count+1;
+        $str .= '((4))' . $f->co_omodu;
+        $str .= '((5))' . strtoupperFr($f->libmodu);
+      };
+      $str .= '((6))' . $f->duree_prev;
+      $str .= '((7))' . $f->prenom_modu.' '.$f->nomu_modu;
+      $str .= '((8))' . $f->qualite;
+      $str .= '((8b))' . $f->lcibl;
+      $str .= '((9))' . $f->lpeda;
+      $str .= '((10))' . $f->lcont;
+      $str .= '((11))' . $f->lmoda;
+      $str .= ($f->lform == "")? "" : '((12))' . $f->lform;
+      $no_offre = $f->no_offre;
+    };
+    $rows[] = $val." ".$str.(($str=="")? "":'((13))<br/>');
+  }
+  $output = implode('<br/>',$rows);
+  return $output;
+  }
+
+function strtoupperFr($string) {
+  $string = strtoupper($string);
+  $string = str_replace(
+    array('é', 'è', 'ê', 'ë', 'à', 'â', 'î', 'ï', 'ô', 'ù', 'û'),
+    array('É', 'È', 'Ê', 'Ë', 'À', 'Â', 'Î', 'Ï', 'Ô', 'Ù', 'Û'),
+    $string);
+  return $string;
+}
+
