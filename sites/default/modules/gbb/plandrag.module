@@ -98,7 +98,7 @@ function theme_plandrag_form($variables) {
     $output .= t('Ré-organisez ici les offres en les déplaçant avec la souris.<br/>');
     $output .= t('ATTENTION : en enregistrant, les poids seront réinitialisés en partant de ZERO. ');
     $output .= t('Cliquez sur «Afficher le poids des lignes» pour voir la proposition de numérotation (que vous pouvez modifier)');
-    $output .= t('<br/>Vérifiez <a href="/gbbdr/pia/x/').arg(1).t('">l\'affichage PIA</a>');
+    $output .= t('<br/>Vérifiez <a href="../ctp_pia_preview">l\'affichage PIA</a>');
     $header = array(t('Name'), t('Weight'));
     $rows[] = array();
     foreach (element_children($form['demo']) as $id) {
