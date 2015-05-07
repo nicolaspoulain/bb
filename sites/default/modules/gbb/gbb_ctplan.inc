@@ -161,16 +161,16 @@ function gbb_ctplan_latex($args) {
   // $k ---- 2:2Deg  3:IATSS  4:MotsClé  5:1Deg  6: Encadr  7:Interdeg
   $header[] = array('data' => t("CTP").l('('.t('edit').')', '#'), 'class' => 'gris');
 
-  // $str .= "<br/>((H0))PREMIER DEGRÉ<br/>";
-  // $str .= gbb_ctplan_latex_vocab(10);
+  $str .= "<br/>((H0))PREMIER DEGRÉ<br/>";
+  $str .= gbb_ctplan_latex_vocab(10);
   // $str .= "<br/>((H0))INTERDEGRÉ<br/>";
   // $str .= gbb_ctplan_latex_vocab(7);
   $str .= "<br/>((H0))SECOND DEGRÉ<br/>";
   $str .= gbb_ctplan_latex_vocab(8);
-  // $str .= "<br/>((H0))IATSS<br/>";
-  // $str .= gbb_ctplan_latex_vocab(9);
-  // $str .= "<br/>((H0))ENCADREMENT<br/>";
-  // $str .= gbb_ctplan_latex_vocab(6);
+  $str .= "<br/>((H0))IATSS<br/>";
+  $str .= gbb_ctplan_latex_vocab(9);
+  $str .= "<br/>((H0))ENCADREMENT<br/>";
+  $str .= gbb_ctplan_latex_vocab(11);
 
   $rows[0][] = array('data' => $str,
                      'class'=>'topAlign');
@@ -221,7 +221,7 @@ function gbb_ctplan_latex($args) {
     $query->addField('m', 'libl', 'libmodu');
     $query->addField('m', 'co_modu', 'co_omodu');
     $query->addField('d', 'id_disp', 'no_offre');
-    $query->fields('d',array('lib','lobjt'));
+    $query->fields('d',array('lib','lobjt','co_tcan','co_tpla'));
     $query->orderBy('weight', 'ASC');
     $list= $query->execute()->fetchAll();
 
@@ -253,8 +253,15 @@ function gbb_ctplan_latex($args) {
           $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
 
         }
+        if ($f->co_tcan=="3" AND $f->co_tpla=="D") {
+          $str .= '((2ID))' . strtoupperFr($f->lib);
+        } elseif ($f->co_tcan=="3") {
+        $str .= '((2D))' . strtoupperFr($f->lib);
+        } elseif ($f->co_tpla=="D") {
+        $str .= '((2I))' . strtoupperFr($f->lib);
+        } else {
         $str .= '((2))' . strtoupperFr($f->lib);
-
+        }
         // affiche le lib dispo que si modules multiples
         if ($nbmod>1) {
           $str .= '((3))' . $f->lobjt; 
@@ -269,12 +276,12 @@ function gbb_ctplan_latex($args) {
       };
       $str .= '((6))' . $f->duree_prev;
       $str .= '((7))' . $f->prenom_modu.' '.$f->nomu_modu;
-      $str .= '((8))' . $f->qualite;
+      $str .= ($f->qualite == "")? "" : '((8))' . $f->qualite;
       $str .= '((8b))' . $f->lcibl;
       $str .= '((9))' . $f->lpeda;
       $str .= '((10))' . $f->lcont;
-      $str .= '((11))' . $f->lmoda;
-      $str .= ($f->lform == "")? "" : '((12))' . $f->lform;
+      $str .= ($f->lmoda == "" || $f->lmoda =='.' || $f->lmoda ==';')? "" : '((11))' . $f->lmoda;
+      $str .= ($f->lform == "" || $f->lform =='.' || $f->lform ==';')? "" : '((12))' . $f->lform;
       $no_offre = $f->no_offre;
     };
     $rows[] = $val." ".$str.(($str=="")? "":'((13))<br/>');
