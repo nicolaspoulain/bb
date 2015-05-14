@@ -37,16 +37,18 @@ function plandrag_form($form, &$form_state) {
   $query  ->leftjoin('gbb_gdisp', 'd',  'm.co_disp = d.co_disp AND m.co_degre = d.co_degre');
   $query  ->addField('m', 'lib', 'lib');
   $query  ->addField('d', 'id_disp', 'id_disp');
+  $query  ->addField('d', 'co_tcan', 'co_tcan');
   $result= $query->execute();
   foreach ($result as $record) {
     $a[$record->id] = $record->lib;
     $b[$record->id] = $record->co_modu;
     $c[$record->id] = $record->id_disp;
+    $d[$record->id] = ($record->co_tcan==3)?'Ⓓ ':'';
   }
   foreach ($a as $id => $name) {
            $form['demo'][$id]['#demo'] = (object) array(
                  'id' => $id,
-                 'name' => $c[$id]." / ".$b[$id].' '.$name,
+                 'name' => $d[$id].$c[$id]." / ".$b[$id].' '.$name,
                  'weight' => $order,
             );
             $form['demo'][$id]['#weight'] = $order;
