@@ -41,8 +41,9 @@ function gbb_ctplan_tab($args) {
     if ($k >= 8) {
       $header[] = array('data' => t($v->name.' ').l('('.t('edit').')',
                               'admin/structure/taxonomy/'.$v->machine_name), 'class' => 'gris');
+      $class = (preg_match("/multi/",$v->name))? 'topAlignMulti' : 'topAlign';
       $rows[0][] = array('data' => gbb_ctplan_vocab($k),
-                         'class'=>'topAlign');
+                         'class'=>$class);
     }
   }
   $output = theme('table',array('header' => $header, 'rows'   => $rows ));
