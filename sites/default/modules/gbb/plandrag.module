@@ -194,7 +194,7 @@ function theme_plandragB_form($variables) {
   $result= $query->execute()->fetchAssoc();
 
     $form = $variables['form'];
-    $output ='<h1>Peuvent vous intéresser</h1>';
+    $output ='<h1>Vous pouvez aussi être intéressé(e) par les stages suivants :</h1>';
     $output .='Poids supérieur ou égal à 100';
     $header = array(t('Name'), t('Weight'));
     $rows[] = array();
