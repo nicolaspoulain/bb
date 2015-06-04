@@ -362,8 +362,8 @@ function gbb_views_data() {
       'click sortable' => TRUE,
     ),
     'sort' => array('handler' => 'views_handler_sort'),
-    'filter' => array('handler' => 'views_handler_filter_string'),
-    'argument' => array('handler' => 'views_handler_argument_string'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
   $data['gbb_gmodu_taxonomy']['weight'] = array(
     'title' => t('weight'),
