@@ -189,6 +189,14 @@ function gbb_menu() {
         'file' => 'gbb_ctplan.inc',
   );
 
+  $items['filtxt2tags'] = array(
+        'title' => '',
+        'page callback' => 'gbb_ctplan_latex_fil',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_ctplan.inc',
+  );
+
 
 
 /*

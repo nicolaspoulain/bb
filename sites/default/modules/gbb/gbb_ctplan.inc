@@ -289,6 +289,75 @@ function gbb_ctplan_latex($args) {
   $output = implode('<br/>',$rows);
   return $output;
   }
+/**
+ * Construit le doc txt2tags pour imprimer les FIL
+ * */
+  function gbb_ctplan_latex_fil() {
+
+  $query = db_select('gbb_gmodu','m')
+        ->condition('d.id_disp' , '14' . '%', 'LIKE')
+        ->condition('d.co_andi' , '', '=')
+        ->condition('m.co_anmo' , '', '=')
+        ->condition('d.co_camp' , 'BS', 'LIKE');
+  $query->leftjoin('gbb_gdisp', 'd',
+                   'm.co_disp = d.co_disp');
+  // resp PEDA
+  $query->leftjoin('gbb_gdire', 'gdpeda',
+                 'gdpeda.co_modu = m.co_modu AND gdpeda.co_degre=2 AND gdpeda.co_tres=3');
+  $query->leftjoin('gbb_gresp', 'resppeda',
+                 'gdpeda.co_resp = resppeda.co_resp AND resppeda.co_degre=2');
+  // resp ORGA
+  $query->leftjoin('gbb_gdire', 'gdorga',
+                 'gdorga.co_modu = m.co_modu AND gdorga.co_degre=2 AND gdorga.co_tres=2');
+  $query->leftjoin('gbb_gresp', 'resporga',
+                 'gdorga.co_resp = resporga.co_resp AND resporga.co_degre=2');
+  $query->leftjoin('gbb_netab_dafor', 'e',
+                 'm.co_etab_dem = e.co_lieu');
+  $query->fields('m',array('co_modu','duree_prev','lpeda','lcont','lmoda','lform','lcibl'));
+  $query->addField('resporga', 'nomu', 'nomuOrga');
+  $query->addField('resporga', 'prenom', 'prenomOrga');
+  $query->addField('resporga', 'qualite', 'qualiteOrga');
+  $query->addField('m', 'libl', 'libmodu');
+  $query->addField('m', 'co_modu', 'co_omodu');
+  $query->addField('d', 'id_disp', 'no_offre');
+  $query->addField('e', 'denom_comp', 'denom_comp');
+  $query->addField('e', 'sigle', 'sigle');
+  $query->addField('e', 'cp', 'cp');
+  $query->fields('d',array('lib','lobjt','co_tcan','co_tpla'));
+  $query->orderBy('e.cp', 'ASC');
+  $query->orderBy('denom_comp', 'ASC');
+  $list= $query->execute()->fetchAll();
+
+  $str = "((H1)) Sans code postal<br/>";
+  $last_cp = "";
+  $last_denom_comp = "";
+
+  foreach ($list as $f) {
+    if ($last_cp != $f->cp) $str .= "<br/>((H1)) ".$f->cp."<br/>";
+    $last_cp = $f->cp;
+
+    if ($last_denom_comp != $f->denom_comp) 
+      $str .= "<br/>((H2)) ".strtoupperFr($f->sigle) .' '. strtoupperFr($f->denom_comp)."<br/>";
+    $last_denom_comp = $f->denom_comp;
+
+
+    $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
+    $str .= '((2))' . strtoupperFr($f->lib);
+    $str .= '((3))' . $f->lobjt; 
+    $str .= '((4))' . $f->co_omodu;
+    $str .= '((5))' . strtoupperFr($f->libmodu);
+    $str .= '((6))' . $f->duree_prev;
+    $str .= '((7))' . $f->prenomOrga.' '.$f->nomuOrga;
+    $str .= ($f->qualiteOrga == "")? "" : '((8))' . $f->qualiteOrga;
+    $str .= '((8b))' . $f->lcibl;
+    $str .= '((9))' . $f->lpeda;
+    $str .= '((10))' . $f->lcont;
+    $str .= ($f->lmoda == "" || $f->lmoda =='.' || $f->lmoda ==';')? "" : '((11))' . $f->lmoda;
+    $str .= ($f->lform == "" || $f->lform =='.' || $f->lform ==';')? "" : '((12))' . $f->lform;
+    $str .= "((13))<br/>";
+  };
+  return $str;
+  }
 
 function strtoupperFr($string) {
   $string = strtoupper($string);
