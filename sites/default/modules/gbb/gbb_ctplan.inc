@@ -295,7 +295,7 @@ function gbb_ctplan_latex($args) {
   function gbb_ctplan_latex_fil() {
 
   $query = db_select('gbb_gmodu','m')
-        ->condition('d.id_disp' , '14' . '%', 'LIKE')
+        ->condition('d.id_disp' , '15' . '%', 'LIKE')
         ->condition('d.co_andi' , '', '=')
         ->condition('m.co_anmo' , '', '=')
         ->condition('d.co_camp' , 'BS', 'LIKE');
@@ -317,44 +317,64 @@ function gbb_ctplan_latex($args) {
   $query->addField('resporga', 'nomu', 'nomuOrga');
   $query->addField('resporga', 'prenom', 'prenomOrga');
   $query->addField('resporga', 'qualite', 'qualiteOrga');
-  $query->addField('m', 'libl', 'libmodu');
+  $query->addField('resppeda', 'nomu', 'nomuPeda');
+  $query->addField('resppeda', 'prenom', 'prenomPeda');
+  $query->addField('resppeda', 'qualite', 'qualitePeda');
+  $query->addField('m', 'lib', 'libmodu');
   $query->addField('m', 'co_modu', 'co_omodu');
+  $query->addField('m', 'co_etab_dem', 'co_etab_dem');
   $query->addField('d', 'id_disp', 'no_offre');
   $query->addField('e', 'denom_comp', 'denom_comp');
   $query->addField('e', 'sigle', 'sigle');
   $query->addField('e', 'cp', 'cp');
   $query->fields('d',array('lib','lobjt','co_tcan','co_tpla'));
-  $query->orderBy('e.cp', 'ASC');
-  $query->orderBy('denom_comp', 'ASC');
+  // $query->orderBy('denom_comp', 'ASC');
+  $query->orderBy('id_disp', 'ASC')->orderBy('cp', 'ASC');
   $list= $query->execute()->fetchAll();
 
-  $str = "((H1)) Sans code postal<br/>";
+  $str = "";
+  $last_iddisp = "";
   $last_cp = "";
   $last_denom_comp = "";
 
   foreach ($list as $f) {
-    if ($last_cp != $f->cp) $str .= "<br/>((H1)) ".$f->cp."<br/>";
+    if ($last_iddisp != $f->no_offre) {
+      $str .= "<br/>((H1)) ".$f->no_offre.' '. strtoupperFr($f->lib) ."<br/>";
+      $str .= "((H1bis)) ".$f->lobjt."<br/><br/>";
+      $last_cp = 'xx';
+    }
+    $last_iddisp = $f->no_offre;
+
+    if ($last_cp != $f->cp) {
+     $str .= "<br/>((H2)) ".$f->cp."<br/>";
+    } else {
+     if ($new_iddisp) $str .= "<br/>((H2)) Pas de RNE <br/>";
+    }
     $last_cp = $f->cp;
+    $new_iddisp = False;
 
-    if ($last_denom_comp != $f->denom_comp) 
-      $str .= "<br/>((H2)) ".strtoupperFr($f->sigle) .' '. strtoupperFr($f->denom_comp)."<br/>";
-    $last_denom_comp = $f->denom_comp;
+    // if ($last_denom_comp != $f->denom_comp) 
+      // $str .= "<br/>((H2)) ".strtoupperFr($f->sigle) .' '. strtoupperFr($f->denom_comp)."<br/>";
+    // $last_denom_comp = $f->denom_comp;
 
 
-    $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
-    $str .= '((2))' . strtoupperFr($f->lib);
-    $str .= '((3))' . $f->lobjt; 
+    // $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
+    // $str .= '((2))' . strtoupperFr($f->lib);
+    // $str .= '((3))' . $f->lobjt; 
     $str .= '((4))' . $f->co_omodu;
     $str .= '((5))' . strtoupperFr($f->libmodu);
     $str .= '((6))' . $f->duree_prev;
-    $str .= '((7))' . $f->prenomOrga.' '.$f->nomuOrga;
-    $str .= ($f->qualiteOrga == "")? "" : '((8))' . $f->qualiteOrga;
-    $str .= '((8b))' . $f->lcibl;
-    $str .= '((9))' . $f->lpeda;
-    $str .= '((10))' . $f->lcont;
-    $str .= ($f->lmoda == "" || $f->lmoda =='.' || $f->lmoda ==';')? "" : '((11))' . $f->lmoda;
-    $str .= ($f->lform == "" || $f->lform =='.' || $f->lform ==';')? "" : '((12))' . $f->lform;
+    $str .= '((7))' . $f->lpeda;
+    $str .= '((8))' . $f->lcont;
+    $str .= ($f->lmoda == "" || $f->lmoda =='.' || $f->lmoda ==';')? "" : '((9))' . $f->lmoda;
+    $str .= ($f->lform == "" || $f->lform =='.' || $f->lform ==';')? "" : '((10))' . $f->lform;
+    $str .= '((11))' . $f->lcibl;
+    $str .= '((12o))' . $f->prenomOrga.' '.$f->nomuOrga;
+    $str .= ($f->qualiteOrga == "")? "" : '((12ob))' . $f->qualiteOrga;
+    $str .= '((12p))' . $f->prenomPeda.' '.$f->nomuPeda;
+    $str .= ($f->qualitePeda == "")? "" : '((12pb))' . $f->qualiteOrga;
     $str .= "((13))<br/>";
+
   };
   return $str;
   }
