@@ -38,13 +38,16 @@ function gbb_module_view($args = 'NaN') {
                                        )
                                  );
   }
-  $build['attachements'] = render(drupal_get_form('gbb_attachements', $args));
+  $build['attachements_1'] = render(drupal_get_form('gbb_attachements1', $args));
   $build['sec_A_end'] = "</section>";
   $build['sess_formatr'] = render(drupal_get_form('gbb_sess_formatr', $args));
 
   if (isset($_GET['sess_id'])) {
     $build['sess_edition'] = render(drupal_get_form('gbb_sess_edition', $args));
   };
+  if (user_access('gest_sessions gbb')) {
+    $build['attachements_2'] = render(drupal_get_form('gbb_attachements2', $args));
+  }
   $build['convoc_form']  = render(drupal_get_form('gbb_convoc_form', $args));
   $build['bilan_form']   = render(drupal_get_form('gbb_bilan_form',$args));
   return implode('', $build);
@@ -429,12 +432,12 @@ function gbb_sess_stagiaire($args) {
 }
 
 /**
- * Formulaire des ** ATTACHEMENTS **
-*/
-function gbb_attachements($form, &$form_state, $args) {
+ * Formulaire des ** ATTACHEMENTS service ADMINISTRATIF **
+ */
+function gbb_attachements1($form, &$form_state, $args) {
   $form['f'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Fichiers joints'),
+    '#title' => t('Fichiers joints -> SERVICE ADMINISTRATIF'),
     '#attributes' => array('class' => array('attachements', 'collapsible')),
   );
 
@@ -448,6 +451,7 @@ function gbb_attachements($form, &$form_state, $args) {
      WHERE co_modu  = :comodu
        AND co_degre = :codegre
        AND status = 1
+       AND zone = 1
      ", array(':codegre' => arg(1),
               ':comodu'  => arg(2)) );
   $icon_directory = variable_get('file_icon_directory', 
@@ -471,6 +475,7 @@ function gbb_attachements($form, &$form_state, $args) {
 
   // Seules les extensions suivantes sont autorisées :
   $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx ods pdf zip';
+  $form['#submit'][] = 'gbb_attachements_submit';
   $form['f']['Myfile'] = array(
     '#title' => t('Joindre un fichier à cette page'),
     '#type'  => 'managed_file',
@@ -484,6 +489,77 @@ function gbb_attachements($form, &$form_state, $args) {
                                 '#value' => arg(2)   );
   $form['f']['codegre'] = array( '#type' => 'hidden',
                                 '#value' => arg(1), );
+  $form['f']['zone'] = array( '#type' => 'hidden',
+                                '#value' => '1', );
+  $form['f']['add_file'] = array(
+    '#type' => 'submit',
+    '#value' => t('Joindre'),
+    '#prefix' => '<div class="inline">',
+    '#suffix' => '</div>',
+  );
+  return $form;
+}
+
+/**
+ * Formulaire des ** ATTACHEMENTS CONSEILLERS**
+ */
+function gbb_attachements2($form, &$form_state, $args) {
+  $form['f'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Fichiers joints -> CONSEILLERS - (Nouveau : ici les fichiers qui ne concernent pas les administratifs)'),
+    '#attributes' => array('class' => array('attachements2', 'collapsible')),
+  );
+
+  // -------------------------------------------
+  // TODO réécrire avec la couche d'abstraction
+  // -------------------------------------------
+  $files = db_query("
+     SELECT fm.fid, filename, uri, filemime, timestamp
+     FROM {gbb_file} AS f
+     JOIN {file_managed} AS fm ON fm.fid = f.fid
+     WHERE co_modu  = :comodu
+       AND co_degre = :codegre
+       AND status = 1
+       AND zone = 2
+     ", array(':codegre' => arg(1),
+              ':comodu'  => arg(2)) );
+  $icon_directory = variable_get('file_icon_directory', 
+                                 drupal_get_path('module', 'file') . '/icons');
+  $flist = array();
+  foreach ($files as $f) {
+    $icon = theme_file_icon(array('file' => $f, 
+                            'icon_directory' =>  $icon_directory));
+    $date = strftime('%d/%m/%Y à %X', $f->timestamp);
+    $flist[$f->fid] = $icon . l($f->filename, 
+                                file_create_url($f->uri), 
+                                array('attributes' => array('title' => $date)));
+  }
+
+  if ( count($flist) > 0 ) {
+    $form['f']['files']          = array( '#type'    => 'radios',
+                                          '#options' => $flist, );
+    $form['f']['supprimer_file'] = array( '#type'    => 'submit',
+                                          '#value'   => t('Supprimer'), );
+  }
+
+  // Seules les extensions suivantes sont autorisées :
+  $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx ods pdf zip';
+  $form['#submit'][] = 'gbb_attachements_submit';
+  $form['f']['Myfile'] = array(
+    '#title' => t('Joindre un fichier à cette page'),
+    '#type'  => 'managed_file',
+    '#upload_location' => 'public://',
+    '#process' => array('gbb_attachements_process'),
+    '#upload_validators' => array(
+      'file_validate_extensions' => array( $extensions ) ),
+  );
+
+  $form['f']['comodu'] = array(  '#type' => 'hidden',
+                                '#value' => arg(2)   );
+  $form['f']['codegre'] = array( '#type' => 'hidden',
+                                '#value' => arg(1), );
+  $form['f']['zone'] = array( '#type' => 'hidden',
+                                '#value' => '2', );
   $form['f']['add_file'] = array(
     '#type' => 'submit',
     '#value' => t('Joindre'),
@@ -502,7 +578,6 @@ function gbb_attachements_process($element, &$form_state, $form) {
   $element['upload_button']['#access'] = FALSE;
   return $element;
 }
-
 /**
  * ----> Submit
  */
@@ -534,6 +609,7 @@ function gbb_attachements_submit($form, &$form_state) {
     db_insert('gbb_file')
       ->fields(array('co_modu'  => $form_state['values']['comodu'],
                      'co_degre' => $form_state['values']['codegre'],
+                     'zone'     => $form_state['values']['zone'],
                      'fid'      => $file->fid))
       ->execute();
     drupal_set_message( t('Le nouveau fichier a été enregistré.') );
