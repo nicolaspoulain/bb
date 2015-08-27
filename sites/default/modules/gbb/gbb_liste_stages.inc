@@ -63,7 +63,7 @@ function gbb_atraiter_choix($form, &$form_state, $args) {
   $query ->join('gbb_gresp', 'r', 
     'j.co_resp=r.co_resp AND j.co_degre=r.co_degre');
   $query ->condition('j.co_degre', 2, '=')
-    ->condition('s.id_disp' , '14' . '%', 'LIKE')
+    ->condition('s.id_disp' , '15' . '%', 'LIKE')
     ->fields('j', array('co_resp'))
     ->fields('r', array('nomu'));
   if (arg(3) != 0) { 

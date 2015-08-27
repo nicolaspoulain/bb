@@ -290,7 +290,7 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
 function gbb_formateur_stages($args) {
 
 
-  $annee = '14';
+  $annee = '15';
   if ($args == 'NaN') return "Vide";
   if (arg(1) == 'add') return "";
 
