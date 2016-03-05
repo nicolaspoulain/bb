@@ -71,7 +71,7 @@ function gbb_infos_general($args) {
          ->fields('m',  array('co_modu', 'lautre', 'duree_prev',
                               'lmoda', 'lform', 'co_anmo'))
          ->fields('ds', array('lobjt', 'id_disp',
-                              'co_camp', 'co_andi',))
+                              'co_camp', 'co_andi', 'co_tcan',))
          ->fields('r',  array('prenom', 'nomu',))
          ->fields('dr', array('co_resp', 'co_tres', 'co_degre',));
   $query ->addField('ds', 'lib', 'libd');
@@ -101,7 +101,7 @@ function gbb_infos_general($args) {
                                                      'html' => TRUE));
       } else {
         $str .= l( " $r->prenom $r->nomu", 
-                 'liste/14/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
+                 'liste/15/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
                         array('attributes' =>  array('class' => 'fa fa-th-list'))
               ) ;
       }
@@ -153,9 +153,11 @@ function gbb_infos_general($args) {
                     'colspan' => '2'),
               array('data' => $bilanStr),
             );
+  $can = array(1 => "Cand. Individuelle", 2 => "Cand. Collective", 3 => "Sans appel à Cand.");
+
   $rows[] = array(
               array('data' => $str),
-              array('data' => t(''),
+              array('data' => $r->co_tcan." : ".$can[$r->co_tcan],
                     'colspan' => '2'),
   );
 

@@ -29,7 +29,7 @@ function gbb_offres_filter($form, &$form_state, $args) {
   $form['#method'] = 'get';
   $form['f'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Filtrer'),
+    '#title' => t('▁ ▂ ▄ ▅ ▆ ▇ █  FILTRER █ ▇ ▆ ▅ ▄ ▂ ▁'),
     '#attributes' => array('class' => array('collapsible', 
                                             'collapsed')),
   );
@@ -137,7 +137,7 @@ function gbb_offres_tab($args) {
                     'd.co_resp = r.co_resp AND r.co_degre = 2');
   $query ->leftjoin('gbb_gresp', 'r2',
                     'm.co_resp = r2.co_resp AND r2.co_degre = 2');
-  $query ->condition('d.no_offre', '20150000', '>')
+  $query ->condition('d.no_offre', '20160000', '>')
          ->fields('d', array('no_offre', 'co_tpla', 'co_orie'))
          ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_eff_groupe'))
          ->fields('r', array('nomu'));
@@ -333,10 +333,16 @@ function gbb_offres_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_nat'] = array(
     '#type' => 'select', 
-    '#options' => array('0'=>'-','T0'=>'T0','T1'=>'T1','T2'=>'T2','T3'=>'T3',
-                        'T4'=>'T4','T5'=>'T5','T6'=>'T6','T7'=>'T7','T8'=>'T8',
-                        'V0'=>'V0','V1'=>'V1','V2'=>'V2','V3'=>'V3','V4'=>'V4',
-                        'V5'=>'V5','V6'=>'V6','V7'=>'V7','V8'=>'V8'),
+    '#options' => array('0'=>'-',
+    'T0'=>'T0','T1'=>'T1','T2'=>'T2','T3'=>'T3','T4'=>'T4',
+    'T5'=>'T5','T6'=>'T6','T7'=>'T7','T8'=>'T8','T9'=>'T9',
+    'TA'=>'TA',
+    'U0'=>'U0','U1'=>'U1','U2'=>'U2','U3'=>'U3','U4'=>'U4',
+    'U5'=>'U5','U6'=>'U6','U7'=>'U7','U8'=>'U8','U9'=>'U9',
+    'UA'=>'UA', 
+    'V1'=>'V1','V2'=>'V2','V3'=>'V3','V4'=>'V4','V5'=>'V5',
+    'V6'=>'V6','V7'=>'V7','V8'=>'V8','V9'=>'V9',
+    'VA'=>'VA','VB'=>'VB',),
     '#default_value' => $prio_nat,
     '#ajax' => array(
       'callback' => 'gbb_offres_prio_nat_form_submit',
@@ -412,7 +418,7 @@ function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
                   'Paris3'=>'Paris3','Paris4'=>'Paris4','Paris5'=>'Paris5',
                   'Paris6'=>'Paris6','Paris7'=>'Paris7','Paris8'=>'Paris8',
                   'Paris10'=>'Paris10','CNAM'=>'CNAM','CANOPE'=>'CANOPE',
-    'Autres.'=>'Autres.'),
+    'Autres.'=>'Autres org'),
     '#default_value' => $iufm,
     '#ajax' => array(
       'callback' => 'gbb_offres_iufm_form_submit',
