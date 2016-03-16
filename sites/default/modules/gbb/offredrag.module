@@ -1,0 +1,233 @@
+<?php
+
+/*
+ * Implementation of hook_menu()
+ */
+function offredrag_menu(){
+  $items = array();
+  $items['offredrag'] = array(
+    'description' => 'Tabeldrag offredrag.',
+    'page callback' => 'offredrag',
+    'access arguments' => array('formateur gbb'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+
+function offredrag(){
+  $out = render(drupal_get_form('offredrag_form'));
+  // $out .= render(drupal_get_form('offredragB_form'));
+  return $out;
+}
+
+function offredrag_form($form, &$form_state) {
+  $order = 0;
+  $a = array();
+  $form['demo'] = array('#tree' => TRUE);
+  $query = db_select('gbb_gmodu_taxonomy', 't')
+            ->fields('t')
+            ->orderBy('weight', 'ASC')
+            ->condition('tid', arg(1) )
+            ->condition('d.no_offre' , '2016' . '%', 'LIKE');
+  $query  ->leftjoin('gbb_gmoof', 'm',  'm.co_omodu = t.co_modu AND t.co_degre = 999');
+  $query  ->leftjoin('gbb_gdiof', 'd',  'm.co_offre = d.co_offre');
+  $query  ->addField('m', 'libl', 'libl');
+  $query  ->addField('m', 'co_omodu', 'co_omodu');
+  $query  ->addField('d', 'no_offre', 'no_offre');
+  $query  ->addField('d', 'co_tcan', 'co_tcan');
+  $result= $query->execute();
+  foreach ($result as $record) {
+    $a[$record->id] = $record->libl;
+    $b[$record->id] = $record->co_omodu;
+    $c[$record->id] = $record->no_offre;
+    $d[$record->id] = ($record->co_tcan==3)?'Ⓓ ':'';
+  }
+  foreach ($a as $id => $name) {
+           $form['demo'][$id]['#demo'] = (object) array(
+                 'id' => $id,
+                 'name' => $d[$id].$c[$id]." / ".$b[$id].' '.$name,
+                 'weight' => $order,
+            );
+            $form['demo'][$id]['#weight'] = $order;
+            $form['demo'][$id]['weight'] = array(
+                  '#type' => 'textfield',
+                  '#title' => t('Weight for @title', array('@title' => $name)),
+                  '#title_display' => 'invisible',
+                  '#size' => 4,
+                  '#default_value' => $order,
+                  '#attributes' => array('class' => array('demo-weight')),
+            );
+            $order++;
+  }
+    $form['submit'] = array(
+           '#type' => 'submit',
+           '#value' => t('Submit'),
+   );
+   return $form;
+}
+
+function offredrag_form_submit($form, &$form_state) {
+  foreach ($form_state['values']['demo'] as $id => $values) {
+    db_update('gbb_gmodu_taxonomy')
+       ->fields(array('weight' => $values['weight']))
+       ->condition('id', $id, '=')
+       ->execute();
+    }
+  drupal_set_message(t('The settings have been updated.'));
+}
+
+
+function offredrag_theme() {
+    return array(
+          'offredrag_form' => array(
+            'render element' => 'form',
+          ),
+          'offredragB_form' => array(
+            'render element' => 'form',
+          ),
+    );
+}
+
+function theme_offredrag_form($variables) {
+  $query = db_select('taxonomy_term_data', 't')
+            ->fields('t',array('name'))
+            ->condition('tid', arg(1) );
+  $query  ->leftjoin('taxonomy_vocabulary', 'v',  'v.vid = t.vid');
+  $query  ->addField('v', 'name', 'vname');
+  $result= $query->execute()->fetchAssoc();
+
+    $form = $variables['form'];
+    $output ='<h1>'.$result['vname'].' : '.$result['name'].'</h1>';
+    $output .= t('Ré-organisez ici les offres en les déplaçant avec la souris.<br/>');
+    $output .= t('ATTENTION : en enregistrant, les poids seront réinitialisés en partant de ZERO. ');
+    $output .= t('Cliquez sur «Afficher le poids des lignes» pour voir la proposition de numérotation (que vous pouvez modifier)');
+    $output .= t('<br/>Vérifiez <a href="../ctp_pia_preview">l\'affichage PIA</a>');
+    $header = array(t('Name'), t('Weight'));
+    $rows[] = array();
+    foreach (element_children($form['demo']) as $id) {
+       $name = $form['demo'][$id]['#demo']->name;
+       $row = array();
+       $row[] = t('@name', array('@name' => $name));
+       $row[] = drupal_render($form['demo'][$id]['weight']);
+       $rows[] = array('data' => $row, 'class' => array('draggable'));
+    }
+    drupal_add_tabledrag('demo', 'order', 'sibling', 'demo-weight');
+    $output .= theme('table', array(
+            'header' => $header,
+            'rows' => $rows,
+            'attributes' => array('id' => 'demo'),
+    ));
+    $output .= drupal_render_children($form);
+    //$output .= '<br /><br />';
+    //$output .= t('Explanatory text goes here. ');
+    //$output .= t('Feel free to submit your requests via the "Contact Carl" main menu option. ');
+    return $output;
+}
+
+
+
+// -----------------------------------------------------------------
+// -----------------------------------------------------------------
+// -----------------------------------------------------------------
+// -----------------------------------------------------------------
+// -----------------------------------------------------------------
+
+function offredragB_form($form, &$form_state) {
+  $order = 0;
+  $a = array();
+  $form['demo'] = array('#tree' => TRUE);
+  $query = db_select('gbb_gmodu_taxonomy', 't')
+            ->fields('t')
+            ->orderBy('weight', 'ASC')
+            ->condition('tid', arg(1) )
+            ->condition('d.id_disp' , '15' . '%', 'LIKE')
+            ->condition('d.co_andi' , '', '=')
+            ->condition('m.co_anmo' , '', '=')
+            ->condition('weight', 500, '<' )
+            ->condition('weight', 100, '>=' );
+  $query  ->leftjoin('gbb_gmodu', 'm',  'm.co_modu = t.co_modu AND m.co_degre = t.co_degre');
+  $query  ->leftjoin('gbb_gdisp', 'd',  'm.co_disp = d.co_disp AND m.co_degre = d.co_degre');
+  $query  ->addField('m', 'lib', 'lib');
+  $query  ->addField('d', 'id_disp', 'id_disp');
+  $query  ->addField('d', 'co_tcan', 'co_tcan');
+  $result= $query->execute();
+  foreach ($result as $record) {
+    $a[$record->id] = $record->lib;
+    $b[$record->id] = $record->co_modu;
+    $c[$record->id] = $record->id_disp;
+    $d[$record->id] = ($record->co_tcan==3)?'Ⓓ ':'';
+  }
+  foreach ($a as $id => $name) {
+           $form['demo'][$id]['#demo'] = (object) array(
+                 'id' => $id,
+                 'name' => $d[$id].$c[$id]." / ".$b[$id].' '.$name,
+                 'weight' => $order,
+            );
+            $form['demo'][$id]['#weight'] = $order;
+            $form['demo'][$id]['weight'] = array(
+                  '#type' => 'textfield',
+                  '#title' => t('Weight for @title', array('@title' => $name)),
+                  '#title_display' => 'invisible',
+                  '#size' => 4,
+                  '#default_value' => $order,
+                  '#attributes' => array('class' => array('demo-weight')),
+            );
+            $order++;
+  }
+    $form['submit'] = array(
+           '#type' => 'submit',
+           '#value' => t('Submit'),
+   );
+   return $form;
+}
+
+function offredragB_form_submit($form, &$form_state) {
+  foreach ($form_state['values']['demo'] as $id => $values) {
+    db_update('gbb_gmodu_taxonomy')
+       ->fields(array('weight' => $values['weight']+100))
+       ->condition('id', $id, '=')
+       ->execute();
+    }
+  drupal_set_message(t('The settings have been updated.'));
+}
+function theme_offredragB_form($variables) {
+  $query = db_select('taxonomy_term_data', 't')
+            ->fields('t',array('name'))
+            ->condition('tid', arg(1) );
+  $query  ->leftjoin('taxonomy_vocabulary', 'v',  'v.vid = t.vid');
+  $query  ->addField('v', 'name', 'vname');
+  $result= $query->execute()->fetchAssoc();
+
+    $form = $variables['form'];
+    $output ='<h1>Vous pouvez aussi être intéressé(e) par les stages suivants :</h1>';
+    $output .='Poids supérieur ou égal à 100';
+    $header = array(t('Name'), t('Weight'));
+    $rows[] = array();
+    foreach (element_children($form['demo']) as $id) {
+       $name = $form['demo'][$id]['#demo']->name;
+       $row = array();
+       $row[] = t('@name', array('@name' => $name));
+       $row[] = drupal_render($form['demo'][$id]['weight']);
+       $rows[] = array('data' => $row, 'class' => array('draggable'));
+    }
+    drupal_add_tabledrag('demo', 'order', 'sibling', 'demo-weight');
+    $output .= theme('table', array(
+            'header' => $header,
+            'rows' => $rows,
+            'attributes' => array('id' => 'demo'),
+    ));
+    $output .= drupal_render_children($form);
+    //$output .= '<br /><br />';
+    //$output .= t('Explanatory text goes here. ');
+    //$output .= t('Feel free to submit your requests via the "Contact Carl" main menu option. ');
+    return $output;
+}
+
+
+
+
+
+
+
+
