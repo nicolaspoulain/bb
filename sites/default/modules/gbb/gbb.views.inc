@@ -211,6 +211,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmodu']['lcomm'] = array(
+    'title' => t('lcomm'),
+    'help' => t('Commentaires/observations'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmodu']['co_prac'] = array(
     'title' => t('co_prac'),
     'help' => t('Priorite academique : code'),
@@ -1828,6 +1839,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gdiof']['co_tcan'] = array(
+    'title' => t('co_tcan'),
+    'help' => t('Code candidature'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
   $data['gbb_gdiof']['libl'] = array(
     'title' => t('libl'),
     'help' => t('Libellé du didpositif offre'),
@@ -2074,6 +2096,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmoof']['lconp'] = array(
+    'title' => t('lconp'),
+    'help' => t('Conditions particulieres'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmoof']['co_omodu'] = array(
     'title' => t('co_omodu'),
     'help' => t('CODE ??'),
@@ -2286,9 +2319,11 @@ function gbb_views_data() {
     'group' => t('gbb_gmoof_taxnomy'),
     'join' => array(
       'gbb_gdiof' => array(
+        'table' => 'gbb_gmodu_taxonomy',
         'left_table' => 'gbb_gmoof',
         'left_field' => 'co_omodu',
-        'field' => 'co_omodu',
+        'field' => 'co_modu',
+        'extra' => 'gbb_gmoof_taxonomy.co_degre = 999',
       ),
     ),
   );
