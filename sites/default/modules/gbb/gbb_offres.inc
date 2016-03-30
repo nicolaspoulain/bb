@@ -247,7 +247,7 @@ function gbb_offres_nb_hp_form_submit($form, &$form_state) {
 function gbb_offres_position_form($form, &$form_state, $position, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['position'] = array(
-    '#type' => 'textfield', '#size' => 1,
+    '#type' => 'textfield', '#size' => 4,
     '#default_value' => (isset($position))? (int)$position : '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_position_form_submit',
