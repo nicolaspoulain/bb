@@ -645,7 +645,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gdire.co_degre = gbb_gmodu.co_degre',
+        'extra' => 'gbb_gdire.co_degre = gbb_gmodu.co_degre AND gbb_gdire.co_tres=2',
       ),
     ),
   );
@@ -798,9 +798,31 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gresp']['organ'] = array(
+    'title' => t('Organisme'),
+    'help' => t('Organisme'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gresp2']['qualite'] = array(
     'title' => t('Qualité'),
     'help' => t('Qualité du responsable'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp2']['organ'] = array(
+    'title' => t('Organisme'),
+    'help' => t('Organisme'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
@@ -2379,6 +2401,33 @@ function gbb_views_data() {
   $data['taxonomy_term_data2']['vid'] = array(
     'title' => t('vid'),
     'help' => t('Identifiant du vocabulaire'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+  // --------------------------------------------------------
+  // TAXONOMY_TERM_DATA_
+  // --------------------------------------------------------
+
+  $data['taxonomy_term_data32']['table'] = array(
+    'group' => t('taxonomy_term_data32'),
+    'join' => array(
+      'gbb_gdiof' => array(
+        'table' => 'field_data_field_lib_court',
+        'left_table' => 'gbb_gmoof_taxonomy',
+        'left_field' => 'tid',
+        'field' => 'entity_id',
+      ),
+    ),
+  );
+  $data['taxonomy_term_data32']['field_lib_court_value'] = array(
+    'title' => t('lib_court'),
+    'help' => t('lib court du terme de taxonomie'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
