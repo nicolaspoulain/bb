@@ -229,7 +229,7 @@ function gbb_offres_tab($args) {
 function gbb_offres_nb_hp_form($form, &$form_state, $nb_hp, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_hp'] = array(
-    '#type' => 'textfield', '#size' => 1,
+    '#type' => 'textfield', '#size' => 3,
     '#default_value' => (isset($nb_hp))? (int)$nb_hp: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_nb_hp_form_submit',
@@ -265,7 +265,7 @@ function gbb_offres_position_form_submit($form, &$form_state) {
 function gbb_offres_nb_vac_form($form, &$form_state, $nb_vac, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_vac'] = array(
-    '#type' => 'textfield', '#size' => 1,
+    '#type' => 'textfield', '#size' => 3,
     '#default_value' => (isset($nb_vac))? (int)$nb_vac: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_nb_vac_form_submit',
@@ -301,7 +301,7 @@ function gbb_offres_taux_form_submit($form, &$form_state) {
 function gbb_offres_ht2_form($form, &$form_state, $ht2, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['ht2'] = array(
-    '#type' => 'textfield', '#size' => 1,
+    '#type' => 'textfield', '#size' => 4,
     '#default_value' => (isset($ht2))? (int)$ht2: '0',
     '#ajax' => array(
       'callback' => 'gbb_offres_ht2_form_submit',
