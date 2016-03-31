@@ -181,6 +181,18 @@ function gbb_menu() {
         'file' => 'gbb_ctplan.inc',
   );
 
+  // Saisie de la classification d'un module de l'offre
+  // co_modu 26142
+  // exemple : ctoffre/26142
+
+  $items['ctoffre'] = array(
+        'title' => '',
+        'page callback' => 'gbb_ctoffre_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_ctoffre.inc',
+  );
+
   $items['ctp'] = array(
         'title' => '',
         'page callback' => 'gbb_ctplan_latex_view',

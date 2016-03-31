@@ -253,6 +253,10 @@ ul.nope {
   background-color : white;
   color : black;
 }
+
+.small {
+  font-size: 75%;
+}
 .topAlign {
   vertical-align : top;
 }
