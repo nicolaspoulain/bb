@@ -211,6 +211,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmodu']['lautre'] = array(
+    'title' => t('lautre'),
+    'help' => t('??'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmodu']['lcomm'] = array(
     'title' => t('lcomm'),
     'help' => t('Commentaires/observations'),
@@ -2011,6 +2022,18 @@ function gbb_views_data() {
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
 
+  $data['gbb_gdiof_dafor']['foad'] = array(
+    'title' => t('foad'),
+    'help' => t('Offre FOAD)'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+
   $data['gbb_gdiof_dafor']['nouv_offreur'] = array(
     'title' => t('nouv_offreur'),
     'help' => t('Nouv. ofreur (O/N)'),
@@ -2397,6 +2420,17 @@ function gbb_views_data() {
     'sort' => array('handler' => 'views_handler_sort'),
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['taxonomy_term_data2']['weight'] = array(
+    'title' => t('weight'),
+    'help' => t('Position du terme de taxonomie'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
   $data['taxonomy_term_data2']['vid'] = array(
     'title' => t('vid'),
