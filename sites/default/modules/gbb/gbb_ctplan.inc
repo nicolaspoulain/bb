@@ -88,7 +88,7 @@ function gbb_ctplan_tab($args) {
       );
     $form['f']['weight'] = array(
       '#type' => 'textfield',
-      '#size' => 2,
+      '#size' => 3,
       '#default_value' => $pos,
       '#prefix' => '&nbsp;<div class="inline">',
       '#attributes' => array('class' => array('weight')),
