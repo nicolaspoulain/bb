@@ -36,11 +36,11 @@ function gbb_ctplan_view($args = 'NaN') {
 }
 
 function gbb_ctplan_tab($args) {
-  //print_r(taxonomy_get_vocabularies());
+  // print_r(taxonomy_get_vocabularies());
   foreach (taxonomy_get_vocabularies() as $k=>$v) {
-    if ($k >= 12) {
+    if (preg_match("/2016/",$v->name)) {
       $header[] = array('data' => t($v->name.' '), 'class' => 'gris');
-      $class = (preg_match("/multi/",$v->name))? 'topAlignMulti' : 'topAlign';
+      $class = (preg_match("/WEB/",$v->name))? 'topAlignMulti' : 'topAlign';
       $rows[0][] = array('data' => gbb_ctplan_vocab($k),
                          'class'=>$class);
     }
