@@ -29,7 +29,7 @@ function plandrag_form($form, &$form_state) {
             ->fields('t')
             ->orderBy('weight', 'ASC')
             ->condition('tid', arg(1) )
-            ->condition('d.id_disp' , '15' . '%', 'LIKE')
+            ->condition('d.id_disp' , '16' . '%', 'LIKE')
             ->condition('d.co_andi' , '', '=')
             ->condition('m.co_anmo' , '', '=')
             ->condition('weight', 100, '<' );
@@ -87,7 +87,7 @@ function plandragB_form($form, &$form_state) {
             ->fields('t')
             ->orderBy('weight', 'ASC')
             ->condition('tid', arg(1) )
-            ->condition('d.id_disp' , '15' . '%', 'LIKE')
+            ->condition('d.id_disp' , '16' . '%', 'LIKE')
             ->condition('d.co_andi' , '', '=')
             ->condition('m.co_anmo' , '', '=')
             ->condition('weight', 500, '<' )
