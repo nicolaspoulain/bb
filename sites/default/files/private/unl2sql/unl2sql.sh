@@ -12,6 +12,10 @@ cd $HOME && iconv -f UTF-8 -t ISO-8859-15 $1.unl -o $1.unl_cleaned
 cd $HOME && sed -i "s/ \( \)*/ /g" $1.unl_cleaned
 cd $HOME && sed -i "s/'/\\\'/g" $1.unl_cleaned
 
+if [ "$1" == "gdire" ]; then
+  # Supprime les duplicates adjacents
+  cd $HOME && echo "`uniq $1.unl_cleaned`" > $1.unl_cleaned
+fi
 if [ "$1" == "gdisp" ]; then
   # Remplace 12345|12ABCD0560 par A_A_A_A12345|12ABCD0560
   cd $HOME && sed -i "s/^-*\([0-9]\{1,5\}|[0-9][0-9][0-9A-Z]\{4\}[0-9]\{4\}|\)/A_A_A_A\1/" $1.unl_cleaned
