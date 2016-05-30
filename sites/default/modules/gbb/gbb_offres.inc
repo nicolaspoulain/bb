@@ -59,7 +59,7 @@ function gbb_offres_filter($form, &$form_state, $args) {
     '#type' => 'textfield',
     '#title' => t('Resp. (module)'),
     '#default_value' => (isset($_GET['nomu2']))? $_GET['nomu2'] : '',
-    '#description' => t('p.ex.:BESNARD'),
+    '#description' => t('p.ex.:BADDA'),
     '#size' => 20, 
   );
    $form['f']['co_tpla'] = array(

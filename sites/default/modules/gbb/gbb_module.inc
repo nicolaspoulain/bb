@@ -195,21 +195,21 @@ function gbb_infos_detail($args) {
   $rows[] = array( array('data' => "Objectif Dispositif"),
                    array('data' => $r['lobjt']),);
   $rows[] = array( array('data' => "Objectif Module"),
-                   array('data' => $r['lcont']),);
-  $rows[] = array( array('data' => "Objectif pédagogique"),
                    array('data' => $r['lpeda']),);
-  $rows[] = array( array('data' => "Cible"),
+  $rows[] = array( array('data' => "Contenu Module"),
+                   array('data' => $r['lcont']),);
+  $rows[] = array( array('data' => "Forme"),
+                   array('data' => $r['lform']),);
+  $rows[] = array( array('data' => "Public Cible"),
                    array('data' => $r['lcibl']),);
-  $rows[] = array( array('data' => "Orientation"),
-                   array('data' => $r['ori']),);
-  $rows[] = array( array('data' => "Observation"),
-                   array('data' => $r['lautre']),);
   $rows[] = array( array('data' => t("Durée")),
                    array('data' => $r['duree_prev'] . "h"),);
   $rows[] = array( array('data' => t("Modalité")),
                    array('data' => $r['lmoda']),);
-  $rows[] = array( array('data' => "Forme"),
-                   array('data' => $r['lform']),);
+  $rows[] = array( array('data' => "Orientation"),
+                   array('data' => $r['ori']),);
+  $rows[] = array( array('data' => "Comm/Observation"),
+                   array('data' => $r['lautre']),);
   return theme('table', array('rows' => $rows));
 }
 
