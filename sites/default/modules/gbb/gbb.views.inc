@@ -436,6 +436,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
+  $data['taxonomy_term_data3']['weight'] = array(
+    'title' => t('weight'),
+    'help' => t('Position du terme de taxonomie'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
 
 
   // --------------------------------------------------------
