@@ -90,6 +90,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmodu']['co_moda'] = array(
+    'title' => t('co_moda'),
+    'help' => t('Modalité'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gmodu']['lmoda'] = array(
     'title' => t('lmoda'),
     'help' => t('Modalité'),
@@ -725,6 +736,28 @@ function gbb_views_data() {
   $data['gbb_gresp_peda']['nomu'] = array(
     'title' => t('gresp.nomu peda'),
     'help' => t('Nom du responsable pédagogique'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp_peda']['prenom'] = array(
+    'title' => t('gresp.prenom peda'),
+    'help' => t('Prenom du responsable pédagogique'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp_peda']['qualite'] = array(
+    'title' => t('gresp.qualite peda'),
+    'help' => t('Qualite du responsable pédagogique'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
