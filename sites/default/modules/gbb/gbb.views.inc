@@ -721,6 +721,28 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gresp_orga']['prenom'] = array(
+    'title' => t('gresp.prenom orga'),
+    'help' => t('Prenom du responsable organisationnel'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp_orga']['qualite'] = array(
+    'title' => t('gresp.qualite orga'),
+    'help' => t('Qualite du responsable organisationnel'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gresp_peda']['table'] = array(
     'group' => t('gbb_gmodu'),
     'join' => array(
