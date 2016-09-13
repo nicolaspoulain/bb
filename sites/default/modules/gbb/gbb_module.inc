@@ -1177,7 +1177,7 @@ function gbb_sess_edition($form, $form_state, $args) {
   );
 
   $form['f']['ficand'] = array(
-    '#title' => "<i class=\"fa fa-fonticons\" aria-hidden=\"true\"></i>".t('ccand'),
+    '#title' => "<i class=\"fa fa-fonticons fa-2x\" aria-hidden=\"true\"></i>".t('cand'),
     '#type' => 'checkbox',
     '#default_value' => $r->ficand,
     '#prefix' => '<div class="inline">',
