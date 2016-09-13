@@ -632,7 +632,8 @@ function gbb_sess_formatr($form, $form_state, $args) {
     'formateur' => t('Formateur'),
     'duree_prevue' => variable_get('ico_dureePrev'),
     'duree_a_payer' => variable_get('ico_dureeApayer'),
-    'TypePaiement' => t('Type pmt'),
+    'TypePaiement' => t('Pmt'),
+    'ficand' => t('Fcnd'),
   );
 
   $query = db_select('gbb_session', 's');
@@ -655,7 +656,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
                              'duree_prevue','duree_a_payer', 'type_paiement',
                              'en_attente', 'convoc_sent', 'session_alert',
                              'horaires', 'co_lieu', 'co_resp', 'groupe',
-                             'date_modif'))
+                             'ficand','date_modif'))
          ->fields('r', array('prenom', 'nomu', 'co_resp'))
          ->fields('p', array('statut'))
          ->fields('u', array('name'))
@@ -713,6 +714,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
                        ,
       'duree_prevue' => $r->duree_prevue . "h",
       'duree_a_payer' => $r->duree_a_payer . "h",
+      'ficand' => ($r->ficand)? "<i class=\"fa fa-fonticons fa-2x\" aria-hidden=\"true\"></i>": "",
       'TypePaiement' => $r->type_paiement,
       '#attributes'  => array('class' => array($visibilite)),
     );
@@ -1054,7 +1056,7 @@ function gbb_sess_edition($form, $form_state, $args) {
                      'r.co_resp=s.co_resp AND r.co_degre=s.co_degre');
   $query ->leftjoin('gbb_netab_dafor', 'e', 'e.co_lieu=s.co_lieu');
   $query ->condition('sess_id', $id, '=')
-         ->fields('s', array('sess_id', 'date', 'horaires', 'groupe',
+         ->fields('s', array('sess_id', 'date', 'horaires', 'groupe','ficand',
                              'duree_prevue', 'duree_a_payer', 'type_paiement',
                              'session_alert', 'en_attente', 'convoc_sent'))
          ->fields('r', array('co_resp', 'nomu', 'prenom'))
@@ -1172,6 +1174,14 @@ function gbb_sess_edition($form, $form_state, $args) {
     '#maxlength' => 4,
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>',
+  );
+
+  $form['f']['ficand'] = array(
+    '#title' => "<i class=\"fa fa-fonticons\" aria-hidden=\"true\"></i>".t('ccand'),
+    '#type' => 'checkbox',
+    '#default_value' => $r->ficand,
+    '#prefix' => '<div class="inline">',
+    '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
 
   // $default_value = ($r->convoc_sent)? 1 : $r->session_alert;
@@ -1352,6 +1362,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
                    'duree_prevue'  => $form_state['values']['duree_prevue'],
                    'duree_a_payer' => $form_state['values']['duree_a_payer'],
                    'type_paiement' => $form_state['values']['type_paiement'],
+                   'ficand'        => $form_state['values']['ficand'],
                    'date'          => $form_state['values']['date'],
                    'date_ts'       => strtotime($form_state['values']['date']),
                    'co_lieu'       => $co_lieu,
