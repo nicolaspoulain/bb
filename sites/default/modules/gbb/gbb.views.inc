@@ -583,6 +583,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
+  $data['gbb_session']['ficand'] = array(
+    'title' => t('FiCand'),
+    'help' => t('La session est traitée par FiCand BOOL'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
   $data['gbb_session']['co_lieu'] = array(
     'title' => t('co_lieu'),
     'help' => t('Code lieu (RNE)'),
