@@ -460,7 +460,7 @@ function gbb_attachements1($form, &$form_state, $args) {
                                  drupal_get_path('module', 'file') . '/icons');
   $flist = array();
   foreach ($files as $f) {
-    $icon = theme_file_icon(array('file' => $f, 
+    $icon = theme_file_icon(array('file' => $f, 'alt' => 'icon', 
                             'icon_directory' =>  $icon_directory));
     $date = strftime('%d/%m/%Y à %X', $f->timestamp);
     $flist[$f->fid] = $icon . l($f->filename, 
@@ -529,7 +529,7 @@ function gbb_attachements2($form, &$form_state, $args) {
                                  drupal_get_path('module', 'file') . '/icons');
   $flist = array();
   foreach ($files as $f) {
-    $icon = theme_file_icon(array('file' => $f, 
+    $icon = theme_file_icon(array('file' => $f, 'alt' => 'icon', 
                             'icon_directory' =>  $icon_directory));
     $date = strftime('%d/%m/%Y à %X', $f->timestamp);
     $flist[$f->fid] = $icon . l($f->filename, 
