@@ -21,6 +21,18 @@ function gbb_formateur_view($args = 'NaN') {
   $build = array();
   $build['filtre'] = render(drupal_get_form('gbb_formateur_filtre' , $args));
   $build['fiche']  = render(drupal_get_form('gbb_formateur_fiche' , $args));
+  $build['stages_before'] = theme('fieldset',
+                           array(
+                             'element' => array(
+                               '#attributes' => array(
+                                 'class' => array('details'),
+                               ),
+                               '#children' => '',
+                               '#title' => t('Graphique de répartition des heures'),
+                               '#value' => gbb_formateur_stages_before($args),
+                             )
+                           )
+                     );
   $build['stages'] = theme('fieldset',
                            array(
                              'element' => array(
@@ -287,10 +299,116 @@ function gbb_formateur_fiche_submit($form, &$form_state) {
 /**
  * Un tableau qui affiche les détails des interventions du formateur
  */
-function gbb_formateur_stages($args) {
+function gbb_formateur_stages_before($args) {
 
 
   $annee = '15';
+  if ($args == 'NaN') return "Vide";
+  if (arg(1) == 'add') return "";
+
+  $query = db_select('gbb_session', 's');
+  $query ->leftjoin('gbb_gmodu', 'm', 
+                    'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
+           );
+  $query ->leftjoin('gbb_gresp_plus', 'r',  'r.co_resp = s.co_resp');
+  $query ->leftjoin('gbb_gdisp', 'd', 
+                    'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
+           );
+  $query ->condition('s.co_resp', arg(1), '=')
+         ->condition('s.co_degre', '2', '=')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
+         ->fields('r', array('decharge',))
+         ->distinct();
+  $query ->addExpression('SUM(duree_prevue)', 'sumprevue');
+  $query ->addExpression('SUM(duree_a_payer)', 'sumapayer');
+  $r = $query->execute()->fetchObject();
+
+  //**** les vacations **************
+  $query = db_select('gbb_session', 's');
+  $query ->leftjoin('gbb_gmodu', 'm', 
+                    'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
+           );
+  $query ->leftjoin('gbb_gdisp', 'd', 
+                    'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
+           );
+  $query ->condition('s.co_resp', arg(1), '=')
+         ->condition('s.co_degre', '2', '=')
+         ->condition('s.type_paiement', 'VAC', 'LIKE')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
+         ->distinct();
+  $query ->addExpression('SUM(duree_a_payer)', 'sumapayervac');
+  $r2 = $query->execute()->fetchObject();
+
+  //**** la decharge **************
+  $query = db_select('gbb_session', 's');
+  $query ->leftjoin('gbb_gmodu', 'm', 
+                    'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
+           );
+  $query ->leftjoin('gbb_gdisp', 'd', 
+                    'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
+           );
+  $query ->condition('s.co_resp', arg(1), '=')
+         ->condition('s.co_degre', '2', '=')
+         ->condition('s.type_paiement', 'DECH', 'LIKE')
+         ->condition('id_disp', db_like($annee) . '%', 'LIKE')
+         ->distinct();
+  $query ->addExpression('SUM(duree_a_payer)', 'sumapayerdec');
+  $r3 = $query->execute()->fetchObject();
+
+  //_________________________
+  if (isset($r)) {
+    $chart = array(
+      '#type' => 'chart',
+      '#chart_type' => 'bar',
+      '#title' => t('Année 20').$annee,
+      '#stacking' => TRUE,
+    );
+    $chart['decharge'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(27*$r->decharge,0,0),
+      '#title' => t(' '),
+      '#suffix' => 'h',
+    );
+    $chart['Prevue'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(0, $r->sumprevue, 0),
+      '#title' => t(' '),
+      '#suffix' => 'h',
+    );
+    $chart['ApayerDech'] = array(
+      '#type' => 'chart_data',
+      '#title' => t('en déch.'),
+      '#data' => array(0, 0, $r3->sumapayerdec),
+      '#suffix' => 'h',
+    );
+    $chart['ApayerVac'] = array(
+      '#type' => 'chart_data',
+      '#title' => t('en vac.'),
+      '#data' => array(0, 0, $r2->sumapayervac),
+      '#suffix' => 'h',
+    );
+    $chart['ApayerAutres'] = array(
+      '#type' => 'chart_data',
+      '#data' => array(0, 0, $r->sumapayer-$r3->sumapayerdec-$r2->sumapayervac),
+      '#title' => t('autres'),
+      '#suffix' => 'h',
+    );
+    $chart['xaxis'] = array(
+      '#type' => 'chart_xaxis',
+      '#labels' => array('Décharge', 'Durée à payer', 'Durée payée'),
+      '#suffix' => 'h',
+    );
+    $output = drupal_render($chart);
+    return $output;
+  }
+}
+/**
+ * Un tableau qui affiche les détails des interventions du formateur
+ */
+function gbb_formateur_stages($args) {
+
+
+  $annee = '16';
   if ($args == 'NaN') return "Vide";
   if (arg(1) == 'add') return "";
 
