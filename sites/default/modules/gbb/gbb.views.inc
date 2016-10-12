@@ -461,6 +461,86 @@ function gbb_views_data() {
 
 
   // --------------------------------------------------------
+  // gbb_finance
+  // --------------------------------------------------------
+
+  $data['gbb_finance']['table'] = array(
+    'group' => t('gbb_finance'),
+    'join' => array(
+      'gbb_gmodu' => array(
+        'left_field' => 'co_modu',
+        'field' => 'co_modu',
+        'extra' => 'gbb_finance.co_degre = gbb_gmodu.co_degre',
+      ),
+    ),
+  );
+  $data['gbb_finance']['co_chap'] = array(
+    'title' => t('co_chap'),
+    'help' => t('co_chap'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_finance']['hp'] = array(
+    'title' => t('hp'),
+    'help' => t('HP en heures'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_finance']['co_thema'] = array(
+    'title' => t('co_thema'),
+    'help' => t('co_thema'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_finance']['vac'] = array(
+    'title' => t('remun_vac'),
+    'help' => t('Rémunération en vacation'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_finance']['fonc'] = array(
+    'title' => t('frais_fonc'),
+    'help' => t('Frais de fonctionnement'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_finance']['conv'] = array(
+    'title' => t('conv'),
+    'help' => t('Convention'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  // --------------------------------------------------------
   // gbb_session
   // --------------------------------------------------------
 
