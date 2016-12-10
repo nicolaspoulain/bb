@@ -294,6 +294,7 @@ variable_set('ico_alert',      '<i class="fa fa-flag fa-lg red" title="Alerte à
 variable_set('ico_notAttente', '<i class="fa fa-play-circle fa-lg blue" title="Demande de préparation des convocations"></i>');
 variable_set('ico_attente',    '<i class="fa fa-pause" title="En attente : ne pas préparer les convocations pour le moment"></i>');
 variable_set('ico_print',      '<i class="fa fa-print green" title="Imprimé par le service administratif"></i> ');
+variable_set('agenda',       '<i class="fa fa-calendar fa-lg green" title="Agenda général"></i> ');
 variable_set('ico_bell',       '<i class="fa fa-bell orange" title="Prioritaire"></i> ');
 variable_set('ico_sent',       '<i class="fa fa-envelope green" title="La convocation pour cette session a été envoyée"></i>' );
 variable_set('ico_clockGreen', '<i class="fa fa-clock-o fa-lg green" title="Première date dans plus de 15 jours"></i> ');

@@ -733,6 +733,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gmodu_plus']['agenda'] = array(
+    'title' => t('agenda'),
+    'help' => t('agenda'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
  
   // --------------------------------------------------------
   // gbb_gdire table de liaison, pas de champ à extraire

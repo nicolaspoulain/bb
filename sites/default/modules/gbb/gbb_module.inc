@@ -304,7 +304,7 @@ function gbb_organis_form($form, &$form_state) {
                      'm.co_modu=mp.co_modu AND m.co_degre=mp.co_degre');
   $query ->condition('m.co_modu', arg(2), '=')
          ->condition('m.co_degre', arg(1), '=')
-         ->fields('mp', array('organisation', 'module_alert', 'prioritaire'));
+         ->fields('mp', array('organisation', 'module_alert', 'prioritaire', 'agenda'));
   $r = $query->execute()->fetchAssoc();
 
   $form['f'] = array( '#type' => 'fieldset',
@@ -333,6 +333,21 @@ function gbb_organis_form($form, &$form_state) {
     '#title' => t( variable_get('ico_bell') . 
                    'Prioritaire' ),
     '#default_value' => $r['prioritaire'],
+    '#prefix' => '<div class="inline">',
+    '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+    '#ajax' => array(
+      'callback' => 'gbb_organis_form_submit',
+      'progress' => array('type' => 'throbber',
+                          'message' => 'Enregistrement...'),
+    ),
+  );
+  $form['f']['agenda'] = array(
+    '#type' => 'checkbox',
+    '#title' => t( variable_get('agenda') . 
+                   l('Agenda Général' ,'/agenda',array('query'=>array('date_ts[value][date]'=>date('d/m/Y'))))),
+    '#default_value' => $r['agenda'],
+    '#prefix' => '<div class="inline">',
+    '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
     '#ajax' => array(
       'callback' => 'gbb_organis_form_submit',
       'progress' => array('type' => 'throbber',
@@ -361,7 +376,7 @@ function gbb_organis_form_submit(&$form, &$form_state) {
   $query = db_select('gbb_gmodu_plus', 'p');
   $query ->condition('p.co_modu' , $form_state['values']['comodu'] , '=')
          ->condition('p.co_degre', $form_state['values']['codegre'], '=')
-         ->fields('p',  array('co_modu', 'organisation', 'prioritaire'));
+         ->fields('p',  array('co_modu', 'organisation', 'prioritaire', 'agenda'));
   $result = $query->execute();
   $orga = '';
   $prio = '';
@@ -384,7 +399,8 @@ function gbb_organis_form_submit(&$form, &$form_state) {
     ->key(array('co_modu'  => $form_state['values']['comodu'],
                 'co_degre' => $form_state['values']['codegre'] ))
     ->fields(array('organisation' => $form_state['values']['organisation'],
-                   'prioritaire' => $form_state['values']['prioritaire']   ))
+                   'prioritaire' => $form_state['values']['prioritaire'],
+                   'agenda' => $form_state['values']['agenda']   ))
     ->execute();
 }
 
