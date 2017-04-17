@@ -383,7 +383,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gmodu_taxonomy.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gmodu_taxonomy.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -470,7 +470,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_finance.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_finance.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -550,7 +550,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_session.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_session.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -696,7 +696,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gmodu_plus.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gmodu_plus.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -756,7 +756,7 @@ function gbb_views_data() {
         'table' => 'gbb_gdire', 
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gdire_orga.co_degre = gbb_gmodu.co_degre AND gbb_gdire_orga.co_tres=2',
+        'extra' => array('gbb_gdire_orga.co_degre = gbb_gmodu.co_degre AND gbb_gdire_orga.co_tres=2',),
         'type' => 'INNER',
       ),
     ),
@@ -768,7 +768,7 @@ function gbb_views_data() {
         'table' => 'gbb_gdire', 
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gdire_peda.co_degre = gbb_gmodu.co_degre AND gbb_gdire_peda.co_tres=3',
+        'extra' => array('gbb_gdire_peda.co_degre = gbb_gmodu.co_degre AND gbb_gdire_peda.co_tres=3',),
         'type' => 'INNER',
       ),
     ),
@@ -780,7 +780,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gdire.co_degre = gbb_gmodu.co_degre AND gbb_gdire.co_tres=2',
+        'extra' => array('gbb_gdire.co_degre = gbb_gmodu.co_degre AND gbb_gdire.co_tres=2',),
       ),
     ),
   );
@@ -808,7 +808,7 @@ function gbb_views_data() {
         'left_table' => 'gbb_gdire_orga',
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp_orga.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gresp_orga.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -853,7 +853,7 @@ function gbb_views_data() {
         'left_table' => 'gbb_gdire_peda',
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp_peda.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gresp_peda.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -898,12 +898,12 @@ function gbb_views_data() {
         'left_table' => 'gbb_gdire',
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gresp.co_degre = gbb_gmodu.co_degre',),
       ),
       'gbb_gdiof' => array(
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp.co_degre = 2',
+        'extra' => array('gbb_gresp.co_degre = 2',),
       ),
     ),
   );
@@ -916,7 +916,7 @@ function gbb_views_data() {
         'left_table' => 'gbb_gmoof',
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_gresp2.co_degre = 2',
+        'extra' => array('gbb_gresp2.co_degre = 2',),
       ),
     ),
   );
@@ -1084,7 +1084,7 @@ function gbb_views_data() {
          'left_table' => 'gbb_session',
          'left_field' => 'co_resp',
          'field' => 'co_resp',
-         'extra' => 'gbb_gresp_dafor2.co_degre = gbb_gmodu.co_degre',
+         'extra' => array('gbb_gresp_dafor2.co_degre = gbb_gmodu.co_degre',),
        ),
      ),
    );
@@ -1124,7 +1124,7 @@ function gbb_views_data() {
         'table' => 'gbb_session',
         'left_field' => 'co_resp',
         'field' => 'co_resp',
-        'extra' => 'gbb_session2014.date BETWEEN \'2014-08-01\' AND \'2015-07-31\'',
+        'extra' => array('gbb_session2014.date BETWEEN \'2014-08-01\' AND \'2015-07-31\'',),
       ),
     ),
   );
@@ -1263,7 +1263,7 @@ function gbb_views_data() {
         'left_table' => 'gbb_gdire',
         'left_field' => 'co_disp',
         'field' => 'co_disp',
-        'extra' => 'gbb_gdisp.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_gdisp.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -1435,6 +1435,39 @@ function gbb_views_data() {
   // GBB_NORIE
   // --------------------------------------------------------
 
+  $data['gbb_norie2']['table'] = array(
+    'group' => t('gbb_norie2'),
+    'join' => array(
+      'gbb_gdiof' => array(
+        'table' => 'gbb_norie',
+        'left_field' => 'co_orie',
+        'field' => 'co_orie',
+      ),
+    ),
+  );
+  $data['gbb_norie2']['lib_long'] = array(
+    'title' => t('lib_long'),
+    'help' => t('Orientation libellé long'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_norie2']['lib_court'] = array(
+    'title' => t('lib_court'),
+    'help' => t('Orientation libellé court'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
   $data['gbb_norie']['table'] = array(
     'group' => t('gbb_norie'),
     'join' => array(
@@ -1446,6 +1479,18 @@ function gbb_views_data() {
       ),
     ),
   );
+  $data['gbb_norie']['lib_long'] = array(
+    'title' => t('lib_long'),
+    'help' => t('Orientation libellé long'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
   $data['gbb_norie']['lib_court'] = array(
     'title' => t('lib_court'),
     'help' => t('Orientation libellé court'),
@@ -1660,7 +1705,7 @@ function gbb_views_data() {
       'gbb_gmodu' => array(
         'left_field' => 'co_modu',
         'field' => 'co_modu',
-        'extra' => 'gbb_evaluation.co_degre = gbb_gmodu.co_degre',
+        'extra' => array('gbb_evaluation.co_degre = gbb_gmodu.co_degre',),
       ),
     ),
   );
@@ -2178,6 +2223,30 @@ function gbb_views_data() {
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
 
+  $data['gbb_gdiof_dafor']['offre_cat'] = array(
+    'title' => t('offre_cat'),
+    'help' => t('catégorie d offre'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+  $data['gbb_gdiof_dafor']['interdisc'] = array(
+    'title' => t('interdisc'),
+    'help' => t('Interdisciplinaire'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
   $data['gbb_gdiof_dafor']['iufm'] = array(
     'title' => t('iufm'),
     'help' => t('Offreur specifique)'),
@@ -2536,7 +2605,7 @@ function gbb_views_data() {
         'left_table' => 'gbb_gmoof',
         'left_field' => 'co_omodu',
         'field' => 'co_modu',
-        'extra' => 'gbb_gmoof_taxonomy.co_degre = 999',
+        'extra' => array('gbb_gmoof_taxonomy.co_degre = 999',),
       ),
     ),
   );

@@ -101,7 +101,7 @@ function gbb_infos_general($args) {
                                                      'html' => TRUE));
       } else {
         $str .= l( " $r->prenom $r->nomu", 
-                 'liste/15/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
+                 'liste/16/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
                         array('attributes' =>  array('class' => 'fa fa-th-list'))
               ) ;
       }
@@ -982,6 +982,7 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
         ->key(array('sess_id'  => $i))
         ->fields(array('convoc_sent' => 1,
           'session_alert' => 0,
+          'status' => 3,
           'date_modif' => date('Y-m-d H:i:s'),
           'uid' => $user->uid))
         ->execute();
@@ -1026,6 +1027,7 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
           ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ),
+                   'status' => ( ($r->en_attente)? 0 : 1 ),
                    'date_modif' => date('Y-m-d H:i:s'),
                    'uid' => $user->uid))
           ->execute();
@@ -1373,6 +1375,7 @@ function gbb_sess_edition_submit($form, &$form_state) {
                    'groupe'        => $form_state['values']['groupe'],
                    'convoc_sent'   => $convoc_sent,
                    'en_attente'    => $en_attente,
+                   'status'        => 1*$en_attente+2*$form_state['values']['session_alert']+3*$convoc_sent,
                    'session_alert' => $form_state['values']['session_alert'],
                    'horaires'      => $form_state['values']['horaires'],
                    'duree_prevue'  => $form_state['values']['duree_prevue'],
@@ -1550,6 +1553,7 @@ function gbb_convoc_form_module_alert_submit(&$form, &$form_state) {
     ->key(array('co_modu'  => $form_state['values']['comodu'],
                 'co_degre' => $form_state['values']['codegre'] ))
     ->fields(array('module_alert' => $form_state['values']['module_alert'],
+                   'status' => 1,
                    'date_modification' => date('Y-m-d H:i:s'),
                    'user_id' => $user->uid))
     ->execute();
@@ -1558,6 +1562,7 @@ function gbb_convoc_form_module_alert_submit(&$form, &$form_state) {
       ->key(array('co_modu'  => $form_state['values']['comodu'],
                   'co_degre' => $form_state['values']['codegre'] ))
       ->fields(array('module_printed' => 0,
+                   'status' => 2,
                    'date_modification' => date('Y-m-d H:i:s'),
                    'user_id' => $user->uid))
       ->execute();

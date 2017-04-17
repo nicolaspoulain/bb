@@ -105,6 +105,7 @@ function gbb_offres_tab($args) {
     'no_offre' => t('No Offre/ Code Module'),
     'libl' => t('Titre'),
     'nomu2' => t('Resp. péda.'),
+    'co_moda' => t('Hybride'),
     array('data' => t('Catégorie d\'offre'), 'class' => 'jaune'),
     array('data' => t('Offreur'), 'class' => 'jaune'),
     array('data' => t('Interdisciplinaire'), 'class' => 'jaune'),
@@ -123,6 +124,9 @@ function gbb_offres_tab($args) {
     // array('data' => t('taux en € Vac'), 'class' => 'jaune'),
     array('data' => t('HT2'), 'class' => 'jaune'),
     #array('data' => t('Hors CDC'), 'class' => 'jaune'),
+    'cout prest' => t('Coût prest'),
+    'cout fonc' => t('Coût fonc'),
+    'cout excep' => t('Coût excep'),
     'nb_groupe' => t('Nbre groupe'),
     'nb_eff_groupe' => t('Effectif groupe'),
     'duree_prev' => t('Duree prév. (h)'),
@@ -142,7 +146,9 @@ function gbb_offres_tab($args) {
                     'm.co_resp = r2.co_resp AND r2.co_degre = 2');
   $query ->condition('d.no_offre', '20170000', '>')
          ->fields('d', array('no_offre', 'co_tpla', 'co_orie'))
-         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm','nb_groupe','duree_prev','nb_eff_groupe'))
+         ->fields('m', array('libl', 'co_omodu', 'lmoda', 'lcomm',
+           'nb_groupe', 'cout_p_excep', 'cout_p_prest', 'cout_p_fonc',
+          'duree_prev','nb_eff_groupe', 'co_moda'))
          ->fields('r', array('nomu'));
   $query ->addField('r2', 'nomu', 'nomu2');
   $query ->fields('dd', array('nb_hp','nb_vac','taux','ht2','iufm',
@@ -205,6 +211,7 @@ function gbb_offres_tab($args) {
                 array('data' => $r->no_offre.' / '.$r->co_omodu),
                 array('data' => l($r->libl,'offre_detail/'.$r->co_omodu,array('attributes' => array('target'=>'_blank')))),
                 array('data' => $r->nomu2),
+                array('data' => ($r->co_moda=="S")? "OUI" : '-'),
                 array('data' => $catOffre),
                 array('data' => $iufm),
                 array('data' => $interdisc),
@@ -222,6 +229,9 @@ function gbb_offres_tab($args) {
                 array('data' => $taux),
                 array('data' => $ht2),
                 #array('data' => $hors_cdc),
+                array('data' => $r->cout_p_prest),
+                array('data' => $r->cout_p_fonc),
+                array('data' => $r->cout_p_excep),
                 array('data' => $r->nb_groupe),
                 array('data' => $r->nb_eff_groupe),
                 array('data' => $r->duree_prev),
@@ -352,7 +362,10 @@ function gbb_offres_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
     '171I'=>'171I','171J'=>'171J','171K'=>'171K',
     '172A'=>'172A','172B'=>'172B','172C'=>'172C','172D'=>'172D',
     '172E'=>'172E','172F'=>'172F','172G'=>'172G','172H'=>'172H',
-    '172I'=>'172I','172J'=>'172J','172K'=>'172K',),
+    '172I'=>'172I','172J'=>'172J','172K'=>'172K',
+    '173A'=>'173A','173B'=>'173B','173C'=>'173C','173D'=>'173D',
+    '173E'=>'173E','173F'=>'173F','173G'=>'173G','173H'=>'173H',
+    '173I'=>'173I','173J'=>'173J','173K'=>'173K',),
     '#default_value' => $prio_nat,
     '#ajax' => array(
       'callback' => 'gbb_offres_prio_nat_form_submit',
