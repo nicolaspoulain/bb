@@ -269,7 +269,6 @@ function gbb_liste_stages_choix($form, &$form_state, $args) {
   );
 
   $periode = array(
-    08 => '2008-2009',
     09 => '2009-2010',
     10 => '2010-2011',
     11 => '2011-2012',
@@ -277,7 +276,8 @@ function gbb_liste_stages_choix($form, &$form_state, $args) {
     13 => '2013-2014',
     14 => '2014-2015',
     15 => '2015-2016',
-    16 => '2016-2017'  );
+    16 => '2016-2017',
+    17 => '2017-2018'  );
   $form['f']['year'] = array(
     '#type' => 'select',
     '#title' => t(''),
