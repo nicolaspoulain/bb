@@ -74,11 +74,16 @@ function _gbb_autocompstage($string) {
 function _gbb_autocompform($string) {
 
   $matches = array();
-  $result = db_select('gbb_gresp_dafor', 'c')
-    ->fields('c', array('co_resp', 'nomu', 'prenom'))
-    ->condition('nomu', '%' . db_like($string) . '%', 'LIKE')
-    ->range(0, 10)
-    ->execute();
+  $query = db_select('gbb_gresp_dafor', 'c');
+  $query  ->leftjoin('gbb_gresp_plus', 'p', 'c.co_resp = p.co_resp');
+  $query  ->addField('d', 'lib', 'lib');
+  $query  ->addField('c', 'co_resp', 'co_resp');
+  $query  ->addField('c', 'nomu', 'nomu');
+  $query  ->addField('c', 'prenom', 'prenom');
+  $query  ->addField('p', 'decharge', 'decharge');
+  $query  ->condition('nomu', '%' . db_like($string) . '%', 'LIKE')
+    ->range(0, 10);
+  $result = $query->execute();
 
   if (strpos($string,'++')) {
   $result = db_select('gbb_gresp_dafor', 'c')
@@ -87,7 +92,7 @@ function _gbb_autocompform($string) {
     ->execute();
   }
   foreach ($result as $r) {
-    $formatr = $r->prenom . ' ' . $r->nomu . ' (id:' . $r->co_resp . ')';
+    $formatr = $r->prenom . ' ' . $r->nomu . $r->decharge>0 .' (id:' . $r->co_resp . ')';
     $matches[$formatr] = $formatr;
   }
   $count = $result->rowCount();
@@ -105,6 +110,13 @@ function _gbb_autocompformatr2($string) {
   $pieces = explode(" ",$string);
   $query = db_select('gbb_gresp_dafor', 'c')
          ->fields('c', array('co_resp', 'nomu', 'prenom'));
+  // $query = db_select('gbb_gresp_dafor', 'c');
+  $query  ->leftjoin('gbb_gresp_plus', 'p', 'c.co_resp = p.co_resp');
+  // $query  ->addField('d', 'lib', 'lib');
+  // $query  ->addField('c', 'co_resp', 'co_resp');
+  // $query  ->addField('c', 'nomu', 'nomu');
+  // $query  ->addField('c', 'prenom', 'prenom');
+  $query  ->addField('p', 'decharge', 'decharge');
   $query ->condition('nomu', '%'   . db_like($pieces[0]) . '%', 'LIKE');
   if (isset($pieces[1])) $query ->condition('prenom', '%' . db_like($pieces[1]) . '%', 'LIKE');
   $result = $query ->range(0, 10) ->execute();
@@ -116,7 +128,8 @@ function _gbb_autocompformatr2($string) {
       ->execute();
   }
   foreach ($result as $r) {
-    $formatr = $r->nomu . ' ' . $r->prenom . ' (id:' . $r->co_resp . ')';
+    $dec = ($r->decharge >0)?' **'.(int) $r->decharge.'h** ':" ";
+    $formatr = $r->nomu . $dec . $r->prenom . ' (id:' . $r->co_resp . ')';
     $matches[$formatr] = $formatr;
     #$matches[$r->co_resp] =$r->nomu . ' ' . $r->prenom ;
   }
