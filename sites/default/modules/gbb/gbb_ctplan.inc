@@ -38,7 +38,7 @@ function gbb_ctplan_view($args = 'NaN') {
 function gbb_ctplan_tab($args) {
   // print_r(taxonomy_get_vocabularies());
   foreach (taxonomy_get_vocabularies() as $k=>$v) {
-    if (preg_match("/2016/",$v->name)) {
+    if (preg_match("/2017/",$v->name)) {
       $header[] = array('data' => t($v->name.' '), 'class' => 'gris');
       $class = (preg_match("/WEB/",$v->name))? 'topAlignMulti' : 'topAlign';
       $rows[0][] = array('data' => gbb_ctplan_vocab($k),
@@ -54,7 +54,12 @@ function gbb_ctplan_tab($args) {
   $terms = taxonomy_get_tree($vid);
   $terms_select = array();
   foreach ($terms as $term) {
+    // $query = db_select('field_data_field_lib_court','l')
+          // ->condition('l.entity_id' , $term->tid, '=');
+    // $query->fields('l',array('field_lib_court_value'));
+    // $lib= $query->execute()->fetchAll();
       $terms_select[$term->tid] = str_repeat('— ', $term->depth) . $term->name;
+      // $terms_select[$term->tid] = str_repeat('— ', $term->depth) . $lib[0]->field_lib_court_value;
   };
   $check = db_query("SELECT tid,weight FROM {gbb_gmodu_taxonomy}
                                   WHERE co_modu = :co_modu",
