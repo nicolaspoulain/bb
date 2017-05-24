@@ -21,18 +21,18 @@ function gbb_formateur_view($args = 'NaN') {
   $build = array();
   $build['filtre'] = render(drupal_get_form('gbb_formateur_filtre' , $args));
   $build['fiche']  = render(drupal_get_form('gbb_formateur_fiche' , $args));
-  $build['stages_before'] = theme('fieldset',
-                           array(
-                             'element' => array(
-                               '#attributes' => array(
-                                 'class' => array('details'),
-                               ),
-                               '#children' => '',
-                               '#title' => t('Graphique de répartition des heures'),
-                               '#value' => gbb_formateur_stages_before($args),
-                             )
-                           )
-                     );
+  // $build['stages_before'] = theme('fieldset',
+                           // array(
+                             // 'element' => array(
+                               // '#attributes' => array(
+                                 // 'class' => array('details'),
+                               // ),
+                               // '#children' => '',
+                               // '#title' => t('Graphique de répartition des heures'),
+                               // '#value' => gbb_formateur_stages_before($args),
+                             // )
+                           // )
+                     // );
   $build['stages'] = theme('fieldset',
                            array(
                              'element' => array(
