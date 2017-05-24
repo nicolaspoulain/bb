@@ -30,7 +30,7 @@ function offredrag_form($form, &$form_state) {
             ->orderBy('weight', 'ASC')
             ->condition('position', 500, '<' )
             ->condition('tid', arg(1) )
-            ->condition('d.no_offre' , '2016' . '%', 'LIKE');
+            ->condition('d.no_offre' , '2017' . '%', 'LIKE');
   $query  ->leftjoin('gbb_gdiof_dafor', 'dd',  'dd.co_omodu = t.co_modu');
   $query  ->leftjoin('gbb_gmoof', 'm',  'm.co_omodu = t.co_modu AND t.co_degre = 999');
   $query  ->leftjoin('gbb_gdiof', 'd',  'm.co_offre = d.co_offre');
