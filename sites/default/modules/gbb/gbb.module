@@ -110,6 +110,18 @@ function gbb_menu() {
         'file' => 'gbb_module.inc',
   );
 
+  // Etant donné un co_degré (1 ou 2)
+  // Affiche la page de gestion du module co_modu
+  //   exemple : modulenew/2/26142
+
+  $items['modulenew'] = array(
+        'title' => '',
+        'page callback' => 'gbb_modulenew_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_modulenew.inc',
+  );
+
   // Etant donné un id (112 ou 2222)
   // Affiche la page de gestion d'un formateur
   //   exemple : formateur/112
@@ -498,6 +510,19 @@ function gbb_tokens($type, $tokens, array $data = array(), array $options = arra
   return $replacements;
 }
 
+    /**
+     * Implements hook_theme().
+     */
+    function gbb_theme($existing, $type, $theme, $path) {
+      $theme = array();
+      $theme['modulenew'] = array(
+        'render element' => 'content',
+        'base hook' => 'page',
+        'template' => 'page--modulenew',
+        'path' => drupal_get_path('module', 'gbb') . '/templates',
+       );
+      return $theme;
+    }
 
 
 /*

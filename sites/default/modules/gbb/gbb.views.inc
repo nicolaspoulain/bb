@@ -595,7 +595,7 @@ function gbb_views_data() {
       'click sortable' => TRUE,
     ),
     'sort' => array('handler' => 'views_handler_sort_date'),
-    'filter' => array('handler' => 'date_views_filter_handler_simple'), 
+    'filter' => array('handler' => 'date_views_filter_handler_simple'),
   );
   $data['gbb_session']['horaires'] = array(
     'title' => t('horaires'),
@@ -766,7 +766,7 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
- 
+
   // --------------------------------------------------------
   // gbb_gdire table de liaison, pas de champ à extraire
   // --------------------------------------------------------
@@ -775,7 +775,7 @@ function gbb_views_data() {
     'group' => t('gdire_orga'),
     'join' => array(
       'gbb_gmodu' => array(
-        'table' => 'gbb_gdire', 
+        'table' => 'gbb_gdire',
         'left_field' => 'co_modu',
         'field' => 'co_modu',
         'extra' => array('gbb_gdire_orga.co_degre = gbb_gmodu.co_degre AND gbb_gdire_orga.co_tres=2',),
@@ -787,7 +787,7 @@ function gbb_views_data() {
     'group' => t('gdire_peda'),
     'join' => array(
       'gbb_gmodu' => array(
-        'table' => 'gbb_gdire', 
+        'table' => 'gbb_gdire',
         'left_field' => 'co_modu',
         'field' => 'co_modu',
         'extra' => array('gbb_gdire_peda.co_degre = gbb_gmodu.co_degre AND gbb_gdire_peda.co_tres=3',),
@@ -1013,6 +1013,17 @@ function gbb_views_data() {
   $data['gbb_gresp2']['qualite'] = array(
     'title' => t('Qualité'),
     'help' => t('Qualité du responsable'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gresp2']['mel'] = array(
+    'title' => t('mel'),
+    'help' => t('mel'),
     'field' => array(
       'handler' => 'views_handler_field',
       'click sortable' => TRUE,
@@ -2080,8 +2091,8 @@ function gbb_views_data() {
   $data['gbb_gdiof']['table'] = array(
     'group' => t('gbb_gdiof'),
     'base' => array(
-      'field' => 'co_offre', 
-      'title' => t('GaiaBB_OFFRES'), 
+      'field' => 'co_offre',
+      'title' => t('GaiaBB_OFFRES'),
       'help' => t('Tables des offres GaiaBB.'),
     ),
   );
