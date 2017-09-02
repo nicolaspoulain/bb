@@ -1289,11 +1289,21 @@ function gbb_views_data() {
   // gbb_gdisp
   // --------------------------------------------------------
 
+  // $data['gbb_gdisp']['table'] = array(
+    // 'group' => t('gbb_gdisp'),
+    // 'join' => array(
+      // 'gbb_gmodu' => array(
+        // 'left_table' => 'gbb_gdire',
+        // 'left_field' => 'co_disp',
+        // 'field' => 'co_disp',
+        // 'extra' => array('gbb_gdisp.co_degre = gbb_gmodu.co_degre',),
+      // ),
+    // ),
+  // );
   $data['gbb_gdisp']['table'] = array(
     'group' => t('gbb_gdisp'),
     'join' => array(
       'gbb_gmodu' => array(
-        'left_table' => 'gbb_gdire',
         'left_field' => 'co_disp',
         'field' => 'co_disp',
         'extra' => array('gbb_gdisp.co_degre = gbb_gmodu.co_degre',),
