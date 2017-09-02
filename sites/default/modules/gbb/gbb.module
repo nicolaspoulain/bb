@@ -319,12 +319,15 @@ variable_set('ico_etab',       '<i class="fa fa-university" title="Lieu"></i>');
 variable_set('ico_userAdd',    '<i class="fa fa-user" title="Ajouter un formateur">+</i>');
 variable_set('ico_etabAdd',    '<i class="fa fa-university" title="Ajouter un lieu">+</i>');
 variable_set('ico_save',       '<i class="fa fa-floppy-o fa-lg" title="Enregistrer"></i>');
-variable_set('ico_dureePrev',  '&nbsp;<i class="fa fa-eur fa-lg orange euro" title="Durée à payer"></i>');
+variable_set('ico_dureePrev',  '&nbsp;<i class="fa fa-eur orange euro fa-lg" title="Durée à payer"></i>');
 variable_set('ico_dureeApayer','&nbsp;<i class="fa fa-eur fa-lg lightgreen euro " title="Durée payée"></i>');
 variable_set('ico_organisation','<i class="fa fa-comment lightgray" title="Le journal contient des infos"></i>&nbsp;');
 variable_set('ico_organisation-o','<i class="fa fa-comment-o lightgray" title="Le journal est vide"></i>&nbsp;');
 variable_set('ico_bilans',     '<i class="fa fa-check-square-o green fa-lg" title="Bilan rempli"></i>');
 variable_set('ico_DArendu',    '<i class="fa fa-thumbs-o-up green fa-lg" title="Dossier rendu"></i>');
+variable_set('ico_LE_yes',     '<i class="fa fa-file-text green" title="LE transmise"></i>');
+variable_set('ico_LE_no',      '<i class="fa fa-file-text-o lightgray" title="LE non transmise"></i>');
+variable_set('ico_DS_yes',     '<i class="fa fa-check green fa-lg" title="DS transmise"></i>');
 
 variable_set('_gbb_session_alert_icon', array(
   'path' => drupal_get_path('module', 'gbb') . '/images/flag_red.png',

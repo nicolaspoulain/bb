@@ -101,7 +101,7 @@ function gbb_infos_general($args) {
                                                      'html' => TRUE));
       } else {
         $str .= l( " $r->prenom $r->nomu",
-                 'liste/16/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
+                 'liste/17/' . $r->co_degre . '/'. $voir .'/' . $r->nomu,
                         array('attributes' =>  array('class' => 'fa fa-th-list'))
               ) ;
       }
@@ -644,11 +644,12 @@ function gbb_sess_formatr($form, $form_state, $args) {
     'icone' => '',
     'horaires' => t('Horaires'),
     'lieu' => t('Lieu'),
+    'LE_etat' => t('LE'),
     'groupe' => t('Gr'),
     'formateur' => t('Formateur'),
     'duree_prevue' => variable_get('ico_dureePrev'),
     // 'duree_a_payer' => variable_get('ico_dureeApayer'),
-    'TypePaiement' => t('Pmt'),
+    'TypePaiement' => t('TP/DS'),
   );
   if (arg(1)==2) {
     $header['ficand']=t('Fcnd');
@@ -675,8 +676,8 @@ function gbb_sess_formatr($form, $form_state, $args) {
          ->fields('s', array('sess_id', 'date',
                              'duree_prevue','duree_a_payer', 'type_paiement',
                              'en_attente', 'convoc_sent', 'session_alert',
-                             'horaires', 'co_lieu', 'co_resp', 'groupe',
-                             'ficand','nbsta','date_modif'))
+                             'LE_etat','horaires', 'co_lieu', 'co_resp', 'groupe',
+                             'ficand','nbsta','DS_etat','date_modif'))
          ->fields('r', array('prenom', 'nomu', 'co_resp'))
          ->fields('p', array('statut'))
          ->fields('u', array('name'))
@@ -719,6 +720,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
                    ),
                          'html' => TRUE )
                 ),
+      'LE_etat' => (($r->LE_etat)? variable_get('ico_LE_yes') : variable_get('ico_LE_no')),
       'groupe' => $r->groupe,
       'formateur' => (($r->statut)? variable_get('ico_espe') . " " : '')
                 . l( "$r->prenom $r->nomu",
@@ -734,7 +736,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
                        ,
       'duree_prevue' => $r->duree_prevue . "h",
       // 'duree_a_payer' => $r->duree_a_payer . "h",
-      'TypePaiement' => $r->type_paiement,
+      'TypePaiement' => $r->type_paiement.(($r->DS_etat)? " ".variable_get('ico_DS_yes') : ""),
       '#attributes'  => array('class' => array($visibilite)),
     );
     if (arg(1)==2) {
@@ -1082,8 +1084,8 @@ function gbb_sess_edition($form, $form_state, $args) {
                      'r.co_resp=s.co_resp AND r.co_degre=s.co_degre');
   $query ->leftjoin('gbb_netab_dafor', 'e', 'e.co_lieu=s.co_lieu');
   $query ->condition('sess_id', $id, '=')
-         ->fields('s', array('sess_id', 'date', 'horaires', 'groupe','ficand','nbsta',
-                             'duree_prevue', 'duree_a_payer', 'type_paiement',
+         ->fields('s', array('sess_id', 'date', 'horaires', 'groupe','ficand','nbsta','DS_etat',
+                             'duree_prevue', 'duree_a_payer', 'type_paiement','LE_etat',
                              'session_alert', 'en_attente', 'convoc_sent'))
          ->fields('r', array('co_resp', 'nomu', 'prenom'))
          ->fields('e', array('co_lieu', 'denom_comp', 'sigle'));
@@ -1189,7 +1191,7 @@ function gbb_sess_edition($form, $form_state, $args) {
 
   $form['f']['type_paiement'] = array(
     '#type' => 'select',
-    '#title' => t('Type paiement'),
+    '#title' => t('Type Paiement'),
     '#options' => array( 'VAC'  => t('VAC'),
                          'CONV' => t('CONV'),
                          'BDC'  => t('BDC'),
@@ -1259,6 +1261,20 @@ function gbb_sess_edition($form, $form_state, $args) {
   else {
     $form['f']['en_attente']['#type']  = 'disabled';
   }
+    $form['f']['LE_etat'] = array(
+      '#type' => 'checkbox',
+      '#title' => variable_get('ico_LE_yes').' Liste d\'Emargement (LE) transmise',
+      '#default_value' => $r->LE_etat,
+      '#prefix' => '<div class="inline">',
+      '#suffix' => '</div>&nbsp;',
+    );
+    $form['f']['DS_etat'] = array(
+      '#type' => 'checkbox',
+      '#title' => variable_get('ico_DS_yes').' Déclaration de Service (DS) transmise',
+      '#default_value' => $r->DS_etat,
+      '#prefix' => '<div class="inline">',
+      '#suffix' => '</div>&nbsp;',
+    );
 
   if (user_access('gest_convocs gbb')) {
     $form['f']['convoc_sent'] = array(
@@ -1353,7 +1369,8 @@ function gbb_sess_edition_submit($form, &$form_state) {
   // Get a single record out of the database.
   $query = db_select('gbb_session', 's');
   $query ->condition('s.sess_id' , $sess_id , '=')
-    ->fields('s',  array('date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires',
+    ->fields('s',  array('date', 'session_alert', 'en_attente', 'convoc_sent',
+    'nbsta', 'DS_etat', 'LE_etat', 'horaires',
     'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
   $result = $query->execute();
   $sess_oldAndNew = "\n-----------\n";
@@ -1366,8 +1383,11 @@ function gbb_sess_edition_submit($form, &$form_state) {
       . " | Snt:" . $r->convoc_sent
       . " | "     . $r->horaires
       . " | "     . $r->co_lieu
+      . " | LE"   . $r->LE_etat
+      . " | DS"   . $r->DS_etat
       . " | G"    . $r->groupe
       . " | F:"   . $r->co_resp
+      . " | nbst:". $r->nbsta
       . " | "     . $r->duree_prevue   . "h"
       . " | "     . $r->duree_a_payer  . "h"
       . " | "     . $r->type_paiement;
@@ -1380,8 +1400,11 @@ function gbb_sess_edition_submit($form, &$form_state) {
     . " | Snt:" . $convoc_sent
     . " | "     . $form_state['values']['horaires']
     . " | "     . $co_lieu
+    . " | LE"   . $form_state['values']['LE_etat']
+    . " | DS"   . $form_state['values']['DS_etat']
     . " | G"    . $form_state['values']['groupe']
     . " | F:"   . $co_resp
+    . " | nbst:". $form_state['values']['nbsta']
     . " | "     . $form_state['values']['duree_prevue']  . "h"
     . " | "     . $form_state['values']['duree_a_payer'] . "h"
     . " | "     . $form_state['values']['type_paiement']
@@ -1395,6 +1418,8 @@ function gbb_sess_edition_submit($form, &$form_state) {
       ->fields(array(
                    'co_modu'       => $form_state['values']['co_modu'],
                    'co_degre'      => $form_state['values']['co_degre'],
+                   'LE_etat'       => $form_state['values']['LE_etat'],
+                   'DS_etat'       => $form_state['values']['DS_etat'],
                    'groupe'        => $form_state['values']['groupe'],
                    'convoc_sent'   => $convoc_sent,
                    'en_attente'    => $en_attente,
