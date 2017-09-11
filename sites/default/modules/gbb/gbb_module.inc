@@ -181,7 +181,7 @@ function gbb_infos_detail($args) {
                     'r.co_resp  = dr.co_resp AND r.co_degre = m.co_degre');
   $query ->condition('m.co_modu', arg(2), '=')
          ->condition('m.co_degre', arg(1), '=')
-         ->fields('m',  array('lautre', 'duree_prev', 'lmoda',
+         ->fields('m',  array('lautre', 'duree_prev', 'nb_place_prev', 'lmoda',
                               'lform', 'lcont', 'lpeda', 'lcibl',))
           ->fields('r', array('prenom', 'nomu',))
           ->fields('dr', array('co_resp', 'co_tres',));
@@ -202,8 +202,10 @@ function gbb_infos_detail($args) {
                    array('data' => $r['lform']),);
   $rows[] = array( array('data' => "Public Cible"),
                    array('data' => $r['lcibl']),);
-  $rows[] = array( array('data' => t("Durée")),
+  $rows[] = array( array('data' => t("Durée prévue")),
                    array('data' => $r['duree_prev'] . "h"),);
+  $rows[] = array( array('data' => t("Nb places prévues")),
+                   array('data' => $r['nb_place_prev']),);
   $rows[] = array( array('data' => t("Modalité")),
                    array('data' => $r['lmoda']),);
   $rows[] = array( array('data' => "Orientation"),
@@ -784,40 +786,40 @@ function gbb_sess_formatr($form, $form_state, $args) {
       '#value' => t('Modifier'),
       '#submit' => array('gbb_sess_formatr_modifier_submit'),
     );
-    $form['f']['plus'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Plus'),
-      '#default_value' => 0,
-      '#prefix' => '<a name="edit_session_anchor"></a><div class="inline">',
-      '#suffix' => '</div>&nbsp;',
-    );
+    // $form['f']['plus'] = array(
+      // '#type' => 'checkbox',
+      // '#title' => t('Plus'),
+      // '#default_value' => 0,
+      // '#prefix' => '<a name="edit_session_anchor"></a><div class="inline">',
+      // '#suffix' => '</div>&nbsp;',
+    // );
 
     $form['f']['bascule_en_attente'] = array(
       '#type' => 'submit',
       '#value' => t('Attente Y/N'),
       '#submit' => array('gbb_sess_formatr_bascule_en_attente_submit'),
-      '#states' => array(    // This #states rule limits visibility
-        'visible' => array(  // action to take.
-          ':input[name="plus"]' => array('checked' => TRUE),),
-      ),
+      // '#states' => array(    // This #states rule limits visibility
+        // 'visible' => array(  // action to take.
+          // ':input[name="plus"]' => array('checked' => TRUE),),
+      // ),
     );
     $form['f']['dupliquer'] = array(
       '#type' => 'submit',
       '#value' => t('Dupliquer'),
       '#submit' => array('gbb_sess_formatr_dupliquer_submit'),
-      '#states' => array(    // This #states rule limits visibility
-        'visible' => array(  // action to take.
-          ':input[name="plus"]' => array('checked' => TRUE),),
-      ),
+      // '#states' => array(    // This #states rule limits visibility
+        // 'visible' => array(  // action to take.
+          // ':input[name="plus"]' => array('checked' => TRUE),),
+      // ),
     );
     $form['f']['supprimer'] = array(
       '#type' => 'submit',
       '#value' => t('*Supprimer*'),
       '#submit' => array('gbb_sess_formatr_supprimer_submit'),
-      '#states' => array(    // This #states rule limits visibility
-        'visible' => array(  // action to take.
-          ':input[name="plus"]' => array('checked' => TRUE),),
-      ),
+      // '#states' => array(    // This #states rule limits visibility
+        // 'visible' => array(  // action to take.
+          // ':input[name="plus"]' => array('checked' => TRUE),),
+      // ),
     );
   }
 
