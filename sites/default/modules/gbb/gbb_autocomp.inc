@@ -46,12 +46,14 @@ function _gbb_autocompstage($string) {
 
   $matches = array();
   $query = db_select('gbb_gdisp', 'd');
-  $query  ->leftjoin('gbb_gmodu', 'm', 'm.co_disp = d.co_disp');
+  $query  ->leftjoin('gbb_gmodu', 'm', 'm.co_disp = d.co_disp AND m.co_degre=d.co_degre');
   $query  ->addField('d', 'id_disp', 'id_disp');
   $query  ->addField('d', 'lib', 'lib');
   $query  ->addField('m', 'lib', 'libmodu');
   $query  ->addField('m', 'co_modu', 'co_modu');
+  $query  ->addField('m', 'co_degre');
   $query  ->condition('id_disp', db_like('17') . '%', 'LIKE')
+    ->condition('m.co_degre', db_like('2') . '%', 'LIKE')
     ->condition(db_or()->condition('id_disp', '%' . db_like($string) . '%', 'LIKE')
     ->condition('m.lib', '%' . db_like($string) . '%', 'LIKE')
     ->condition('m.co_modu', '%' . db_like($string) . '%', 'LIKE')
