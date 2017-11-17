@@ -652,6 +652,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
   );
+  $data['gbb_session']['LE_etat'] = array(
+    'title' => t('LE_etat'),
+    'help' => t('LE_etat'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
   $data['gbb_session']['session_alert'] = array(
     'title' => t('session_alert'),
     'help' => t('Changement important sur la session BOOL'),
@@ -765,6 +776,61 @@ function gbb_views_data() {
     'sort' => array('handler' => 'views_handler_sort'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_gmodu_plus']['LE_etat'] = array(
+    'title' => t('LE_etat'),
+    'help' => t('LE_etat'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_gmodu_plus']['LE_info'] = array(
+    'title' => t('LE_info'),
+    'help' => t('LE_info'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gmodu_plus']['DSF_etat'] = array(
+    'title' => t('DSF_etat'),
+    'help' => t('DSF_etat'),
+    'field' => array(
+      'handler' => 'views_handler_field_numeric',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_numeric'),
+    'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_gmodu_plus']['DSF_info'] = array(
+    'title' => t('DSF_info'),
+    'help' => t('DSF_info'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_gmodu_plus']['DA_date_depot'] = array(
+    'title' => t('DA_date_depot'),
+    'help' => t('DA_date_depot'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
   );
 
   // --------------------------------------------------------

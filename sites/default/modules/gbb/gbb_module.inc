@@ -20,11 +20,11 @@ function gbb_module_view($args = 'NaN') {
   $build['infos_general'] = gbb_infos_general($args);
   $build['color_form']  = render(drupal_get_form('gbb_color_form', $args));
   $build['sec_A'] = "<section>";
-  if (user_access('gest_sessions gbb')) {
+  if (user_access('bb cadre organisation')) {
       $build['organis_form'] = render(drupal_get_form('gbb_organis_form', $args));
   }
 
-  if (user_access('gest_convocs gbb')) {
+  if (user_access('bb session stagiaire')) {
     $build['sess_stagiaire'] = theme('fieldset',
                                        array(
                                          'element' => array(
@@ -75,6 +75,7 @@ function gbb_infos_general($args) {
          ->fields('r',  array('prenom', 'nomu',))
          ->fields('dr', array('co_resp', 'co_tres', 'co_degre',));
   $query ->addField('ds', 'lib', 'libd');
+  $query ->addField('ds', 'co_offreur', 'co_offreur');
   $query ->addField('m',  'lib', 'libm');
   $query ->addField('n',  'lib_long', 'ori');
   $result = $query->execute();
@@ -157,7 +158,7 @@ function gbb_infos_general($args) {
 
   $rows[] = array(
               array('data' => $str),
-              array('data' => $r->co_tcan." : ".$can[$r->co_tcan],
+              array('data' => $r->co_tcan." : ".$can[$r->co_tcan]."&nbsp;&nbsp;-&nbsp;&nbsp;".$r->co_offreur,
                     'colspan' => '2'),
   );
 
@@ -241,7 +242,7 @@ function gbb_color_form($args) {
                   'collapsed',  )),
   );
 
-  if (user_access('gest_sessions gbb')) {
+  if (user_access('bb crea session')) {
   $form['f']['color'] = array(
     '#suffix' => '<div id=' . $divid . '></div>',
     '#attached' => array(
@@ -705,8 +706,14 @@ function gbb_sess_formatr($form, $form_state, $args) {
           $icon = variable_get('ico_attente');
     } elseif ($r->session_alert) {
           $icon = variable_get('ico_alert');
-    } elseif ($r->convoc_sent) {
+    } elseif ($r->convoc_sent > 0) {
+        if ($r->convoc_sent ==1) {
           $icon = variable_get('ico_sent');
+        } elseif ($r->convoc_sent ==2) {
+          $icon = variable_get('ico_formsent');
+        } elseif ($r->convoc_sent ==3) {
+          $icon = variable_get('ico_stagsent');
+        }
     } else {
           $icon = variable_get('ico_notAttente');
     };
@@ -742,7 +749,15 @@ function gbb_sess_formatr($form, $form_state, $args) {
       '#attributes'  => array('class' => array($visibilite)),
     );
     if (arg(1)==2) {
-      $row[$r->sess_id]['ficand'] = ($r->ficand)? "<i class=\"fa fa-fonticons fa-2x\" aria-hidden=\"true\"></i>": "";
+      // $row[$r->sess_id]['ficand'] = ($r->ficand)? "<i class=\"fa fa-fonticons fa-2x\" aria-hidden=\"true\"></i>": "";
+      if ($r->ficand == 1) {
+        $row[$r->sess_id]['ficand'] = "<i class=\"fa fa-fonticons fa-2x\" aria-hidden=\"true\"></i>";
+      } elseif ($r->ficand == 2) {
+        $row[$r->sess_id]['ficand'] = "<i class=\"fa fa-fonticons fa-2x green\" aria-hidden=\"true\"></i>";
+      } else {
+        $row[$r->sess_id]['ficand'] = "";
+      }
+
     } elseif (arg(1)==1) {
       $row[$r->sess_id]['nbsta']  = $r->nbsta;
     }
@@ -775,7 +790,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
                                   '#value' => arg(2)   );
     $form['f']['codegre'] = array( '#type' => 'hidden',
                                   '#value' => arg(1)   );
-  if (user_access('gest_sessions gbb')) {
+  if (user_access('bb crea session')) {
     $form['f']['ajouter'] = array(
       '#type' => 'submit',
       '#value' => t('Ajouter'),
@@ -785,6 +800,8 @@ function gbb_sess_formatr($form, $form_state, $args) {
       '#type' => 'submit',
       '#value' => t('Modifier'),
       '#submit' => array('gbb_sess_formatr_modifier_submit'),
+      '#prefix' => '<a name="edit_session_anchor"></a><div class="inline">',
+      '#suffix' => '</div>&nbsp;',
     );
     // $form['f']['plus'] = array(
       // '#type' => 'checkbox',
@@ -823,11 +840,28 @@ function gbb_sess_formatr($form, $form_state, $args) {
     );
   }
 
-  if (user_access('gest_convocs gbb')) {
+  if (user_access('bb crea convocs') ) {
     $form['f']['convoc_envoyee'] = array(
       '#type' => 'submit',
-      '#value' => t('Convocs envoyées'),
+      '#value' => t('Convoc envoyée'),
       '#submit' => array('gbb_sess_formatr_convoc_submit'),
+    );
+  }
+  if (user_access('bb crea convocs special') ) {
+    $form['f']['convoc_form_envoyee'] = array(
+      '#type' => 'submit',
+      '#value' => t('Convoc FORM envoyée'),
+      '#submit' => array('gbb_sess_formatr_convocform_submit'),
+    );
+    $form['f']['convoc_stag_envoyee'] = array(
+      '#type' => 'submit',
+      '#value' => t('Convoc STAG envoyée'),
+      '#submit' => array('gbb_sess_formatr_convocstag_submit'),
+    );
+    $form['f']['ficand_traite'] = array(
+      '#type' => 'submit',
+      '#value' => t('Ficand'),
+      '#submit' => array('gbb_sess_formatr_ficand_submit'),
     );
   }
   return $form;
@@ -993,6 +1027,97 @@ function gbb_sess_formatr_convoc_submit($form, &$form_state) {
       db_merge('gbb_session') // Marque comme envoyée chaque session cochée
         ->key(array('sess_id'  => $i))
         ->fields(array('convoc_sent' => 1,
+          'en_attente' => 0,
+          'session_alert' => 0,
+          'status' => 3,
+          'date_modif' => date('Y-m-d H:i:s'),
+          'uid' => $user->uid))
+        ->execute();
+    }
+  }
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Convocation(s) envoyée(s) <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
+  drupal_set_message(t('Les convocs ont été marquées comme envoyées.'));
+}
+function gbb_sess_formatr_convocform_submit($form, &$form_state) {
+  $sess_oldAndNew = '';
+  foreach ($form_state['values']['table'] as $i) {
+    if ($i != 0 ) {
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      }
+      // Get a single record out of the database.
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires',
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {
+          $sess_oldAndNew = $sess_oldAndNew
+          . "". $i
+          . " | "      . $r->date
+          . " | Alt:"  . $r->session_alert
+          . " | Pse:"  . $r->en_attente
+          . " | Snt:"  . $r->convoc_sent   . "->2"
+          . " | "      . $r->horaires
+          . " | "      . $r->co_lieu
+          . " | G"     . $r->groupe
+          . " | F:"    . $r->co_resp
+          . " | "      . $r->duree_prevue  . "h"
+          // . " | "      . $r->duree_a_payer . "h"
+          . " | "      . $r->type_paiement
+          . "\n-----------\n";
+      };
+      global $user;
+      db_merge('gbb_session') // Marque comme envoyée chaque session cochée
+        ->key(array('sess_id'  => $i))
+        ->fields(array('convoc_sent' => 2,
+          'en_attente' => 0,
+          'session_alert' => 0,
+          'status' => 3,
+          'date_modif' => date('Y-m-d H:i:s'),
+          'uid' => $user->uid))
+        ->execute();
+    }
+  }
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Convocation(s) envoyée(s) <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
+  drupal_set_message(t('Les convocs ont été marquées comme envoyées.'));
+}
+function gbb_sess_formatr_convocstag_submit($form, &$form_state) {
+  $sess_oldAndNew = '';
+  foreach ($form_state['values']['table'] as $i) {
+    if ($i != 0 ) {
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      }
+      // Get a single record out of the database.
+      $query = db_select('gbb_session', 's');
+      $query ->condition('s.sess_id' , $i , '=')
+        ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires',
+        'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
+      $result = $query->execute();
+      foreach ($result as $r) {
+          $sess_oldAndNew = $sess_oldAndNew
+          . "". $i
+          . " | "      . $r->date
+          . " | Alt:"  . $r->session_alert
+          . " | Pse:"  . $r->en_attente
+          . " | Snt:"  . $r->convoc_sent   . "->3"
+          . " | "      . $r->horaires
+          . " | "      . $r->co_lieu
+          . " | G"     . $r->groupe
+          . " | F:"    . $r->co_resp
+          . " | "      . $r->duree_prevue  . "h"
+          // . " | "      . $r->duree_a_payer . "h"
+          . " | "      . $r->type_paiement
+          . "\n-----------\n";
+      };
+      global $user;
+      db_merge('gbb_session') // Marque comme envoyée chaque session cochée
+        ->key(array('sess_id'  => $i))
+        ->fields(array('convoc_sent' => 3,
+          'en_attente' => 0,
           'session_alert' => 0,
           'status' => 3,
           'date_modif' => date('Y-m-d H:i:s'),
@@ -1019,7 +1144,8 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
              'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement'));
       $result = $query->execute(); // recupère les infos de la session
       foreach ($result as $r) {
-      if ($r->convoc_sent != 1  && $r->session_alert != 1) {
+      // if ($r->convoc_sent != 1  && $r->session_alert != 1) {
+      if ($r->session_alert != 1) {
           // Modifie le statut en_attente SSI convoc_sent = 0 = session_alert
           $sess_oldAndNew = $sess_oldAndNew
           . "". $i
@@ -1038,8 +1164,53 @@ function gbb_sess_formatr_bascule_en_attente_submit($form, &$form_state) {
         global $user;
         db_merge('gbb_session')
           ->key(array('sess_id'  => $i))
-          ->fields(array('en_attente' => ( ($r->en_attente)? 0 : 1 ),
-                   'status' => ( ($r->en_attente)? 0 : 1 ),
+          ->fields(array('en_attente' => ( ($r->en_attente || $r->convoc_sent)? 0 : 1 ),
+                   'status' => ( ($r->en_attente || $r->convoc_sent )? 0 : 1 ),
+                   'convoc_sent' => 0,
+                   'date_modif' => date('Y-m-d H:i:s'),
+                   'uid' => $user->uid))
+          ->execute();
+      }
+      }
+    }
+    $url_query['sess_id[' . $i . ']'] =  $i;
+  };
+  watchdog('BouleEtBill', "M:" . $r->co_modu . " Attente  Y/N <pre>@sess_oldAndNew</pre>",
+    array( '@sess_oldAndNew' => $sess_oldAndNew));
+  drupal_set_message(t('Les convocs ont été basculées enAttente <-> enCours.'));
+  $url = url('module/' . $form_state['values']['codegre'] .
+                   '/' . $form_state['values']['comodu'],
+             array('fragment' => 'edit_session_anchor',
+                   'query' => $url_query,
+                   'absolute' => TRUE));
+  $form_state['redirect'] = $url;
+}
+
+function gbb_sess_formatr_ficand_submit($form, &$form_state) {
+  $sess_oldAndNew = '';
+  $url_query= array();
+  foreach ($form_state['values']['table'] as $i) {
+    if ($i != 0 ) { // on traite seulement les cases cochées
+      if ($sess_oldAndNew == '') {
+          $sess_oldAndNew = "\n-----------\n";
+      };
+      $query = db_select('gbb_session', 's')
+             ->condition('sess_id', $i)
+             ->fields('s',  array('co_modu', 'date', 'session_alert', 'en_attente', 'convoc_sent', 'horaires',
+             'co_lieu', 'groupe', 'co_resp', 'duree_prevue', 'duree_a_payer', 'type_paiement', 'ficand'));
+      $result = $query->execute(); // recupère les infos de la session
+      foreach ($result as $r) {
+      // if ($r->convoc_sent != 1  && $r->session_alert != 1) {
+      if ($r->session_alert != 1) {
+          // Modifie le statut en_attente SSI convoc_sent = 0 = session_alert
+          $sess_oldAndNew = $sess_oldAndNew
+          . "". $i
+          . " ficand | "     . ( ($r->ficand == 2)? 1 : 2 )
+          . "\n-----------\n";
+        global $user;
+        db_merge('gbb_session')
+          ->key(array('sess_id'  => $i))
+          ->fields(array('ficand' => ( ($r->ficand == 2)? 1 : 2 ),
                    'date_modif' => date('Y-m-d H:i:s'),
                    'uid' => $user->uid))
           ->execute();
@@ -1199,6 +1370,7 @@ function gbb_sess_edition($form, $form_state, $args) {
                          'BDC'  => t('BDC'),
                          'DECH' => t('DECH'),
                          'HSE'  => t('HSE'),
+                         'PFA'  => t('PFA'),
                          'SF'   => t('SF'),  ),
     '#default_value' => $r->type_paiement,
     '#maxlength' => 4,
@@ -1245,7 +1417,7 @@ function gbb_sess_edition($form, $form_state, $args) {
     ),
   );
 
-  if ($r->convoc_sent != 1 && user_access('gest_sessions gbb') ) {
+  if ($r->convoc_sent != 1 && (user_access('gest_sessions gbb')|| user_access('gest_1d gbb')) ) {
     $form['f']['en_attente'] = array(
       '#type' => 'checkbox',
       '#title' => variable_get('ico_attente') .
@@ -1278,7 +1450,7 @@ function gbb_sess_edition($form, $form_state, $args) {
       '#suffix' => '</div>&nbsp;',
     );
 
-  if (user_access('gest_convocs gbb')) {
+  if (user_access('gest_convocs gbb')||user_access('gest_1d gbb') ) {
     $form['f']['convoc_sent'] = array(
       '#type' => 'checkbox',
       '#title' => t('Convoc envoyée'),

@@ -37,13 +37,13 @@ function gbb_liste_view($args = 'NaN') {
  */
 function gbb_atraiter_view($args = 'NaN') {
   // Charge la feuille des style et les fichiers javascript pour le module
-  drupal_add_css(drupal_get_path('module', 'gbb') . '/css/gbb.css', 
+  drupal_add_css(drupal_get_path('module', 'gbb') . '/css/gbb.css',
     array('group' => CSS_SYSTEM -1 , 'preprocess' => FALSE));
   drupal_add_library('system', 'drupal.collapse');
 
   // Construction de la page
   $build = array();
-  drupal_add_js(drupal_get_path('module', 'gbb') . '/js/jquery.dataTables.js', 
+  drupal_add_js(drupal_get_path('module', 'gbb') . '/js/jquery.dataTables.js',
     array('group' => CSS_DEFAULT, 'every_page' => TRUE));
   drupal_add_js(drupal_get_path('module', 'gbb') . '/js/jquery.dataTables.load.js',
     array('group' => CSS_DEFAULT, 'every_page' => TRUE));
@@ -53,20 +53,20 @@ function gbb_atraiter_view($args = 'NaN') {
 }
 
 /**
- * Formulaire de ** CHOIX D'UN FORMATEUR OU D'UNE ORIENTATION ** 
+ * Formulaire de ** CHOIX D'UN FORMATEUR OU D'UNE ORIENTATION **
  */
 function gbb_atraiter_choix($form, &$form_state, $args) {
 
   $query = db_select('gbb_gdire', 'j');
-  $query ->rightjoin('gbb_gdisp', 's', 
+  $query ->rightjoin('gbb_gdisp', 's',
     'j.co_disp=s.co_disp AND j.co_degre=s.co_degre');
-  $query ->join('gbb_gresp', 'r', 
+  $query ->join('gbb_gresp', 'r',
     'j.co_resp=r.co_resp AND j.co_degre=r.co_degre');
   $query ->condition('j.co_degre', 2, '=')
     ->condition('s.id_disp' , '15' . '%', 'LIKE')
     ->fields('j', array('co_resp'))
     ->fields('r', array('nomu'));
-  if (arg(3) != 0) { 
+  if (arg(3) != 0) {
     // si un co_tres est spécifié : on trie dessus
     $query->condition('j.co_tres' , 2, '=');
   }
@@ -130,7 +130,7 @@ function gbb_atraiter_choix_submit($form, &$form_state) {
   if ($nomu=="TOUS") { $nomu = "";};
   $url = url('atraiter',
     array('query' => array(
-      'nomu' => $nomu), 
+      'nomu' => $nomu),
     'absolute' => TRUE)
   );
   $form_state['redirect'] = $url;
@@ -495,6 +495,20 @@ function gbb_liste_stages_liste($args) {
           ->condition('s.convoc_sent', '1', '=');
         $nb_s = $qs->execute()->rowCount();
 
+        $qs = db_select('gbb_session', 's');
+        $qs ->fields('s', array('sess_id'))
+          ->condition('s.co_degre', arg(2), '=')
+          ->condition('s.co_modu', $r->co_modu, '=')
+          ->condition('s.convoc_sent', '2', '=');
+        $nb_fs = $qs->execute()->rowCount();
+
+        $qs = db_select('gbb_session', 's');
+        $qs ->fields('s', array('sess_id'))
+          ->condition('s.co_degre', arg(2), '=')
+          ->condition('s.co_modu', $r->co_modu, '=')
+          ->condition('s.convoc_sent', '2', '=');
+        $nb_ss = $qs->execute()->rowCount();
+
         $qsa = db_select('gbb_session', 's');
         $qsa ->fields('s', array('sess_id'))
           ->condition('s.co_degre', arg(2), '=')
@@ -541,6 +555,8 @@ function gbb_liste_stages_liste($args) {
         $module_printed = ($r->module_printed)? variable_get('ico_print') : '';
         $prioritaire = (!$r->prioritaire)? '' : variable_get('ico_bell');
         $convoc_sent = ($nb_s == 0)? '' : variable_get('ico_sent')."<span class=\"fa green\">$nb_s</span> ";
+        $convoc_formsent = ($nb_fs == 0)? '' : variable_get('ico_formsent')."<span class=\"fa yellow\">$nb_fs</span> ";
+        $convoc_stagsent = ($nb_ss == 0)? '' : variable_get('ico_stagsent')."<span class=\"fa pink\">$nb_ss</span> ";
         $rsp = db_select('gbb_gdire', 'd');
         $rsp ->fields('d', array('co_resp', 'co_tres', 'co_modu'))
           ->condition('d.co_degre', arg(2), '=')
@@ -614,7 +630,7 @@ function gbb_liste_stages_liste($args) {
             };
           };
         };
-        $organisation = (strlen($r->organisation)>0) ? variable_get('ico_organisation') : variable_get('ico_organisation-o'); 
+        $organisation = (strlen($r->organisation)>0) ? variable_get('ico_organisation') : variable_get('ico_organisation-o');
         // La liste des sessions pour le module
         $qf = db_select('gbb_session', 's');
         $qf ->leftjoin('gbb_gresp_dafor', 'r',
@@ -645,6 +661,8 @@ function gbb_liste_stages_liste($args) {
             'data' => //$attachement .
             $module_printed .
             $convoc_sent .
+            $convoc_formsent .
+            $convoc_stagsent .
             $session_alert .
             $NOT_en_attente .
             $en_attente .

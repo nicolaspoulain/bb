@@ -60,12 +60,69 @@ function gbb_permission() {
       'description' => t('Autorise à marquer comme imprimées ou envoyées les'
       . 'convocations.'),
       ),
+
+    'bb cadre organisation' => array(
+      'title' => t('Cadre Organisation'),
+      'description' => t('Voir le cadre Organisation'),
+      ),
+    'bb session stagiaire' => array(
+      'title' => t('Cadre sessions stagiaire'),
+      'description' => t('Voir le cadre avec la liste des sessiosn stagiaires'),
+      ),
+    'bb cadre fichiers admin' => array(
+      'title' => t('Cadre Fichiers -> service admin'),
+      'description' => t('Voir le cadre fichiers à destination du service administratifif'),
+      ),
+    'bb cadre fichiers cons' => array(
+      'title' => t('Cadre Fichiers -> conseillers'),
+      'description' => t('Voir le cadre fichiers à destination des conseillers'),
+      ),
+    'bb crea session' => array(
+      'title' => t('Gérer des sessions'),
+      'description' => t('Gérer des sessions'),
+      ),
+    'bb crea convocs' => array(
+      'title' => t('Gérer des convocations'),
+      'description' => t('Gérer des convocations'),
+      ),
+    'bb crea convocs special' => array(
+      'title' => t('Gérer des convocations special'),
+      'description' => t('Gérer des convocations special'),
+      ),
+
+
+    'gest_1d gbb' => array(
+      'title' => t('Gérer les stages 1D'),
+      'description' => t('Autorise à igérer les sessions et les convocations'
+      . 'convocations.'),
+      ),
     'gest_etablissements gbb' => array(
       'title' => t('Ajouter un établissement dans la base de données'),
       'description' => t('Permet de modifier le RNE (l\'identifiant), le nom et'
       . 'le sigle. Les autres données sont modifiables par tous.'),
       ),
   );
+}
+
+function gbb_block_info() {
+  $blocks['TAZ'] = array(
+    // info: The name of the block.
+    'info' => t('TAZ'),
+  );
+
+  return $blocks;
+}
+
+function gbb_block_view($delta = '') {
+  // The $delta parameter tells us which block is being requested.
+  switch ($delta) {
+    case 'TAZ':
+      // Create your block content here
+      $block['subject'] = t('--');
+      $block['content'] = '--';
+    break;
+  }
+  return $block;
 }
 
 /**
@@ -308,6 +365,8 @@ variable_set('ico_attente',    '<i class="fa fa-pause" title="En attente : ne pa
 variable_set('ico_print',      '<i class="fa fa-print green" title="Imprimé par le service administratif"></i> ');
 variable_set('agenda',       '<i class="fa fa-calendar fa-lg green" title="Agenda général"></i> ');
 variable_set('ico_bell',       '<i class="fa fa-bell orange" title="Prioritaire"></i> ');
+variable_set('ico_formsent',       '<span class="fa-stack" title="La convocation formateur pour cette session a été envoyée"><i class="fa fa-user-circle-o fa-stack-1x yellow"></i><i class="fa fa-envelope-open-o fa-stack-2x"></i></span></i>' );
+variable_set('ico_stagsent',       '<span class="fa-stack" title="La convocation stagiaire pour cette session a été envoyée"><i class="fa fa-users fa-stack-1x pink"></i><i class="fa fa-envelope-open-o fa-stack-2x"></i></span></i>' );
 variable_set('ico_sent',       '<i class="fa fa-envelope green" title="La convocation pour cette session a été envoyée"></i>' );
 variable_set('ico_clockGreen', '<i class="fa fa-clock-o fa-lg green" title="Première date dans plus de 15 jours"></i> ');
 variable_set('ico_clockOrange','<i class="fa fa-clock-o fa-lg orange" title="Première date dans moins de 15 jours"></i> ');

@@ -104,7 +104,7 @@ function gbb_formateur_fiche($form, &$form_state) {
   $query = db_select('gbb_gresp_dafor', 'r');
   $query ->leftjoin('gbb_gresp_plus', 'rp', 'r.co_resp=rp.co_resp');
   $query ->condition('r.co_resp', arg(1), '=')
-         ->fields('r',  array('co_resp', 
+         ->fields('r',  array('co_resp',
                               'nomu',
                               'prenom',
                               'mel',
@@ -307,11 +307,11 @@ function gbb_formateur_stages_before($args) {
   if (arg(1) == 'add') return "";
 
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
   $query ->leftjoin('gbb_gresp_plus', 'r',  'r.co_resp = s.co_resp');
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
@@ -325,10 +325,10 @@ function gbb_formateur_stages_before($args) {
 
   //**** les vacations **************
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
@@ -341,10 +341,10 @@ function gbb_formateur_stages_before($args) {
 
   //**** la decharge **************
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
@@ -408,16 +408,16 @@ function gbb_formateur_stages_before($args) {
 function gbb_formateur_stages($args) {
 
 
-  $annee = '16';
+  $annee = '17';
   if ($args == 'NaN') return "Vide";
   if (arg(1) == 'add') return "";
 
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
   $query ->leftjoin('gbb_gresp_plus', 'r',  'r.co_resp = s.co_resp');
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
@@ -431,10 +431,10 @@ function gbb_formateur_stages($args) {
 
   //**** les vacations **************
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
@@ -447,10 +447,10 @@ function gbb_formateur_stages($args) {
 
   //**** la decharge **************
   $query = db_select('gbb_session', 's');
-  $query ->leftjoin('gbb_gmodu', 'm', 
+  $query ->leftjoin('gbb_gmodu', 'm',
                     'm.co_modu = s.co_modu AND m.co_degre = s.co_degre'
            );
-  $query ->leftjoin('gbb_gdisp', 'd', 
+  $query ->leftjoin('gbb_gdisp', 'd',
                     'd.co_disp = m.co_disp AND d.co_degre = s.co_degre'
            );
   $query ->condition('s.co_resp', arg(1), '=')
