@@ -269,7 +269,7 @@ function gbb_liste_stages_choix($form, &$form_state, $args) {
   );
 
   $periode = array(
-    09 => '2009-2010',
+    9 => '2009-2010',
     10 => '2010-2011',
     11 => '2011-2012',
     12 => '2012-2013',

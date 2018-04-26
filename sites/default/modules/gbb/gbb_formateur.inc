@@ -442,7 +442,8 @@ function gbb_formateur_stages($args) {
          ->condition('s.type_paiement', 'VAC', 'LIKE')
          ->condition('id_disp', db_like($annee) . '%', 'LIKE')
          ->distinct();
-  $query ->addExpression('SUM(duree_a_payer)', 'sumapayervac');
+  // $query ->addExpression('SUM(duree_a_payer)', 'sumapayervac');
+  $query ->addExpression('SUM(duree_prevue)', 'sumprevuevac');
   $r2 = $query->execute()->fetchObject();
 
   //**** la decharge **************
@@ -458,7 +459,8 @@ function gbb_formateur_stages($args) {
          ->condition('s.type_paiement', 'DECH', 'LIKE')
          ->condition('id_disp', db_like($annee) . '%', 'LIKE')
          ->distinct();
-  $query ->addExpression('SUM(duree_a_payer)', 'sumapayerdec');
+  // $query ->addExpression('SUM(duree_a_payer)', 'sumapayerdec');
+  $query ->addExpression('SUM(duree_prevue)', 'sumprevuedec');
   $r3 = $query->execute()->fetchObject();
 
   //_________________________
@@ -471,37 +473,34 @@ function gbb_formateur_stages($args) {
     );
     $chart['decharge'] = array(
       '#type' => 'chart_data',
-      '#data' => array(27*$r->decharge,0,0),
-      '#title' => t(' '),
-      '#suffix' => 'h',
-    );
-    $chart['Prevue'] = array(
-      '#type' => 'chart_data',
-      '#data' => array(0, $r->sumprevue, 0),
-      '#title' => t(' '),
+      '#data' => array(27*$r->decharge,0),
+      '#title' => t('déch'),
       '#suffix' => 'h',
     );
     $chart['ApayerDech'] = array(
       '#type' => 'chart_data',
       '#title' => t('en déch.'),
-      '#data' => array(0, 0, $r3->sumapayerdec),
+      // '#data' => array(0, 0, $r3->sumapayerdec),
+      '#data' => array(0, $r3->sumprevuedec),
       '#suffix' => 'h',
     );
     $chart['ApayerVac'] = array(
       '#type' => 'chart_data',
       '#title' => t('en vac.'),
-      '#data' => array(0, 0, $r2->sumapayervac),
+      // '#data' => array(0, 0, $r2->sumapayervac),
+      '#data' => array(0, $r2->sumprevuevac),
       '#suffix' => 'h',
     );
     $chart['ApayerAutres'] = array(
       '#type' => 'chart_data',
-      '#data' => array(0, 0, $r->sumapayer-$r3->sumapayerdec-$r2->sumapayervac),
+      // '#data' => array(0, 0, $r->sumapayer-$r3->sumapayerdec-$r2->sumapayervac),
+      '#data' => array(0, $r->sumprevue-$r3->sumprevuedec-$r2->sumprevuevac),
       '#title' => t('autres'),
       '#suffix' => 'h',
     );
     $chart['xaxis'] = array(
       '#type' => 'chart_xaxis',
-      '#labels' => array('Décharge', 'Durée à payer', 'Durée payée'),
+      '#labels' => array('Décharge', 'Durée à payer'),
       '#suffix' => 'h',
     );
     $output = drupal_render($chart);

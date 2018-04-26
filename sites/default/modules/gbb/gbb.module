@@ -155,6 +155,14 @@ function gbb_menu() {
         'file' => 'gbb_liste_stages.inc',
   );
 
+  $items['atraiter1D'] = array(
+        'title' => '',
+        'page callback' => 'gbb_atraiter_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_liste_stages.inc',
+  );
+
   // Etant donné un co_degré (1 ou 2)
   // Affiche la page de gestion du module co_modu
   //   exemple : module/2/26142
@@ -236,6 +244,17 @@ function gbb_menu() {
         'access arguments' => array('stable gbb'),
         'type' => MENU_CALLBACK,
         'file' => 'gbb_offres.inc',
+      );
+
+  // Tableau permettant la Saisie des info compléméntaires
+  // concernant les offres
+
+  $items['plan_edit'] = array(
+        'title' => '',
+        'page callback' => 'gbb_plan_view',
+        'access arguments' => array('stable gbb'),
+        'type' => MENU_CALLBACK,
+        'file' => 'gbb_plan.inc',
       );
 
   // Saisie de la classification d'un module du plan
@@ -363,6 +382,7 @@ variable_set('ico_alert',      '<i class="fa fa-flag fa-lg red" title="Alerte à
 variable_set('ico_notAttente', '<i class="fa fa-play-circle fa-lg blue" title="Demande de préparation des convocations"></i>');
 variable_set('ico_attente',    '<i class="fa fa-pause" title="En attente : ne pas préparer les convocations pour le moment"></i>');
 variable_set('ico_print',      '<i class="fa fa-print green" title="Imprimé par le service administratif"></i> ');
+variable_set('encours',       '<i class="fa fa-cogs fa-lg green" title="Agenda général"></i> ');
 variable_set('agenda',       '<i class="fa fa-calendar fa-lg green" title="Agenda général"></i> ');
 variable_set('ico_bell',       '<i class="fa fa-bell orange" title="Prioritaire"></i> ');
 variable_set('ico_formsent',       '<span class="fa-stack" title="La convocation formateur pour cette session a été envoyée"><i class="fa fa-user-circle-o fa-stack-1x yellow"></i><i class="fa fa-envelope-open-o fa-stack-2x"></i></span></i>' );

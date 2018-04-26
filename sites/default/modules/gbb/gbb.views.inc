@@ -301,6 +301,104 @@ function gbb_views_data() {
   );
 
   // --------------------------------------------------------
+  // GBB_NOBJT
+  // --------------------------------------------------------
+
+  $data['gbb_nobjt']['table'] = array(
+    'group' => t('gbb_nobjt'),
+    'join' => array(
+      'gbb_gmodu' => array(
+        #'table' => 'taxonomy_term_data',
+        'left_table' => 'gbb_gdisp',
+        'left_field' => 'co_objt',
+        'field' => 'co_objt',
+      ),
+    ),
+  );
+  $data['gbb_nobjt']['lib_court'] = array(
+    'title' => t('nobjt.lib_court'),
+    'help' => t('Objectif : libellé court'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_objt']['lib_long'] = array(
+    'title' => t('nobjt.lib_long'),
+    'help' => t('Objectif : libellé long'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+
+  // --------------------------------------------------------
+  // GBB_NMODA
+  // --------------------------------------------------------
+  $data['gbb_nmoda2']['table'] = array(
+    'group' => t('gbb_nmoda2'),
+    'join' => array(
+      'gbb_gdiof' => array(
+        'table' => 'gbb_nmoda',
+        'left_table' => 'gbb_gmoof',
+        'left_field' => 'co_moda',
+        'field' => 'co_moda',
+      ),
+    ),
+  );
+
+  $data['gbb_nmoda2']['lib_court'] = array(
+    'title' => t('lib_court'),
+    'help' => t('Libellé du contenu (court)'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+  $data['gbb_nmoda']['table'] = array(
+    'group' => t('gbb_gmodu'),
+    'join' => array(
+      'gbb_gmodu' => array(
+        'left_field' => 'co_moda',
+        'field' => 'co_moda',
+      ),
+    ),
+  );
+  $data['gbb_nmoda']['lib_court'] = array(
+    'title' => t('nmoda.lib_court'),
+    'help' => t('Modalité : libellé court'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+  $data['gbb_nmoda']['lib_long'] = array(
+    'title' => t('nmoda.lib_long'),
+    'help' => t('Modalité : libellé long'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+  // --------------------------------------------------------
   // GBB_NPRAC
   // --------------------------------------------------------
 
@@ -1409,6 +1507,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gdisp']['co_objt'] = array(
+    'title' => t('co_objt'),
+    'help' => t('Code de l objectif'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gdisp']['co_tcan'] = array(
     'title' => t('co_tcan'),
     'help' => t('Code du type de candidature'),
@@ -1552,8 +1661,36 @@ function gbb_views_data() {
 
 
   // --------------------------------------------------------
+  // GBB_NOBJT
+  // --------------------------------------------------------
+
+  $data['gbb_nobjt2']['table'] = array(
+    'group' => t('gbb_nobjt2'),
+    'join' => array(
+      'gbb_gdiof' => array(
+        'table' => 'gbb_nobjt',
+        'left_field' => 'co_objt',
+        'field' => 'co_objt',
+      ),
+    ),
+  );
+  $data['gbb_nobjt2']['lib_long'] = array(
+    'title' => t('lib_long'),
+    'help' => t('Orientation libellé long'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
+
+
+  // --------------------------------------------------------
   // GBB_NORIE
   // --------------------------------------------------------
+
 
   $data['gbb_norie2']['table'] = array(
     'group' => t('gbb_norie2'),
@@ -2194,6 +2331,17 @@ function gbb_views_data() {
     'filter' => array('handler' => 'views_handler_filter_string'),
     'argument' => array('handler' => 'views_handler_argument_string'),
   );
+  $data['gbb_gdiof']['co_objt'] = array(
+    'title' => t('co_objt'),
+    'help' => t('Code de l objectif'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['gbb_gdiof']['co_orie'] = array(
     'title' => t('co_orie'),
     'help' => t('Code orientation'),
@@ -2237,6 +2385,17 @@ function gbb_views_data() {
     'sort' => array('handler' => 'views_handler_sort'),
     'filter' => array('handler' => 'views_handler_filter_numeric'),
     'argument' => array('handler' => 'views_handler_argument_numeric'),
+  );
+  $data['gbb_gdiof']['co_offreur'] = array(
+    'title' => t('co_offreur'),
+    'help' => t('Code offreur'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
   );
 
   // --------------------------------------------------------

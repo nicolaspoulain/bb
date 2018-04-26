@@ -11,7 +11,7 @@
  * affichant une liste de responsables et les stages qui leur
  * associes
  */
-function gbb_offres_view($args = 'NaN') {
+function gbb_plan_view($args = 'NaN') {
   // Charge la feuille des style et les fichiers javascript pour le module
   drupal_add_css(drupal_get_path('module', 'gbb') . '/css/gbb.css',
                  array('group' => CSS_SYSTEM -1 , 'preprocess' => FALSE));
@@ -19,13 +19,13 @@ function gbb_offres_view($args = 'NaN') {
 
   // Construction de la page
   $build = array();
-  $build['search'] = render(drupal_get_form('gbb_offres_filter',$args));
-  $build['tab'] = gbb_offres_tab($args);
+  $build['search'] = render(drupal_get_form('gbb_plan_filter',$args));
+  $build['tab'] = gbb_plan_tab($args);
 
   return implode('', $build);
 }
 
-function gbb_offres_filter($form, &$form_state, $args) {
+function gbb_plan_filter($form, &$form_state, $args) {
   $form['#method'] = 'get';
   $form['f'] = array(
     '#type' => 'fieldset',
@@ -83,7 +83,7 @@ function gbb_offres_filter($form, &$form_state, $args) {
 /**
  * ----> Submit
  */
-function gbb_offres_filter_submit($form, &$form_state) {
+function gbb_plan_filter_submit($form, &$form_state) {
 
   $form_state['redirect'] = array(
     // $path
@@ -95,7 +95,7 @@ function gbb_offres_filter_submit($form, &$form_state) {
 
 
 
-function gbb_offres_tab($args) {
+function gbb_plan_tab($args) {
 
   $header = array(
     'nomu' => t('Interlocuteur dispo'),
@@ -170,38 +170,38 @@ function gbb_offres_tab($args) {
 
   $rows = array();
   foreach ($result as $r) {
-    $hp = render(drupal_get_form('gbb_offres_nb_hp_form',
+    $hp = render(drupal_get_form('gbb_plan_nb_hp_form',
                                 $r->nb_hp, $r->co_omodu)) ;
-    $vac = render(drupal_get_form('gbb_offres_nb_vac_form',
+    $vac = render(drupal_get_form('gbb_plan_nb_vac_form',
                                 $r->nb_vac, $r->co_omodu)) ;
-    $taux = render(drupal_get_form('gbb_offres_taux_form',
+    $taux = render(drupal_get_form('gbb_plan_taux_form',
                                 $r->taux, $r->co_omodu)) ;
-    $ht2 = render(drupal_get_form('gbb_offres_ht2_form',
+    $ht2 = render(drupal_get_form('gbb_plan_ht2_form',
                                 $r->ht2, $r->co_omodu)) ;
-    $prio_nat = render(drupal_get_form('gbb_offres_prio_nat_form',
+    $prio_nat = render(drupal_get_form('gbb_plan_prio_nat_form',
                                 $r->prio_nat, $r->co_omodu)) ;
-    $prio_aca = render(drupal_get_form('gbb_offres_prio_aca_form',
+    $prio_aca = render(drupal_get_form('gbb_plan_prio_aca_form',
                                 $r->prio_aca, $r->co_omodu)) ;
-    $offre_new = render(drupal_get_form('gbb_offres_offre_new_form',
+    $offre_new = render(drupal_get_form('gbb_plan_offre_new_form',
                                 $r->offre_new, $r->co_omodu)) ;
-    $comment = render(drupal_get_form('gbb_offres_comment_form',
+    $comment = render(drupal_get_form('gbb_plan_comment_form',
                                 $r->comment, $r->co_omodu)) ;
 
-    $position = render(drupal_get_form('gbb_offres_position_form',
+    $position = render(drupal_get_form('gbb_plan_position_form',
                                 $r->position, $r->co_omodu)) ;
-    $catOffre = render(drupal_get_form('gbb_offres_categories_form',
+    $catOffre = render(drupal_get_form('gbb_plan_categories_form',
                                 $r->offre_cat, $r->co_omodu)) ;
-    $interdisc = render(drupal_get_form('gbb_offres_interdisc_form',
+    $interdisc = render(drupal_get_form('gbb_plan_interdisc_form',
                                 $r->interdisc, $r->co_omodu)) ;
-    $iufm = render(drupal_get_form('gbb_offres_iufm_form',
+    $iufm = render(drupal_get_form('gbb_plan_iufm_form',
                                 $r->iufm, $r->co_omodu)) ;
-    $nouv_offreur = render(drupal_get_form('gbb_offres_nouv_offreur_form',
+    $nouv_offreur = render(drupal_get_form('gbb_plan_nouv_offreur_form',
                                 $r->nouv_offreur, $r->co_omodu)) ;
-    $pub_des = render(drupal_get_form('gbb_offres_pub_des_form',
+    $pub_des = render(drupal_get_form('gbb_plan_pub_des_form',
                                 $r->pub_des, $r->co_omodu)) ;
-    $anim_peda = render(drupal_get_form('gbb_offres_anim_peda_form',
+    $anim_peda = render(drupal_get_form('gbb_plan_anim_peda_form',
                                 $r->anim_peda, $r->co_omodu)) ;
-    $foad= render(drupal_get_form('gbb_offres_foad_form',
+    $foad= render(drupal_get_form('gbb_plan_foad_form',
                                 $r->foad, $r->co_omodu)) ;
 
     $rows[] = array(
@@ -247,17 +247,17 @@ function gbb_offres_tab($args) {
   return $output . theme('pager', array('tags' => array()));
 }
 
-function gbb_offres_nb_hp_form($form, &$form_state, $nb_hp, $co_omodu) {
+function gbb_plan_nb_hp_form($form, &$form_state, $nb_hp, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_hp'] = array(
     '#type' => 'textfield', '#size' => 3,
     '#default_value' => (isset($nb_hp))? (int)$nb_hp: '0',
     '#ajax' => array(
-      'callback' => 'gbb_offres_nb_hp_form_submit',
+      'callback' => 'gbb_plan_nb_hp_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_nb_hp_form_submit($form, &$form_state) {
+function gbb_plan_nb_hp_form_submit($form, &$form_state) {
   $val = is_numeric($form_state['values']['nb_hp'])? $form_state['values']['nb_hp']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
@@ -265,17 +265,17 @@ function gbb_offres_nb_hp_form_submit($form, &$form_state) {
   ))->execute();
 }
 
-function gbb_offres_position_form($form, &$form_state, $position, $co_omodu) {
+function gbb_plan_position_form($form, &$form_state, $position, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['position'] = array(
     '#type' => 'textfield', '#size' => 4,
     '#default_value' => (isset($position))? (int)$position : '0',
     '#ajax' => array(
-      'callback' => 'gbb_offres_position_form_submit',
+      'callback' => 'gbb_plan_position_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_position_form_submit($form, &$form_state) {
+function gbb_plan_position_form_submit($form, &$form_state) {
   $val = is_numeric($form_state['values']['position'])? $form_state['values']['position']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
@@ -283,17 +283,17 @@ function gbb_offres_position_form_submit($form, &$form_state) {
   ))->execute();
 }
 
-function gbb_offres_nb_vac_form($form, &$form_state, $nb_vac, $co_omodu) {
+function gbb_plan_nb_vac_form($form, &$form_state, $nb_vac, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nb_vac'] = array(
     '#type' => 'textfield', '#size' => 3,
     '#default_value' => (isset($nb_vac))? (int)$nb_vac: '0',
     '#ajax' => array(
-      'callback' => 'gbb_offres_nb_vac_form_submit',
+      'callback' => 'gbb_plan_nb_vac_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_nb_vac_form_submit($form, &$form_state) {
+function gbb_plan_nb_vac_form_submit($form, &$form_state) {
   $val = is_numeric($form_state['values']['nb_vac'])? $form_state['values']['nb_vac']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
@@ -301,35 +301,35 @@ function gbb_offres_nb_vac_form_submit($form, &$form_state) {
   ))->execute();
 }
 
-function gbb_offres_taux_form($form, &$form_state, $taux, $co_omodu) {
+function gbb_plan_taux_form($form, &$form_state, $taux, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['taux'] = array(
     '#type' => 'select',
     '#options' => array('0'=>'0','27'=>'27','32'=>'32','35'=>'35','42'=>'42','52'=>'52','56'=>'56','59'=>'59','70'=>'70'),
     '#default_value' => (int)$taux,
     '#ajax' => array(
-      'callback' => 'gbb_offres_taux_form_submit',
+      'callback' => 'gbb_plan_taux_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_taux_form_submit($form, &$form_state) {
+function gbb_plan_taux_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('taux'  => $form_state['values']['taux'],
   ))->execute();
 }
 
-function gbb_offres_ht2_form($form, &$form_state, $ht2, $co_omodu) {
+function gbb_plan_ht2_form($form, &$form_state, $ht2, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['ht2'] = array(
     '#type' => 'textfield', '#size' => 4,
     '#default_value' => (isset($ht2))? (int)$ht2: '0',
     '#ajax' => array(
-      'callback' => 'gbb_offres_ht2_form_submit',
+      'callback' => 'gbb_plan_ht2_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_ht2_form_submit($form, &$form_state) {
+function gbb_plan_ht2_form_submit($form, &$form_state) {
   $val = is_numeric($form_state['values']['ht2'])? $form_state['values']['ht2']:0;
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
@@ -337,104 +337,94 @@ function gbb_offres_ht2_form_submit($form, &$form_state) {
   ))->execute();
 }
 
-function gbb_offres_hors_cdc_form($form, &$form_state, $hors_cdc, $co_omodu) {
+function gbb_plan_hors_cdc_form($form, &$form_state, $hors_cdc, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['hors_cdc'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $hors_cdc,
     '#ajax' => array(
-      'callback' => 'gbb_offres_hors_cdc_form_submit',
+      'callback' => 'gbb_plan_hors_cdc_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_hors_cdc_form_submit($form, &$form_state) {
+function gbb_plan_hors_cdc_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('hors_cdc'  => $form_state['values']['hors_cdc'],
   ))->execute();
 }
 
-function gbb_offres_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
+function gbb_plan_prio_nat_form($form, &$form_state, $prio_nat, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_nat'] = array(
-    '#type' => 'checkbox', '#size' => 1,
-    '#default_value' => $prio_nat,
-    '#ajax' => array(
-      'callback' => 'gbb_offres_prio_nat_form_submit',
-      'progress' => array('type' => 'throbber', 'message' => '')),);
+    '#type' => 'select',
+    '#options' => array('0'=>'-',
+    '1'=>'1','2'=>'2','3'=>'3',
+    '4'=>'4','5'=>'5','6'=>'6','7'=>'7',
+    '8'=>'8','9'=>'9','10'=>'10','11'=>'11','12'=>'12',));
   return $form;
 }
-function gbb_offres_prio_nat_form_submit($form, &$form_state) {
+function gbb_plan_prio_nat_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('prio_nat'  => $form_state['values']['prio_nat'],
   ))->execute();
 }
 
-function gbb_offres_prio_aca_form($form, &$form_state, $prio_aca, $co_omodu) {
+function gbb_plan_prio_aca_form($form, &$form_state, $prio_aca, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['prio_aca'] = array(
     '#type' => 'select',
-    '#options' => array('0'=>'-',
-    '11'=>'11',
-    '12'=>'12',
-    '13'=>'13',
-    '21'=>'21',
-    '22'=>'22',
-    '23'=>'23',
-    '24'=>'24',
-    '31'=>'31',
-    '32'=>'32',
-    '33'=>'33',),
+    '#options' => array('-','11','12','13','21','22','23','24','31','32','33',),
     '#default_value' => (is_numeric($prio_aca)? $prio_aca : '0'),
     '#ajax' => array(
-      'callback' => 'gbb_offres_prio_aca_form_submit',
+      'callback' => 'gbb_plan_prio_aca_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_prio_aca_form_submit($form, &$form_state) {
+function gbb_plan_prio_aca_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('prio_aca'  => $form_state['values']['prio_aca'],
   ))->execute();
 }
 
-function gbb_offres_offre_new_form($form, &$form_state, $offre_new, $co_omodu) {
+function gbb_plan_offre_new_form($form, &$form_state, $offre_new, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['offre_new'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $offre_new,
     '#ajax' => array(
-      'callback' => 'gbb_offres_offre_new_form_submit',
+      'callback' => 'gbb_plan_offre_new_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_offre_new_form_submit($form, &$form_state) {
+function gbb_plan_offre_new_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('offre_new'  => $form_state['values']['offre_new'],
   ))->execute();
 }
 
-function gbb_offres_comment_form($form, &$form_state, $comment, $co_omodu) {
+function gbb_plan_comment_form($form, &$form_state, $comment, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['comment'] = array(
     '#type' => 'textarea',
     '#cols' => 20, '#rows' => 2,
     '#default_value' => $comment,
     '#ajax' => array(
-      'callback' => 'gbb_offres_comment_form_submit',
+      'callback' => 'gbb_plan_comment_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_comment_form_submit($form, &$form_state) {
+function gbb_plan_comment_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('comment' => $form_state['values']['comment'],
   ))->execute();
 }
 
-function gbb_offres_categories_form($form, &$form_state, $offre_cat, $co_omodu) {
+function gbb_plan_categories_form($form, &$form_state, $offre_cat, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['offre_cat'] = array(
     '#type' => 'checkbox', '#size' => 1,
@@ -443,17 +433,17 @@ function gbb_offres_categories_form($form, &$form_state, $offre_cat, $co_omodu) 
                   // 'Recond'=>'Reconduction','OffreNouv'=>'Offre nouvelle'),
     '#default_value' => $offre_cat,
     '#ajax' => array(
-      'callback' => 'gbb_offres_categories_form_submit',
+      'callback' => 'gbb_plan_categories_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_categories_form_submit($formV, &$form_state) {
+function gbb_plan_categories_form_submit($formV, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('offre_cat'  => $form_state['values']['offre_cat'],
   ))->execute();
 }
-function gbb_offres_interdisc_form($form, &$form_state, $interdisc, $co_omodu) {
+function gbb_plan_interdisc_form($form, &$form_state, $interdisc, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['interdisc'] = array(
     #'#type' => 'checkbox', '#size' => 1,
@@ -462,17 +452,17 @@ function gbb_offres_interdisc_form($form, &$form_state, $interdisc, $co_omodu) {
                   'humanites'=>'Humanités','autres'=>'Autres'),
     '#default_value' => $interdisc,
     '#ajax' => array(
-      'callback' => 'gbb_offres_interdisc_form_submit',
+      'callback' => 'gbb_plan_interdisc_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_interdisc_form_submit($formV, &$form_state) {
+function gbb_plan_interdisc_form_submit($formV, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('interdisc'  => $form_state['values']['interdisc'],
   ))->execute();
 }
-function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
+function gbb_plan_iufm_form($form, &$form_state, $iufm, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['iufm'] = array(
     #'#type' => 'checkbox', '#size' => 1,
@@ -484,11 +474,11 @@ function gbb_offres_iufm_form($form, &$form_state, $iufm, $co_omodu) {
                   'Autres.'=>'Autres org'),
     '#default_value' => $iufm,
     '#ajax' => array(
-      'callback' => 'gbb_offres_iufm_form_submit',
+      'callback' => 'gbb_plan_iufm_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_iufm_form_submit($formV, &$form_state) {
+function gbb_plan_iufm_form_submit($formV, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('iufm'  => $form_state['values']['iufm'],
@@ -496,17 +486,17 @@ function gbb_offres_iufm_form_submit($formV, &$form_state) {
 }
 
 
-function gbb_offres_nouv_offreur_form($form, &$form_state, $nouv_offreur, $co_omodu) {
+function gbb_plan_nouv_offreur_form($form, &$form_state, $nouv_offreur, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['nouv_offreur'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $nouv_offreur,
     '#ajax' => array(
-      'callback' => 'gbb_offres_nouv_offreur_form_submit',
+      'callback' => 'gbb_plan_nouv_offreur_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_nouv_offreur_form_submit($form, &$form_state) {
+function gbb_plan_nouv_offreur_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('nouv_offreur'  => $form_state['values']['nouv_offreur'],
@@ -514,17 +504,17 @@ function gbb_offres_nouv_offreur_form_submit($form, &$form_state) {
 }
 
 
-function gbb_offres_pub_des_form($form, &$form_state, $pub_des, $co_omodu) {
+function gbb_plan_pub_des_form($form, &$form_state, $pub_des, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['pub_des'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $pub_des,
     '#ajax' => array(
-      'callback' => 'gbb_offres_pub_des_form_submit',
+      'callback' => 'gbb_plan_pub_des_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_pub_des_form_submit($form, &$form_state) {
+function gbb_plan_pub_des_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('pub_des'  => $form_state['values']['pub_des'],
@@ -532,34 +522,34 @@ function gbb_offres_pub_des_form_submit($form, &$form_state) {
 }
 
 
-function gbb_offres_anim_peda_form($form, &$form_state, $anim_peda, $co_omodu) {
+function gbb_plan_anim_peda_form($form, &$form_state, $anim_peda, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['anim_peda'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $anim_peda,
     '#ajax' => array(
-      'callback' => 'gbb_offres_anim_peda_form_submit',
+      'callback' => 'gbb_plan_anim_peda_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_anim_peda_form_submit($form, &$form_state) {
+function gbb_plan_anim_peda_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('anim_peda'  => $form_state['values']['anim_peda'],
   ))->execute();
 }
 
-function gbb_offres_foad_form($form, &$form_state, $foad, $co_omodu) {
+function gbb_plan_foad_form($form, &$form_state, $foad, $co_omodu) {
   $form['f']['co_omodu']  = array('#type' => 'hidden','#value' => $co_omodu );
   $form['f']['foad'] = array(
     '#type' => 'checkbox', '#size' => 1,
     '#default_value' => $foad,
     '#ajax' => array(
-      'callback' => 'gbb_offres_foad_form_submit',
+      'callback' => 'gbb_plan_foad_form_submit',
       'progress' => array('type' => 'throbber', 'message' => '')),);
   return $form;
 }
-function gbb_offres_foad_form_submit($form, &$form_state) {
+function gbb_plan_foad_form_submit($form, &$form_state) {
   db_merge('gbb_gdiof_dafor')
     ->key(array('co_omodu' => $form_state['values']['co_omodu']))
     ->fields(array('foad'  => $form_state['values']['foad'],

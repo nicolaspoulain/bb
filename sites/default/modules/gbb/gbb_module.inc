@@ -307,7 +307,7 @@ function gbb_organis_form($form, &$form_state) {
                      'm.co_modu=mp.co_modu AND m.co_degre=mp.co_degre');
   $query ->condition('m.co_modu', arg(2), '=')
          ->condition('m.co_degre', arg(1), '=')
-         ->fields('mp', array('organisation', 'module_alert', 'prioritaire', 'agenda'));
+         ->fields('mp', array('organisation', 'module_alert', 'prioritaire', 'agenda', 'encours'));
   $r = $query->execute()->fetchAssoc();
 
   $form['f'] = array( '#type' => 'fieldset',
@@ -344,11 +344,25 @@ function gbb_organis_form($form, &$form_state) {
                           'message' => 'Enregistrement...'),
     ),
   );
-  $form['f']['agenda'] = array(
+
+  // $form['f']['agenda'] = array(
+    // '#type' => 'checkbox',
+    // '#title' => t( variable_get('agenda') .
+                   // l('Agenda Général' ,'/agenda',array('query'=>array('date_ts[value][date]'=>date('d/m/Y'))))),
+    // '#default_value' => $r['agenda'],
+    // '#prefix' => '<div class="inline">',
+    // '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+    // '#ajax' => array(
+      // 'callback' => 'gbb_organis_form_submit',
+      // 'progress' => array('type' => 'throbber',
+                          // 'message' => 'Enregistrement...'),
+    // ),
+  // );
+
+  $form['f']['encours'] = array(
     '#type' => 'checkbox',
-    '#title' => t( variable_get('agenda') .
-                   l('Agenda Général' ,'/agenda',array('query'=>array('date_ts[value][date]'=>date('d/m/Y'))))),
-    '#default_value' => $r['agenda'],
+    '#title' => t( variable_get('encours') . "En cours de traitement"),
+    '#default_value' => $r['encours'],
     '#prefix' => '<div class="inline">',
     '#suffix' => '</div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
     '#ajax' => array(
@@ -403,7 +417,8 @@ function gbb_organis_form_submit(&$form, &$form_state) {
                 'co_degre' => $form_state['values']['codegre'] ))
     ->fields(array('organisation' => $form_state['values']['organisation'],
                    'prioritaire' => $form_state['values']['prioritaire'],
-                   'agenda' => $form_state['values']['agenda']   ))
+                   'agenda' => $form_state['values']['agenda'],
+                   'encours' => $form_state['values']['encours']   ))
     ->execute();
 }
 
@@ -1201,8 +1216,6 @@ function gbb_sess_formatr_ficand_submit($form, &$form_state) {
       $result = $query->execute(); // recupère les infos de la session
       foreach ($result as $r) {
       // if ($r->convoc_sent != 1  && $r->session_alert != 1) {
-      if ($r->session_alert != 1) {
-          // Modifie le statut en_attente SSI convoc_sent = 0 = session_alert
           $sess_oldAndNew = $sess_oldAndNew
           . "". $i
           . " ficand | "     . ( ($r->ficand == 2)? 1 : 2 )
@@ -1215,13 +1228,12 @@ function gbb_sess_formatr_ficand_submit($form, &$form_state) {
                    'uid' => $user->uid))
           ->execute();
       }
-      }
     }
     $url_query['sess_id[' . $i . ']'] =  $i;
   };
   watchdog('BouleEtBill', "M:" . $r->co_modu . " Attente  Y/N <pre>@sess_oldAndNew</pre>",
     array( '@sess_oldAndNew' => $sess_oldAndNew));
-  drupal_set_message(t('Les convocs ont été basculées enAttente <-> enCours.'));
+  drupal_set_message(t('Les convocs ont été basculées ficand.'));
   $url = url('module/' . $form_state['values']['codegre'] .
                    '/' . $form_state['values']['comodu'],
              array('fragment' => 'edit_session_anchor',
