@@ -534,6 +534,28 @@ function gbb_views_data() {
       ),
     ),
   );
+  $data['field_data_field_co_orie2']['table'] = array(
+    'group' => t('taxonomy_term_data3'),
+    'join' => array(
+      'gbb_gmodu' => array(
+        'table' => 'field_data_field_co_orie',
+        'left_table' => 'gbb_gmodu_taxonomy',
+        'left_field' => 'tid',
+        'field' => 'entity_id',
+      ),
+    ),
+  );
+  $data['field_data_field_co_orie2']['field_co_orie_value'] = array(
+    'title' => t('co_orie'),
+    'help' => t('orientation du terme de taxonomie'),
+    'field' => array(
+      'handler' => 'views_handler_field',
+      'click sortable' => TRUE,
+    ),
+    'sort' => array('handler' => 'views_handler_sort'),
+    'filter' => array('handler' => 'views_handler_filter_string'),
+    'argument' => array('handler' => 'views_handler_argument_string'),
+  );
   $data['taxonomy_vocabulary2']['name'] = array(
     'title' => t('vocab name'),
     'help' => t('Nom vocab de taxonomie'),
