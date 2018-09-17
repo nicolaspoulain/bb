@@ -451,11 +451,12 @@ function gbb_sess_stagiaire($args) {
                   'etab'     => t('Établissement'),
                   'co_lieu'  => t('RNE'),
   );
-  setlocale(LC_TIME, 'fr_FR');
+  setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
   foreach ($result as $r) {
     $rows[] = array(
-                array('data' => utf8_encode(strftime('%a %e %h %Y ',
-                                            strtotime($r->date) ))  ),
+                // array('data' => utf8_encode(strftime('%a %e %h %Y ',
+                array('data' => strftime('%a %e %h %Y ',
+                                            strtotime($r->date) ))  ,
                 array('data' => $r->horaires),
                 array('data' => $r->groupe),
                 array('data' => $r->denom_princ . ' ' .
@@ -471,6 +472,7 @@ function gbb_sess_stagiaire($args) {
  * Formulaire des ** ATTACHEMENTS service ADMINISTRATIF **
  */
 function gbb_attachements1($form, &$form_state, $args) {
+  setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
   $form['f'] = array(
     '#type' => 'fieldset',
     '#title' => t('Fichiers joints -> SERVICE ADMINISTRATIF'),
@@ -510,7 +512,7 @@ function gbb_attachements1($form, &$form_state, $args) {
   }
 
   // Seules les extensions suivantes sont autorisées :
-  $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx ods pdf zip';
+  $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx csv ods pdf zip';
   $form['#submit'][] = 'gbb_attachements_submit';
   $form['f']['Myfile'] = array(
     '#title' => t('Joindre un fichier à cette page'),
@@ -540,6 +542,7 @@ function gbb_attachements1($form, &$form_state, $args) {
  * Formulaire des ** ATTACHEMENTS CONSEILLERS**
  */
 function gbb_attachements2($form, &$form_state, $args) {
+  setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
   $form['f'] = array(
     '#type' => 'fieldset',
     '#title' => t('Fichiers joints -> CONSEILLERS - (Nouveau : ici les fichiers qui ne concernent pas les administratifs)'),
@@ -579,7 +582,7 @@ function gbb_attachements2($form, &$form_state, $args) {
   }
 
   // Seules les extensions suivantes sont autorisées :
-  $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx ods pdf zip';
+  $extensions = 'jpg jpeg gif png txt rtf doc docx odt xls xlsx csv ods pdf zip';
   $form['#submit'][] = 'gbb_attachements_submit';
   $form['f']['Myfile'] = array(
     '#title' => t('Joindre un fichier à cette page'),
@@ -656,6 +659,7 @@ function gbb_attachements_submit($form, &$form_state) {
  * Formulaire du ** TABLEAU DES SESSIONS **
  */
 function gbb_sess_formatr($form, $form_state, $args) {
+  setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
 
   $header = array(
     'date' => t('Date'),
@@ -733,7 +737,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
           $icon = variable_get('ico_notAttente');
     };
     $row[$r->sess_id] = array(
-      'date' => utf8_encode(strftime('%a %e %h %Y ', strtotime($r->date))),
+      'date' => strftime('%a %e %h %Y ', strtotime($r->date)),
       'icone' => $icon,
       'horaires' => $r->horaires,
       'lieu' => l( "$r->sigle $r->denom_comp" ,
@@ -748,11 +752,13 @@ function gbb_sess_formatr($form, $form_state, $args) {
       'groupe' => $r->groupe,
       'formateur' => (($r->statut)? variable_get('ico_espe') . " " : '')
                 . l( "$r->prenom $r->nomu",
-                   'formateur/' . $r->co_resp,
+                   // 'formateur/' . $r->co_resp,
+                   '../../../bb8/web/bb-stages-formateur',
                    array('attributes' => array(
                      'class' => 'anchor-class',
                      'title' => "Voir la fiche",
                    ),
+                     'query' => ['id_disp'=>'2', 'co_resp'=>$r->co_resp],
                          'html' => TRUE )
                        )
                        .(($r->statut && user_access('gest_convocs gbb') && !user_access('gest_sessions gbb'))?
@@ -786,7 +792,7 @@ function gbb_sess_formatr($form, $form_state, $args) {
   $form['f'] = array(
     '#type' => 'fieldset',
     '#title' => t('Sessions - Dernière modifcation : ' .
-         utf8_encode(strftime('%A %e %B %Y %T', $date_modif_ts)) . ' par ' . $name),
+         strftime('%A %e %B %Y %T', $date_modif_ts) . ' par ' . $name),
     '#attributes' => array('class' => array('sessions', 'collapsible')),
   );
 
@@ -1654,7 +1660,7 @@ function gbb_convoc_form($form, &$form_state) {
   $str = "Pas de modif. récente (càd depuis le 17 novembre 2013)";
   if ( isset($r['user_id']) && $r['user_id'] != 0 ) {
     $str = "Dernière modification : ";
-    $str.= utf8_encode(strftime('%A %e %B %Y %T', strtotime($r['date_modification'])));
+    $str.= strftime('%A %e %B %Y %T', strtotime($r['date_modification']));
     $str.= " par ". user_load($r['user_id'])->name;
     }
 

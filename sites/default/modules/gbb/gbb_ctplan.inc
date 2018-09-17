@@ -38,7 +38,7 @@ function gbb_ctplan_view($args = 'NaN') {
 function gbb_ctplan_tab($args) {
   // print_r(taxonomy_get_vocabularies());
   foreach (taxonomy_get_vocabularies() as $k=>$v) {
-    if (preg_match("/2017/",$v->name)) {
+    if (preg_match("/2018/",$v->name)) {
       $header[] = array('data' => t($v->name.' '), 'class' => 'gris');
       $class = (preg_match("/WEB/",$v->name))? 'topAlignMulti' : 'topAlign';
       $rows[0][] = array('data' => gbb_ctplan_vocab($k),
@@ -235,7 +235,7 @@ function gbb_ctplan_latex($args) {
     $no_offre = -1;
 
     foreach ($list as $f) {
-      if ($no_offre != $f->no_offre || $count==3) { 
+      if ($no_offre != $f->no_offre || $count==3) {
           //on crée un nouveau tableau si les modules ne sont pas dans le
           //même dispo ou si le tableau a plus de 4 lignes.
         if ($no_offre != -1) $str .= '((13))<br/>';
@@ -269,12 +269,12 @@ function gbb_ctplan_latex($args) {
         }
         // affiche le lib dispo que si modules multiples
         if ($nbmod>1) {
-          $str .= '((3))' . $f->lobjt; 
+          $str .= '((3))' . $f->lobjt;
           $str .= '((4))' . $f->co_omodu;
           $str .= '((5))' . strtoupperFr($f->libmodu);
         }
         $count = 0;
-      } else { 
+      } else {
         $count = $count+1;
         $str .= '((4))' . $f->co_omodu;
         $str .= '((5))' . strtoupperFr($f->libmodu);
@@ -358,14 +358,14 @@ function gbb_ctplan_latex($args) {
     $last_cp = $f->cp;
     $new_iddisp = False;
 
-    // if ($last_denom_comp != $f->denom_comp) 
+    // if ($last_denom_comp != $f->denom_comp)
       // $str .= "<br/>((H2)) ".strtoupperFr($f->sigle) .' '. strtoupperFr($f->denom_comp)."<br/>";
     // $last_denom_comp = $f->denom_comp;
 
 
     // $str .= '((1))' . $f->no_offre ."/" . $f->co_omodu;
     // $str .= '((2))' . strtoupperFr($f->lib);
-    // $str .= '((3))' . $f->lobjt; 
+    // $str .= '((3))' . $f->lobjt;
     $str .= '((4))' . $f->co_omodu;
     $str .= '((5))' . strtoupperFr($f->libmodu);
     $str .= '((6))' . $f->duree_prev;
